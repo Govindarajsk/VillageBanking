@@ -26,11 +26,13 @@ public class PersonsFragment extends Fragment {
         View root = binding.getRoot();
         initialize();
         return root;
+
     }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        
     }
 
     int key = 0;
