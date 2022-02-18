@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="1dp"
+    android:orientation="vertical">
+    <TableRow>
+        <TextView android:visibility="gone"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:id="@+id/txtColumn1"/>
+        <TextView android:visibility="gone"
+            android:textAlignment="viewStart"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:id="@+id/txtColumn2"/>
+        <TextView android:visibility="gone"
+            android:textAlignment="viewStart"
+            android:width="80dp"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:id="@+id/txtColumn3"/>
+        <TextView android:visibility="gone"
+            android:textAlignment="viewStart"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:id="@+id/txtColumn4">
+        </TextView>
+    </TableRow>
+</TableLayout>

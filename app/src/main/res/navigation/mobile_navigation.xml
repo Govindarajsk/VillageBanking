@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_group">
+
+    <fragment
+        android:id="@+id/nav_person"
+        android:name="com.villagebanking.ui.Master.PersonsFragment"
+        android:label="@string/header_persons"
+        tools:layout="@layout/fragment_persons" />
+
+    <fragment
+        android:id="@+id/nav_group"
+        android:name="com.villagebanking.ui.Master.GroupFragment"
+        android:label="@string/header_group"
+        tools:layout="@layout/fragment_group" />
+    <fragment
+        android:id="@+id/nav_group_detail"
+        android:name="com.villagebanking.ui.Master.FGroupPerson"
+        android:label="@string/header_group_detail"
+        tools:layout="@layout/person_group_link" />
+    <fragment
+        android:id="@+id/nav_person_trans"
+        android:name="com.villagebanking.ui.Links.PersonTrans"
+        android:label="@string/header_group"
+        tools:layout="@layout/person_transaction" />
+</navigation>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.Master.PersonsFragment">
+
+    <TableRow
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="45dp">
+
+        <TextView
+            style="@style/txtLebel"
+            android:text="@string/first_name" />
+
+        <EditText
+            android:id="@+id/editFName"
+            style="@style/editText"
+            android:inputType="text" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            style="@style/txtLebel"
+            android:text="@string/last_name" />
+
+        <EditText
+            android:id="@+id/editLName"
+            style="@style/editText"
+            android:inputType="text" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            style="@style/txtLebel"
+            android:text="@string/mobile" />
+
+        <EditText
+            android:id="@+id/editMobile"
+            style="@style/editText"
+            android:inputType="number" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            style="@style/txtLebel"
+            android:text="Reference 1" />
+
+        <EditText
+            android:id="@+id/editRef1"
+            style="@style/editText"
+            android:inputType="textAutoComplete" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            style="@style/txtLebel"
+            android:text="Reference 2" />
+
+        <EditText
+            android:id="@+id/editRef2"
+            style="@style/editText"
+            android:inputType="textAutoComplete" />
+    </TableRow>
+
+    <TableRow>
+
+        <TableRow
+            android:layout_marginTop="20dp"
+            android:layout_span="4"
+            android:gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/btnSave"
+                style="@style/btnStyle"
+                android:text="@string/save" />
+
+            <Button
+                android:id="@+id/btnDelete"
+                style="@style/btnStyle"
+                android:text="@string/delete" />
+
+            <Button
+                android:id="@+id/btnNew"
+                style="@style/btnStyle"
+                android:text="@string/New" />
+        </TableRow>
+    </TableRow>
+
+    <GridView
+        android:id="@+id/gvNames"
+        android:layout_marginTop="15dp" />
+</TableLayout>

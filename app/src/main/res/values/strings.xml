@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Village Banking</string>
+    <string name="action_settings">More..</string>
+    <string name="bank_Name">Namma Bank</string>
+    <string name="bank_Email">Govindaraj@gmail.com</string>
+
+    <string name="menu_persons">Persons</string>
+    <string name="menu_group">Group</string>
+    <string name="menu_group_detail">Details</string>
+
+    <string name="header_persons">Person Details</string>
+    <string name="header_group">Group Details</string>
+    <string name="header_group_detail">Details</string>
+
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="New">New</string>
+
+    <!--Group-->
+    <string name="group_name">Group Name</string>
+    <string name="no_of_persons">No of Persons</string>
+    <string name="amount">Amount</string>
+    <string name="start_date">Start Date</string>
+    <string name="type">Type</string>
+    <string name="bond_charge">Bond Charge</string>
+<!--Person-->
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="mobile">Mobile</string>
+</resources>

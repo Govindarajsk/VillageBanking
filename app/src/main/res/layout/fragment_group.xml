@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.Master.GroupFragment">
+
+        <TableRow android:id="@+id/row1"
+            android:layout_marginStart="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="45dp">
+
+            <TextView
+                style="@style/txtLebel"
+                android:text="@string/group_name" />
+
+            <EditText
+                android:id="@+id/editName"
+                style="@style/editText"
+                android:inputType="text" />
+        </TableRow>
+
+        <TableRow android:id="@+id/row2">
+
+            <TextView
+                style="@style/txtLebel"
+                android:text="@string/no_of_persons" />
+
+            <EditText
+                android:id="@+id/editNoOfPerson"
+                style="@style/editText"
+                android:inputType="number" />
+        </TableRow>
+
+        <TableRow android:id="@+id/row3">
+
+            <TextView
+                style="@style/txtLebel"
+                android:text="@string/amount" />
+
+            <EditText
+                android:id="@+id/editAmount"
+                style="@style/editText"
+                android:inputType="numberDecimal" />
+        </TableRow>
+
+        <TableRow android:id="@+id/row4">
+
+            <TextView
+                style="@style/txtLebel"
+                android:text="@string/start_date" />
+
+            <EditText
+                android:id="@+id/editStartDate"
+                style="@style/editText"
+                android:inputType="text" />
+        </TableRow>
+
+        <TableRow android:id="@+id/row5">
+
+            <TextView
+                style="@style/txtLebel"
+                android:text="@string/type" />
+
+            <EditText
+                android:id="@+id/editType"
+                style="@style/editText"
+                android:inputType="textAutoComplete" />
+        </TableRow>
+
+        <TableRow android:id="@+id/row6">
+
+            <TextView
+                style="@style/txtLebel"
+                android:text="@string/bond_charge" />
+
+            <EditText
+                android:id="@+id/editBondCharge"
+                style="@style/editText"
+                android:inputType="numberDecimal" />
+        </TableRow>
+
+        <TableRow  android:id="@+id/row7">
+
+            <TextView
+                style="@style/txtLebel"
+                android:text="Occurence" />
+
+            <EditText
+                android:id="@+id/editOccurence"
+                style="@style/editText"
+                android:inputType="textAutoComplete" />
+        </TableRow>
+
+        <TableRow android:id="@+id/row8">
+
+            <TextView
+                style="@style/txtLebel"
+                android:text="Status" />
+
+            <EditText
+                android:id="@+id/editStatus"
+                style="@style/editText"
+                android:inputType="textAutoComplete" />
+        </TableRow>
+
+    <TableRow>
+
+        <TableRow
+            android:layout_marginTop="20dp"
+            android:layout_span="4"
+            android:gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/btnSave"
+                style="@style/btnStyle"
+                android:text="@string/save" />
+
+            <Button
+                android:id="@+id/btnDelete"
+                style="@style/btnStyle"
+                android:text="@string/delete" />
+
+            <Button
+                android:id="@+id/btnNew"
+                style="@style/btnStyle"
+                android:layout_column="0"
+                android:text="@string/New" />
+
+            <Button
+                android:id="@+id/btnRules"
+                style="@style/btnStyle"
+                android:layout_column="0"
+                android:text="Rules"
+                android:visibility="gone" />
+        </TableRow>
+    </TableRow>
+    <GridView
+        android:id="@+id/gvGroup"
+        android:layout_marginTop="15dp" />
+</TableLayout>
