@@ -51,7 +51,6 @@ public class PersonTrans extends Fragment {
         binding.btnNew.setOnClickListener(clickMethod());
         binding.gvDataView.setOnItemClickListener(itemSelect());
         binding.editPerson.setOnItemSelectedListener(itemSelected());
-        binding.editTransDate.setOnClickListener(StaticUtility.DisplayDate(getContext(), binding.editTransDate));
         //fillDGridView(DBUtility.DTOGetAlls(StaticUtility.PERSON_TRANSACTION));
         fillGroupPerson(binding.editPerson);
     }
@@ -247,7 +246,7 @@ public class PersonTrans extends Fragment {
     //Display
     void DataToView(BOPersonTransaction data) {
         key = data.getKeyID();
-        binding.editTransDate.setText(data.getTransDate().toString());
+        //binding.editTransDate.setText(data.getTransDate().toString());
 
         binding.lblNarration.setText(data.getLinkName());
         binding.lblpendingAmount.setText(Double.toString(data.getCalcAmount()));

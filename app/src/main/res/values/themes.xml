@@ -31,12 +31,32 @@
     </style>
     <style name="txtLebel" parent="@style/editText">
         <item name="android:textAlignment">viewEnd</item>
-        <item name="android:width">140dp</item>
+        <item name="android:width">160dp</item>
         <item name="android:textStyle">bold|italic</item>
+        <item name="android:layout_gravity">fill_horizontal</item>
     </style>
     <style name="btnStyle" parent="editText">
         <item name="android:width">110dp</item>
     </style>
     <style name="spnStyle" parent="editText">
     </style>
+
+
+    <style name="stylText">
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:textColor">#008</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">fill_horizontal</item>
+    </style>
+    <style name="stylLbl" parent="@style/stylText">
+        <item name="android:textAlignment">viewEnd</item>
+        <item name="android:textStyle">bold|italic</item>
+    </style>
+    <style name="stylBtn" parent="stylText">
+    </style>
+    <style name="stylSpin" parent="stylText">
+    </style>
+
 </resources>

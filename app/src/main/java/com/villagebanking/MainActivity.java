@@ -74,4 +74,5 @@ public class MainActivity extends AppCompatActivity {
         ContextWrapper localeUpdatedContext = ContextUtils.updateLocale(newBase, localeToSwitchTo);
         super.attachBaseContext(localeUpdatedContext);
     }
+
 }

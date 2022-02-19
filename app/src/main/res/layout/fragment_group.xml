@@ -85,7 +85,7 @@
 
             <TextView
                 style="@style/txtLebel"
-                android:text="Occurence" />
+                android:text="@string/occurence" />
 
             <EditText
                 android:id="@+id/editOccurence"
@@ -97,7 +97,7 @@
 
             <TextView
                 style="@style/txtLebel"
-                android:text="Status" />
+                android:text="@string/status" />
 
             <EditText
                 android:id="@+id/editStatus"

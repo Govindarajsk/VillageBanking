@@ -24,6 +24,6 @@
     <fragment
         android:id="@+id/nav_person_trans"
         android:name="com.villagebanking.ui.Links.PersonTrans"
-        android:label="@string/header_group"
+        android:label="@string/header_group_trans"
         tools:layout="@layout/person_transaction" />
 </navigation>
