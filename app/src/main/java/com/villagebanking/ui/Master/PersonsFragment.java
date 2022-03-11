@@ -56,11 +56,13 @@ public class PersonsFragment extends Fragment {
         btnSave.setOnClickListener(clickMethod());
         btnDelete.setOnClickListener(clickMethod());
         btnNew.setOnClickListener(clickMethod());
-        binding.gvNames.setOnItemClickListener(itemSelect());
+        binding.gvDataView.setOnItemClickListener(itemSelect());
         assignToGridView();
     }
 
     private void btnVisiblity(String type) {
+
+        binding.glInput.setVisibility((View.GONE));
         switch (type) {
             case "Load":
                 binding.btnSave.setVisibility(View.VISIBLE);
@@ -79,10 +81,12 @@ public class PersonsFragment extends Fragment {
                 binding.btnSave.setVisibility(View.VISIBLE);
                 binding.btnNew.setVisibility(View.VISIBLE);
                 binding.btnDelete.setVisibility(View.GONE);
+                binding.glInput.setVisibility((View.VISIBLE));
                 break;
             case "Query":
                 binding.btnNew.setVisibility(View.VISIBLE);
                 binding.btnDelete.setVisibility(View.VISIBLE);
+                binding.glInput.setVisibility((View.VISIBLE));
         }
     }
 
@@ -161,7 +165,7 @@ public class PersonsFragment extends Fragment {
     void assignToGridView() {
         CustomAdapter adapter = new CustomAdapter(this.getContext(), R.layout.activity_gridview,
                 DBUtility.DTOGetAlls(StaticUtility.PERSONS), "A");
-        binding.gvNames.setAdapter(adapter);
+        binding.gvDataView.setAdapter(adapter);
     }
 
     //endregion

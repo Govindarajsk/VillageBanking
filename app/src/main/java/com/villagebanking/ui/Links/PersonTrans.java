@@ -94,6 +94,7 @@ public class PersonTrans extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 // Get the selected item
+                DataToView(ClearNew());
                 BOPerson seletedData = (BOPerson) adapterView.getItemAtPosition(i);
                 personSelectedData(seletedData);
             }
@@ -167,11 +168,6 @@ public class PersonTrans extends Fragment {
     //Save
     BOPersonTransaction ViewToData(BOPersonTransaction newData) {
         newData.setAmount(Double.valueOf(binding.editAmount.getText().toString()));
-
-//        BOPersonTransaction newData = new BOPersonTransaction();
-//        newData.setGp_key(grp.getKeyID());//grop_person_link_key
-//        newData.setAmount(grp.getAmount());
-//        newData.setKeyID(key);
         return newData;
     }
 

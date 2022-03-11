@@ -1,4 +1,4 @@
-package com.villagebanking.ui.Master;
+package com.villagebanking.ui.Links;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,17 +16,17 @@ import com.villagebanking.Database.DBHelper;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 import com.villagebanking.Utility.StaticUtility;
-import com.villagebanking.databinding.PersonGroupLinkBinding;
+import com.villagebanking.databinding.GroupPersonLinkBinding;
 import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOPerson;
 
 import java.util.ArrayList;
 
-public class FGroupPerson extends Fragment {
-    private PersonGroupLinkBinding binding;
+public class GroupPersonLink extends Fragment {
+    private GroupPersonLinkBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = PersonGroupLinkBinding.inflate(inflater, container, false);
+        binding = GroupPersonLinkBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         dbHelper = DBUtility.getDB();
         binding.btnSave.setOnClickListener(clickMethod());

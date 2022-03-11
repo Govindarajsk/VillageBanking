@@ -3,8 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_group">
+    app:startDestination="@+id/nav_person_view">
 
+    <fragment
+        android:id="@+id/nav_person_view"
+        android:name="com.villagebanking.ui.Master.PersonView"
+        android:label="Person Details"
+        tools:layout="@layout/person_view" />
     <fragment
         android:id="@+id/nav_person"
         android:name="com.villagebanking.ui.Master.PersonsFragment"
@@ -18,9 +23,9 @@
         tools:layout="@layout/fragment_group" />
     <fragment
         android:id="@+id/nav_group_detail"
-        android:name="com.villagebanking.ui.Master.FGroupPerson"
+        android:name="com.villagebanking.ui.Links.GroupPersonLink"
         android:label="@string/header_group_detail"
-        tools:layout="@layout/person_group_link" />
+        tools:layout="@layout/group_person_link" />
     <fragment
         android:id="@+id/nav_person_trans"
         android:name="com.villagebanking.ui.Links.PersonTrans"

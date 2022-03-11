@@ -107,7 +107,7 @@ public class CustomAdapter<T> extends ArrayAdapter {
                 column2.setVisibility(View.VISIBLE);
                 column3.setVisibility(View.VISIBLE);
                 column4.setVisibility(View.VISIBLE);
-                column1.setWidth(50);
+                column1.setWidth(100);
                 column2.setWidth(300);
                 column3.setWidth(300);
                 column4.setWidth(300);

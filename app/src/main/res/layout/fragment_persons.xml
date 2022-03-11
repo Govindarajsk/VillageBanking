@@ -1,98 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:columnCount="3" android:background="#0a8a2c"
     tools:context=".ui.Master.PersonsFragment">
 
-    <TableRow
-        android:layout_marginStart="1dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="45dp">
+    <GridLayout
+        android:id="@+id/glInput"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:layout_columnSpan="3"
+        android:layout_gravity="fill_horizontal"
+        android:layout_marginTop="20dp"
+        android:visibility="gone">
 
         <TextView
-            style="@style/txtLebel"
+            style="@style/stylLbl"
+            android:layout_row="0"
+            android:layout_column="0"
             android:text="@string/first_name" />
 
         <EditText
             android:id="@+id/editFName"
-            style="@style/editText"
+            style="@style/stylText"
+            android:layout_row="0"
+            android:layout_column="1"
             android:inputType="text" />
-    </TableRow>
-
-    <TableRow>
 
         <TextView
-            style="@style/txtLebel"
+            style="@style/stylLbl"
+            android:layout_row="1"
+            android:layout_column="0"
             android:text="@string/last_name" />
 
         <EditText
             android:id="@+id/editLName"
-            style="@style/editText"
+            style="@style/stylText"
+            android:layout_row="1"
+            android:layout_column="1"
             android:inputType="text" />
-    </TableRow>
-
-    <TableRow>
 
         <TextView
-            style="@style/txtLebel"
+            style="@style/stylLbl"
+            android:layout_row="2"
+            android:layout_column="0"
             android:text="@string/mobile" />
 
         <EditText
             android:id="@+id/editMobile"
-            style="@style/editText"
+            style="@style/stylText"
+            android:layout_row="2"
+            android:layout_column="1"
             android:inputType="number" />
-    </TableRow>
 
-    <TableRow>
 
         <TextView
-            style="@style/txtLebel"
+            style="@style/stylLbl"
+            android:layout_row="3"
+            android:layout_column="0"
             android:text="Reference 1" />
 
         <EditText
             android:id="@+id/editRef1"
-            style="@style/editText"
+            style="@style/stylText"
+            android:layout_row="3"
+            android:layout_column="1"
             android:inputType="textAutoComplete" />
-    </TableRow>
-
-    <TableRow>
 
         <TextView
-            style="@style/txtLebel"
-            android:text="Reference 2" />
+            style="@style/stylLbl"
+            android:layout_row="4"
+            android:layout_column="0"
+            android:text="Reference 1" />
 
         <EditText
             android:id="@+id/editRef2"
-            style="@style/editText"
+            style="@style/stylText"
+            android:layout_row="4"
+            android:layout_column="1"
             android:inputType="textAutoComplete" />
-    </TableRow>
 
-    <TableRow>
+    </GridLayout>
 
-        <TableRow
-            android:layout_marginTop="20dp"
-            android:layout_span="4"
-            android:gravity="center_horizontal">
+    <GridLayout
+        android:layout_column="0"
+        android:layout_columnSpan="3"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp">
 
-            <Button
-                android:id="@+id/btnSave"
-                style="@style/btnStyle"
-                android:text="@string/save" />
+        <Button
+            android:id="@+id/btnSave"
+            style="@style/stylBtn"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:layout_gravity="right"
+            android:text="@string/save" />
 
-            <Button
-                android:id="@+id/btnDelete"
-                style="@style/btnStyle"
-                android:text="@string/delete" />
+        <Button
+            android:id="@+id/btnDelete"
+            style="@style/stylBtn"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:text="@string/delete" />
 
-            <Button
-                android:id="@+id/btnNew"
-                style="@style/btnStyle"
-                android:text="@string/New" />
-        </TableRow>
-    </TableRow>
+        <Button
+            android:id="@+id/btnNew"
+            style="@style/stylBtn"
+            android:layout_row="1"
+            android:layout_column="2"
+            android:text="@string/New" />
 
-    <GridView
-        android:id="@+id/gvNames"
-        android:layout_marginTop="15dp" />
-</TableLayout>
+    </GridLayout>
+
+    <GridLayout android:visibility="visible"
+        android:layout_row="3"
+        android:layout_column="0"
+        android:layout_columnSpan="3"
+        android:layout_marginTop="20dp">
+
+        <GridView
+            android:layoutMode="opticalBounds"
+            android:id="@+id/gvDataView"
+            android:layout_gravity="top"
+            android:layout_marginTop="15dp" />
+
+    </GridLayout>
+</GridLayout>
