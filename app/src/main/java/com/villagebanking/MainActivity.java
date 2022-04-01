@@ -46,7 +46,10 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_person, R.id.nav_group, R.id.nav_group_detail,R.id.nav_person_trans)
+                R.id.nav_person,
+                R.id.nav_person_view,
+                R.id.nav_group,
+                R.id.nav_group_view)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -67,12 +70,12 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
+/*
     @Override
     protected void attachBaseContext(Context newBase) {
         Locale localeToSwitchTo = new Locale("ta");
         ContextWrapper localeUpdatedContext = ContextUtils.updateLocale(newBase, localeToSwitchTo);
         super.attachBaseContext(localeUpdatedContext);
     }
-
+*/
 }

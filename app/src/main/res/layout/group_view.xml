@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:columnCount="3" android:background="#0a8a2c"
-    tools:context=".ui.Master.PersonView">
+    android:columnCount="3"
+    tools:context=".ui.Group.GroupDetail">
 
-    <GridView android:background="#0a8a2c"
+    <GridView
         android:layoutMode="opticalBounds"
         android:id="@+id/gvDataView"
         android:layout_gravity="top"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="1dp" />
 </GridLayout>
