@@ -17,14 +17,13 @@ import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOGroupPersonLink;
 import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.BOObjects.BOPersonTransaction;
+import com.villagebanking.Database.DB0Tables;
 import com.villagebanking.Utility.CustomAdapter;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
-import com.villagebanking.Utility.StaticUtility;
 import com.villagebanking.databinding.PersonTransactionBinding;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
 public class PersonTrans extends Fragment {
@@ -113,7 +112,7 @@ public class PersonTrans extends Fragment {
     public void clickSave(View view) {
         //BOPersonTransaction selectedData = (BOPersonTransaction) binding.gvDataView.getSelectedItem();
         ViewToData(selectedData);
-        DBUtility.DTOSaveUpdate(selectedData);
+        DBUtility.DTOSaveUpdate(selectedData, DB0Tables.PERSON_TRANSACTION);
         btnVisiblity("Save");
         DataToView(ClearNew());
         personSelectedData((BOPerson) binding.editPerson.getSelectedItem());
@@ -121,7 +120,7 @@ public class PersonTrans extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void clickDelete(View view) {
-        DBUtility.DTOdelete(key, StaticUtility.PERSON_TRANSACTION);
+        DBUtility.DTOdelete(key, DB0Tables.PERSON_TRANSACTION);
         key = 0;
         btnVisiblity("Delete");
         DataToView(ClearNew());
@@ -177,7 +176,7 @@ public class PersonTrans extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.N)
     void personSelectedData(BOPerson seletedData) {
 
-        ArrayList<BOGroupPersonLink> gpList = DBUtility.DTOGetAlls(StaticUtility.GROUP_PERSON_LINK);
+        ArrayList<BOGroupPersonLink> gpList = DBUtility.DTOGetAlls(DB0Tables.GROUP_PERSON_LINK);
         Predicate<BOGroupPersonLink> condition = x -> x.getPerson_key() != seletedData.getKeyID();
         gpList.removeIf(condition);
 
@@ -205,7 +204,7 @@ public class PersonTrans extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     BOPersonTransaction getFinal(BOPersonTransaction linkdata) {
-        ArrayList<BOPersonTransaction> pTrans = DBUtility.DTOGetAlls(StaticUtility.PERSON_TRANSACTION);
+        ArrayList<BOPersonTransaction> pTrans = DBUtility.DTOGetAlls(DB0Tables.PERSON_TRANSACTION);
         pTrans.removeIf(x -> x.getGp_key() != linkdata.getGp_key());
         if (pTrans.stream().count() > 0)
             linkdata.setKeyID(pTrans.stream().findFirst().get().getKeyID());
@@ -225,7 +224,7 @@ public class PersonTrans extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     BOPersonTransaction getBOgroup(BOGroupPersonLink linkdata) {
-        ArrayList<BOGroup> groupLst = DBUtility.DTOGetAlls(StaticUtility.GROUPS);
+        ArrayList<BOGroup> groupLst = DBUtility.DTOGetAlls(DB0Tables.GROUPS);
         groupLst.removeIf(x -> x.getKeyID() != linkdata.getGroup_key());
         BOGroup gpData = (BOGroup) groupLst.get(0);
 
@@ -259,7 +258,7 @@ public class PersonTrans extends Fragment {
     //region Fill
     void fillDGridView(ArrayList<BOPersonTransaction> transactions) {
         if (transactions == null)
-            transactions = DBUtility.DTOGetAlls(StaticUtility.PERSON_TRANSACTION);
+            transactions = DBUtility.DTOGetAlls(DB0Tables.PERSON_TRANSACTION);
 
         CustomAdapter adapter = new CustomAdapter(this.getContext(), R.layout.activity_gridview,
                 transactions, "A");
@@ -268,7 +267,7 @@ public class PersonTrans extends Fragment {
 
     void fillGroupPerson(Spinner spinner) {
         CustomAdapter adapter = new CustomAdapter(this.getContext(), R.layout.activity_gridview,
-                DBUtility.DTOGetAlls(StaticUtility.PERSONS), "B");
+                DBUtility.DTOGetAlls(DB0Tables.PERSONS), "B");
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinner.setAdapter(adapter);

@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.villagebanking.Database.DB0Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
-import com.villagebanking.Utility.StaticUtility;
 import com.villagebanking.databinding.PersonsViewBinding;
 
 
@@ -24,7 +24,7 @@ public class PersonsDetail extends Fragment {
     }
     void assignToGridView() {
         PersonsAdapter adapter = new PersonsAdapter(this.getContext(), R.layout.persons_gridview,
-                DBUtility.DTOGetAlls(StaticUtility.PERSONS));
+                DBUtility.DTOGetAlls(DB0Tables.PERSONS));
         binding.gvDataView.setAdapter(adapter);
     }
 }

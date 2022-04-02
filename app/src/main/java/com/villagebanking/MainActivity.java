@@ -1,7 +1,5 @@
 package com.villagebanking;
 
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
@@ -16,21 +14,19 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.villagebanking.Database.DBUtility;
-import com.villagebanking.databinding.ActivityMainBinding;
-
-import java.util.Locale;
+import com.villagebanking.databinding.MainActivityBinding;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private ActivityMainBinding binding;
+    private MainActivityBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         DBUtility.CreateDB(this);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        binding = MainActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
@@ -45,11 +41,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
+        mAppBarConfiguration = new AppBarConfiguration.Builder
+                (
                 R.id.nav_person,
                 R.id.nav_person_view,
                 R.id.nav_group,
-                R.id.nav_group_view)
+                R.id.nav_group_view,
+                R.id.nav_period_view
+                )
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);

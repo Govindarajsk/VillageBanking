@@ -6,33 +6,9 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
-import com.villagebanking.Database.DBColumn;
-
-import java.util.ArrayList;
 import java.util.Calendar;
 
 public class StaticUtility {
-
-    //region Tables
-    public static String PERSONS = "PERSONS";
-    public static String GROUPS = "GROUPS";
-    public static String GROUP_PERSON_LINK = "GROUP_PERSON_LINK";
-    public static String PERSON_TRANSACTION = "PERSON_TRANSACTION";
-    //endregion
-
-    public static ArrayList<DBColumn> getColumns(String tableName) {
-        ArrayList<DBColumn> columns = new ArrayList<>();
-        switch (tableName) {
-            case "PERSON_TRANSACTION":
-                columns.add(new DBColumn("ID", "integer", "primary key"));
-                columns.add(new DBColumn("GROUP_PERSON_KEY", "integer", ""));
-                columns.add(new DBColumn("AMOUNT", "decimal", ""));
-                columns.add(new DBColumn("STATUS", "text", ""));
-                return columns;
-            default:
-                throw new IllegalStateException("Unexpected value: " + tableName);
-        }
-    }
 
     //region Datepicker Selecter
     public static View.OnClickListener DisplayDate(Context context, EditText dpDispField) {

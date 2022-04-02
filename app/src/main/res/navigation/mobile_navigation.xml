@@ -27,6 +27,12 @@
         android:label="Groups"
         tools:layout="@layout/group_view" />
 
+    <fragment
+        android:id="@+id/nav_period_view"
+        android:name="com.villagebanking.ui.Master.PeriodsAdd"
+        android:label="Period"
+        tools:layout="@layout/periods_view" />
+
     <!--
         <fragment
             android:id="@+id/nav_group_detail"

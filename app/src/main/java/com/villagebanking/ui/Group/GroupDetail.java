@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.villagebanking.Database.DB0Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
-import com.villagebanking.Utility.StaticUtility;
 import com.villagebanking.databinding.GroupViewBinding;
 
 public class GroupDetail extends Fragment {
@@ -24,7 +24,7 @@ public class GroupDetail extends Fragment {
     void assignToGridView() {
 
         GroupAdapter adapter = new GroupAdapter(this.getContext(), R.layout.persons_gridview,
-                DBUtility.DTOGetAlls(StaticUtility.GROUPS));
+                DBUtility.DTOGetAlls(DB0Tables.GROUPS));
         binding.gvDataView.setAdapter(adapter);
 
     }

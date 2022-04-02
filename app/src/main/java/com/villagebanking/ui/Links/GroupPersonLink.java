@@ -11,11 +11,11 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
 import com.villagebanking.BOObjects.BOGroupPersonLink;
-import com.villagebanking.Utility. CustomAdapter;
+import com.villagebanking.Database.DB0Tables;
+import com.villagebanking.Utility.CustomAdapter;
 import com.villagebanking.Database.DBHelper;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
-import com.villagebanking.Utility.StaticUtility;
 import com.villagebanking.databinding.GroupPersonLinkBinding;
 import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOPerson;
@@ -56,19 +56,21 @@ public class GroupPersonLink extends Fragment {
             }
         };
     }
+
     void clickDelete() {
-        DBUtility.DTOdelete(key,StaticUtility.GROUP_PERSON_LINK);
+        DBUtility.DTOdelete(key, DB0Tables.GROUP_PERSON_LINK);
         key = 0;
         assignToGridView();
         binding.btnSave.setVisibility(View.VISIBLE);
         binding.btnNew.setVisibility(View.VISIBLE);
         binding.btnDelete.setVisibility(View.GONE);
     }
+
     void clickSave() {
         BOGroupPersonLink newIns = getDataFromView();
-        DBUtility.DTOSaveUpdate(newIns);
+        DBUtility.DTOSaveUpdate(newIns, DB0Tables.GROUP_PERSON_LINK);
         assignToGridView();
-        key=0;
+        key = 0;
     }
 
     int key = 0;
@@ -77,36 +79,38 @@ public class GroupPersonLink extends Fragment {
         BOGroupPersonLink newData = new BOGroupPersonLink();
         newData.setKeyID(key);
 
-        BOGroup g=(BOGroup) binding.editGroup.getSelectedItem();
+        BOGroup g = (BOGroup) binding.editGroup.getSelectedItem();
         newData.setGroup_key(g.getKeyID());
-        BOPerson p=(BOPerson) binding.editPerson.getSelectedItem();
+        BOPerson p = (BOPerson) binding.editPerson.getSelectedItem();
         newData.setPerson_key(p.getKeyID());
-        newData.setOrderBy(objList.size()+1);
+        newData.setOrderBy(objList.size() + 1);
         newData.setPerson_role("A");
         return newData;
     }
 
     void fillGroup() {
         CustomAdapter adapter = new CustomAdapter(this.getContext(), R.layout.activity_gridview,
-                DBUtility.DTOGetAlls(StaticUtility.GROUPS),"B");
+                DBUtility.DTOGetAlls(DB0Tables.GROUPS), "B");
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.editGroup.setAdapter(adapter);
         binding.editGroup.setSelection(0);
     }
+
     void fillPerson() {
         CustomAdapter adapter = new CustomAdapter(this.getContext(), R.layout.activity_gridview,
-                DBUtility.DTOGetAlls(StaticUtility.PERSONS),"B");
+                DBUtility.DTOGetAlls(DB0Tables.PERSONS), "B");
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.editPerson.setAdapter(adapter);
         binding.editPerson.setSelection(0);
     }
 
-    ArrayList<BOGroupPersonLink> objList=new ArrayList<>();
+    ArrayList<BOGroupPersonLink> objList = new ArrayList<>();
+
     void assignToGridView() {
         CustomAdapter adapter = new CustomAdapter(this.getContext(), R.layout.activity_gridview,
-                DBUtility.DTOGetAlls(StaticUtility.GROUP_PERSON_LINK),"A");
+                DBUtility.DTOGetAlls(DB0Tables.GROUP_PERSON_LINK), "A");
         binding.gvPersons.setAdapter(adapter);
 
         binding.gvPersons.setOnItemClickListener(new AdapterView.OnItemClickListener() {

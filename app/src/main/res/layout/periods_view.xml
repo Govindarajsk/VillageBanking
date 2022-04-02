@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:columnCount="3"
-    tools:context=".ui.Group.GroupAdd">
+    tools:context=".ui.Master.PeriodsAdd">
 
     <EditText
         android:id="@+id/editName"
@@ -39,29 +38,5 @@
         style="@style/btnStyle"
         android:layout_row="3"
         android:layout_column="0"
-        android:text="@string/save" />
-
-    <Button
-        android:id="@+id/btnDelete"
-        style="@style/btnStyle"
-        android:layout_row="3"
-        android:layout_column="1"
-        android:text="@string/delete" />
-
-    <Button
-        android:id="@+id/btnNew"
-        style="@style/btnStyle"
-        android:layout_row="3"
-        android:layout_column="2"
-        android:text="@string/New" />
-
-    <GridLayout
-        android:layout_row="4"
-        android:layout_column="0"
-        android:layout_columnSpan="3">
-
-        <GridView
-            android:id="@+id/gvGroup"
-            android:layout_marginTop="15dp" />
-    </GridLayout>
+        android:text="Submit" />
 </GridLayout>
