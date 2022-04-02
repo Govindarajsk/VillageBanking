@@ -11,6 +11,7 @@
     <string name="header_persons">Person Details</string>
     <string name="header_group">Group Details</string>
     <string name="header_group_detail">Details</string>
+    <string name="header_group_trans">Transaction</string>
 
     <string name="delete">Delete</string>
     <string name="save">Save</string>
@@ -23,8 +24,16 @@
     <string name="start_date">Start Date</string>
     <string name="type">Type</string>
     <string name="bond_charge">Bond Charge</string>
-<!--Person-->
+    <!--Person-->
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="mobile">Mobile</string>
+    <string name="occurence">Occurence</string>
+    <string name="status">Status</string>
+
+    <!--Transaction-->
+    <string name="person_name">Person Name</string>
+    <string name="total_amount">Total Amount</string>
+    <string name="paid_amount">Paid Amount</string>
+    <string name="balance_amount">Balance Amount</string>
 </resources>

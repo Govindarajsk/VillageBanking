@@ -6,15 +6,24 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_person"
+            android:title="Add Person" />
+        <item
+            android:id="@+id/nav_person_view"
             android:title="@string/menu_persons" />
+
         <item
             android:id="@+id/nav_group"
-            android:title="@string/menu_group" />
+            android:title="Add Group" />
         <item
-            android:id="@+id/nav_group_detail"
+            android:id="@+id/nav_group_view"
             android:title="@string/menu_group_detail" />
+        <item
+            android:id="@+id/nav_period_view"
+            android:title="Add Period" />
+<!--
         <item
             android:id="@+id/nav_person_trans"
             android:title="Transaction" />
+            -->
     </group>
 </menu>

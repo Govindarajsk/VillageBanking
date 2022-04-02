@@ -1,32 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <string name="menu_persons">Persons</string>
-    <string name="menu_group">Group</string>
-    <string name="menu_group_detail">Details</string>
+    <string name="menu_persons">நபர்கள்</string>
+    <string name="menu_group">குழுக்கள்</string>
+    <string name="menu_group_detail">விவரங்கள்</string>
 
-    <string name="header_persons">Person Details</string>
-    <string name="header_group">Group Details</string>
-    <string name="header_group_detail">Details</string>
+    <string name="header_persons">நபர் விவரங்கள்</string>
+    <string name="header_group">குழு விவரங்கள்</string>
+    <string name="header_group_detail">விவரங்கள்</string>
+    <string name="header_group_trans">பரிவர்த்தனை</string>
 
     <string name="app_name">Village Banking</string>
-    <string name="action_settings">More..</string>
+    <string name="action_settings">மேலும்..</string>
 
 
-    <string name="bank_Name">Namma Bank</string>
+    <string name="bank_Name">ஜவ்வாதுமலை கிராமவங்கி</string>
     <string name="bank_Email">Govindaraj@gmail.com</string>
 
-    <string name="first_name">First Name</string>
-    <string name="last_name">Last Name</string>
-    <string name="mobile">Mobile</string>
-    <string name="delete">Delete</string>
-    <string name="save">Save</string>
-    <string name="New">New</string>
+    <string name="first_name">பெயர்</string>
+    <string name="last_name">இதர பெயர்</string>
+    <string name="mobile">கைபேசி</string>
+    <string name="delete">நீக்கு</string>
+    <string name="save">சேமி</string>
+    <string name="New">சேர்</string>
     <!--Group-->
-    <string name="group_name">பெயர்</string>
-    <string name="no_of_persons">No of Persons</string>
-    <string name="amount">Amount</string>
-    <string name="start_date">Start Date</string>
-    <string name="type">Type</string>
-    <string name="bond_charge">Bond Charge</string>
+    <string name="group_name">குழு பெயர்</string>
+    <string name="no_of_persons">எண்ணிக்கை</string>
+    <string name="amount">தொகை</string>
+    <string name="start_date">தொடக்க தேதி</string>
+    <string name="type">வகை</string>
+    <string name="bond_charge">கட்டணம்</string>
+    <string name="occurence">நிகழ்வு</string>
+    <string name="status">நிலை</string>
+
+    <!--Transaction-->
+    <string name="person_name">தேர்ந்தெடு</string>
+    <string name="total_amount">மொத்த தொகை</string>
+    <string name="paid_amount">செலுத்தியது</string>
+    <string name="balance_amount">மீதம்</string>
 </resources>

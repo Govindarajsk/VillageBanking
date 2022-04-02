@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.TextView;
 
 import com.villagebanking.BOObjects.BOGroup;
@@ -91,7 +92,19 @@ public class CustomAdapter<T> extends ArrayAdapter {
         column2.setText(value2);
         column3.setText(value3);
         column4.setText(value4);
+        ApplyColor(convertView,row);
         return dgAllignment(convertView,displayType);
+    }
+    void ApplyColor(View convertView,int row)
+    {
+        GridLayout grdlyout = ((GridLayout) convertView.findViewById(R.id.maingrid));
+        if(row%2==0)
+        {
+            grdlyout.setBackgroundColor(0xffffff);
+        }
+        else {
+            grdlyout.setBackgroundColor(0xebe6e6);
+        }
     }
 
     View dgAllignment(View convertView,String type) {
@@ -107,10 +120,6 @@ public class CustomAdapter<T> extends ArrayAdapter {
                 column2.setVisibility(View.VISIBLE);
                 column3.setVisibility(View.VISIBLE);
                 column4.setVisibility(View.VISIBLE);
-                column1.setWidth(50);
-                column2.setWidth(300);
-                column3.setWidth(300);
-                column4.setWidth(300);
                 break;
             case "B":
                 column2.setVisibility(View.VISIBLE);

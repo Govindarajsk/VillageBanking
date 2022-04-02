@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/maingrid"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
     android:columnCount="5"
     android:layoutDirection="locale"
-    android:layoutMode="opticalBounds"
-    android:orientation="vertical"
-    android:id="@+id/maingrid"
-    android:padding="1dp">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/txtColumn1"
@@ -54,13 +52,40 @@
         android:textSize="20dp"
         android:textStyle="bold" />
 
-    <TextView android:layout_gravity="top"
-        android:height="1dp"
+    <Button
+        style="@style/stylDgbtn"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_row="0"
+        android:layout_rowSpan="2"
+        android:layout_column="3"
+        android:layout_gravity="center_vertical"
+        android:background="@color/design_default_color_error"
+        android:ellipsize="none"
+        android:foregroundGravity="fill_horizontal|center_vertical|fill_vertical"
+        android:gravity="center_vertical"
+        android:insetTop="1dp"
+        android:insetBottom="1dp"
+        android:paddingLeft="1dp"
+        android:paddingTop="1dp"
+        android:paddingRight="1dp"
+        android:paddingBottom="1dp"
+        android:text="-"
+        android:textAlignment="gravity"
+        android:textSize="50dp"
+        app:backgroundTint="@color/design_default_color_error"
+        app:backgroundTintMode="screen"
+        app:elevation="0dp" />
+
+
+    <TextView
         android:layout_row="3"
         android:layout_column="0"
-        android:layout_columnSpan="3"
+        android:layout_columnSpan="4"
         android:layout_columnWeight="@integer/config_navAnimTime"
-        android:gravity="top"
-        android:background="#c2bfb6"/>
+        android:layout_gravity="top"
+        android:height="1dp"
+        android:background="#c2bfb6"
+        android:gravity="top" />
 
 </GridLayout>

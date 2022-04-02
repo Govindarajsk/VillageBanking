@@ -3,27 +3,45 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_group">
+    app:startDestination="@+id/nav_person">
 
     <fragment
         android:id="@+id/nav_person"
-        android:name="com.villagebanking.ui.Master.PersonsFragment"
-        android:label="@string/header_persons"
-        tools:layout="@layout/fragment_persons" />
+        android:name="com.villagebanking.ui.Person.PersonsAdd"
+        android:label="Add Person"
+        tools:layout="@layout/persons_fragment" />
+    <fragment
+        android:id="@+id/nav_person_view"
+        android:name="com.villagebanking.ui.Person.PersonsDetail"
+        android:label="Persons"
+        tools:layout="@layout/persons_view" />
 
     <fragment
         android:id="@+id/nav_group"
-        android:name="com.villagebanking.ui.Master.GroupFragment"
-        android:label="@string/header_group"
-        tools:layout="@layout/fragment_group" />
+        android:name="com.villagebanking.ui.Group.GroupAdd"
+        android:label="Add Group"
+        tools:layout="@layout/group_fragment" />
     <fragment
-        android:id="@+id/nav_group_detail"
-        android:name="com.villagebanking.ui.Master.FGroupPerson"
-        android:label="@string/header_group_detail"
-        tools:layout="@layout/person_group_link" />
+        android:id="@+id/nav_group_view"
+        android:name="com.villagebanking.ui.Group.GroupDetail"
+        android:label="Groups"
+        tools:layout="@layout/group_view" />
+
     <fragment
-        android:id="@+id/nav_person_trans"
-        android:name="com.villagebanking.ui.Links.PersonTrans"
-        android:label="@string/header_group"
-        tools:layout="@layout/person_transaction" />
+        android:id="@+id/nav_period_view"
+        android:name="com.villagebanking.ui.Master.PeriodsAdd"
+        android:label="Period"
+        tools:layout="@layout/periods_view" />
+
+    <!--
+        <fragment
+            android:id="@+id/nav_group_detail"
+            android:name="com.villagebanking.ui.Links.GroupPersonLink"
+            android:label="@string/header_group_detail"
+            tools:layout="@layout/group_person_link" />
+        <fragment
+            android:id="@+id/nav_person_trans"
+            android:name="com.villagebanking.ui.Links.PersonTrans"
+            android:label="@string/header_group_trans"
+            tools:layout="@layout/person_transaction" /> -->
 </navigation>

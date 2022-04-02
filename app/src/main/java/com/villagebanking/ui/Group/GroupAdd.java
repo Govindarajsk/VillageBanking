@@ -1,13 +1,11 @@
-package com.villagebanking.ui.Master;
+package com.villagebanking.ui.Group;
 
-import android.app.DatePickerDialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.DatePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -15,24 +13,20 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
 import com.villagebanking.BOObjects.BOGroup;
-import com.villagebanking.BOObjects.BOPerson;
+import com.villagebanking.Database.DB0Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.Utility.CustomAdapter;
 import com.villagebanking.R;
 import com.villagebanking.Utility.StaticUtility;
-import com.villagebanking.databinding.FragmentGroupBinding;
+import com.villagebanking.databinding.GroupFragmentBinding;
 
-import java.util.Calendar;
-
-public class GroupFragment extends Fragment {
-    private FragmentGroupBinding binding;
+public class GroupAdd extends Fragment {
+    private GroupFragmentBinding binding;
     int key = 0;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        binding = FragmentGroupBinding.inflate(inflater, container, false);
+        binding = GroupFragmentBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
         initialize();
         return root;
     }
@@ -42,34 +36,18 @@ public class GroupFragment extends Fragment {
         binding.btnSave.setOnClickListener(clickMethod());
         binding.btnDelete.setOnClickListener(clickMethod());
         binding.btnNew.setOnClickListener(clickMethod());
-        binding.gvGroup.setOnItemClickListener(itemSelect());
+        //binding.gvGroup.setOnItemClickListener(itemSelect());
         fillGridView();
         binding.editStartDate.setOnClickListener(StaticUtility.DisplayDate(getContext(),binding.editStartDate));
 
     }
-
-    private void visibleFields(int visiblity)
-    {
-        binding.row1.setVisibility(visiblity);
-        binding.row2.setVisibility(visiblity);
-        binding.row3.setVisibility(visiblity);
-        binding.row4.setVisibility(visiblity);
-        binding.row5.setVisibility(visiblity);
-        binding.row6.setVisibility(visiblity);
-        binding.row7.setVisibility(visiblity);
-        binding.row8.setVisibility(visiblity);
-    }
     private void btnVisiblity(String type) {
-
         binding.btnSave.setVisibility(View.GONE);
         binding.btnNew.setVisibility(View.GONE);
         binding.btnDelete.setVisibility(View.GONE);
-        visibleFields(View.GONE);
-
         switch (type) {
             case "Load":
                 binding.btnNew.setVisibility(View.VISIBLE);
-                visibleFields(View.VISIBLE);
             case "Save":
                 binding.btnNew.setVisibility(View.VISIBLE);
                 break;
@@ -82,7 +60,6 @@ public class GroupFragment extends Fragment {
             case "Query":
                 binding.btnNew.setVisibility(View.VISIBLE);
                 binding.btnDelete.setVisibility(View.VISIBLE);
-                visibleFields(View.VISIBLE);
         }
     }
 
@@ -109,13 +86,13 @@ public class GroupFragment extends Fragment {
 
     void clickSave() {
         BOGroup newIns = getDataFromView();
-        DBUtility.DTOSaveUpdate(newIns);
+        DBUtility.DTOSaveUpdate(newIns, DB0Tables.GROUPS);
         fillGridView();
         btnVisiblity("Save");
     }
 
     void clickDelete() {
-        DBUtility.DTOdelete(key, StaticUtility.GROUPS);
+        DBUtility.DTOdelete(key, DB0Tables.GROUPS);
         key = 0;
         fillGridView();
         btnVisiblity("Delete");
@@ -127,7 +104,6 @@ public class GroupFragment extends Fragment {
         DataToView(new BOGroup());
         btnVisiblity("New");
     }
-
 
     BOGroup getDataFromView() {
         BOGroup newData = new BOGroup();
@@ -148,8 +124,8 @@ public class GroupFragment extends Fragment {
 
     void fillGridView() {
         CustomAdapter adapter = new CustomAdapter(this.getContext(), R.layout.activity_gridview,
-                DBUtility.DTOGetAlls(StaticUtility.GROUPS), "A");
-        binding.gvGroup.setAdapter(adapter);
+                DBUtility.DTOGetAlls(DB0Tables.GROUPS), "A");
+        //binding.gvGroup.setAdapter(adapter);
     }
     AdapterView.OnItemClickListener itemSelect() {
         return new AdapterView.OnItemClickListener() {
