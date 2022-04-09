@@ -1,4 +1,4 @@
-package com.villagebanking.ui.Group;
+package com.villagebanking.ui.Period;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 import com.villagebanking.databinding.ActivityGridviewBinding;
 
-public class GroupDetail extends Fragment {
+public class PeriodsDetail  extends Fragment {
     private ActivityGridviewBinding binding;
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = ActivityGridviewBinding.inflate(inflater, container, false);
@@ -22,9 +22,8 @@ public class GroupDetail extends Fragment {
         return root;
     }
     void assignToGridView() {
-
-        GroupGrid adapter = new GroupGrid(this.getContext(), R.layout.group_gridview,
-                DBUtility.DTOGetAlls(DB1Tables.GROUPS));
+        PeriodsGrid adapter = new PeriodsGrid(this.getContext(), R.layout.activity_gridview,
+                DBUtility.DTOGetAlls(DB1Tables.PERIODS));
         binding.gvDataView.setAdapter(adapter);
     }
 }

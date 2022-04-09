@@ -8,23 +8,23 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.villagebanking.Database.DB0Tables;
+import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
-import com.villagebanking.databinding.PersonsViewBinding;
+import com.villagebanking.databinding.ActivityGridviewBinding;
 
 
 public class PersonsDetail extends Fragment {
-    private PersonsViewBinding binding;
+    private ActivityGridviewBinding binding;
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = PersonsViewBinding.inflate(inflater, container, false);
+        binding = ActivityGridviewBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         assignToGridView();
         return root;
     }
     void assignToGridView() {
-        PersonsAdapter adapter = new PersonsAdapter(this.getContext(), R.layout.persons_gridview,
-                DBUtility.DTOGetAlls(DB0Tables.PERSONS));
+        PersonsGrid adapter = new PersonsGrid(this.getContext(), R.layout.persons_gridview,
+                DBUtility.DTOGetAlls(DB1Tables.PERSONS));
         binding.gvDataView.setAdapter(adapter);
     }
 }

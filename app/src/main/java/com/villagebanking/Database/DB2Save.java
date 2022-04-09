@@ -4,23 +4,30 @@ import android.content.ContentValues;
 
 import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOGroupPersonLink;
+import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.BOObjects.BOPersonTransaction;
 
-public class DB1Save {
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
+public class DB2Save {
 
     public static <T> BOMap DTOSaveUpdate(T data,String tableName) {
         switch (tableName) {
-            case DB0Tables.PERSONS:
+            case DB1Tables.PERSONS:
                 BOPerson p = (BOPerson) data;
                 return new BOMap(p.getKeyID(), getContentValue(p));
-            case DB0Tables.GROUPS:
+            case DB1Tables.GROUPS:
                 BOGroup g = (BOGroup) data;
                 return new BOMap(g.getKeyID(), getContentValue(g));
-            case DB0Tables.GROUP_PERSON_LINK:
+            case DB1Tables.PERIODS:
+                BOPeriod pd = (BOPeriod) data;
+                return new BOMap(pd.getPrimary_key(), getContentValue(pd));
+            case DB1Tables.GROUP_PERSON_LINK:
                 BOGroupPersonLink gp = (BOGroupPersonLink) data;
                 return new BOMap(gp.getKeyID(), getContentValue(gp));
-            case DB0Tables.PERSON_TRANSACTION:
+            case DB1Tables.PERSON_TRANSACTION:
                 BOPersonTransaction pt = (BOPersonTransaction) data;
                 return new BOMap(pt.getKeyID(), getContentValue(pt));
         }
@@ -62,6 +69,19 @@ public class DB1Save {
         contentValues.put("FirstName", g.getStrFName());
         contentValues.put("LastName", g.getStrLName());
         contentValues.put("phone", g.getNumMobile());
+        return contentValues;
+    }
+    // PERIODS =>ID integer primary key,PERIOD_TYPE INTEGER,PERIOD_NAME TEXT,ACTUAL_DATE DATE,PERIOD_REMARKS TEXT
+    static ContentValues getContentValue(BOPeriod g) {
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put("PERIOD_TYPE", g.getPeriodType());
+        contentValues.put("PERIOD_NAME", g.getPeriodName());
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy", Locale.ENGLISH);
+        String formattedDateString = formatter.format(g.getActualDate());
+        contentValues.put("ACTUAL_DATE",formattedDateString);
+        contentValues.put("PERIOD_REMARKS", g.getPeriodRemarks());
         return contentValues;
     }
 }

@@ -9,11 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.villagebanking.BOObjects.BOPerson;
-import com.villagebanking.Database.DB0Tables;
+import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.databinding.PersonsFragmentBinding;
 
-public class PersonsAdd extends Fragment {
+public class PersonsEdit extends Fragment {
 
     private PersonsFragmentBinding binding;
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class PersonsAdd extends Fragment {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBUtility.DTOSaveUpdate(getPersonDataFromView(), DB0Tables.PERSONS);
+                DBUtility.DTOSaveUpdate(getPersonDataFromView(), DB1Tables.PERSONS);
             }
         };
     }

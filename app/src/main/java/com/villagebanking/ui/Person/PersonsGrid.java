@@ -1,4 +1,4 @@
-package com.villagebanking.ui.Group;
+package com.villagebanking.ui.Person;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,14 +8,13 @@ import android.widget.ArrayAdapter;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
-import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.R;
 
 import java.util.ArrayList;
 
-public class GroupAdapter <T> extends ArrayAdapter {
-    public GroupAdapter(Context context, int textViewResourceId, ArrayList<T> objects) {
+public class PersonsGrid<T> extends ArrayAdapter {
+    public PersonsGrid(Context context, int textViewResourceId, ArrayList<T> objects) {
         super(context, textViewResourceId, objects);
     }
 
@@ -33,13 +32,13 @@ public class GroupAdapter <T> extends ArrayAdapter {
 
     private View customeView(int row, T data) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View convertView = inflater.inflate(R.layout.group_gridview, null);
+        View convertView = inflater.inflate(R.layout.persons_gridview, null);
 
-        BOGroup bindData = (BOGroup) data;
+        BOPerson bindData = (BOPerson) data;
         String value1 = Integer.toString(row);
-        String value2 = bindData.getName() + "-" + bindData.getKeyID();
-        String value3 = Double.toString(bindData.getAmount());
-        String value4 = Double.toString(bindData.getNoOfPerson());
+        String value2 = bindData.getStrFName() + "-" + bindData.getKeyID();
+        String value3 = bindData.getStrLName();
+        String value4 = Long.toString(bindData.getNumMobile());
 
         TextView column1 = ((TextView) convertView.findViewById(R.id.txtColumn1));
         TextView column2 = ((TextView) convertView.findViewById(R.id.txtColumn2));

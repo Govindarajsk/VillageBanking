@@ -1,4 +1,4 @@
-package com.villagebanking.ui.Person;
+package com.villagebanking.ui.Period;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,13 +8,13 @@ import android.widget.ArrayAdapter;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
-import com.villagebanking.BOObjects.BOPerson;
+import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.R;
 
 import java.util.ArrayList;
 
-public class PersonsAdapter<T> extends ArrayAdapter {
-    public PersonsAdapter(Context context, int textViewResourceId, ArrayList<T> objects) {
+public class PeriodsGrid<T> extends ArrayAdapter {
+    public PeriodsGrid(Context context, int textViewResourceId, ArrayList<T> objects) {
         super(context, textViewResourceId, objects);
     }
 
@@ -32,13 +32,13 @@ public class PersonsAdapter<T> extends ArrayAdapter {
 
     private View customeView(int row, T data) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View convertView = inflater.inflate(R.layout.persons_gridview, null);
+        View convertView = inflater.inflate(R.layout.periods_gridview, null);
 
-        BOPerson bindData = (BOPerson) data;
+        BOPeriod bindData = (BOPeriod) data;
         String value1 = Integer.toString(row);
-        String value2 = bindData.getStrFName() + "-" + bindData.getKeyID();
-        String value3 = bindData.getStrLName();
-        String value4 = Long.toString(bindData.getNumMobile());
+        String value2 = bindData.getPeriodType() + "-" + bindData.getPeriodName();
+        String value3 = String.valueOf(bindData.getActualDate()!=null?bindData.getActualDate():"");
+        String value4 = "";//String.valueOf(bindData.());
 
         TextView column1 = ((TextView) convertView.findViewById(R.id.txtColumn1));
         TextView column2 = ((TextView) convertView.findViewById(R.id.txtColumn2));

@@ -13,14 +13,14 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
 import com.villagebanking.BOObjects.BOGroup;
-import com.villagebanking.Database.DB0Tables;
+import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.Utility.CustomAdapter;
 import com.villagebanking.R;
 import com.villagebanking.Utility.StaticUtility;
 import com.villagebanking.databinding.GroupFragmentBinding;
 
-public class GroupAdd extends Fragment {
+public class GroupEdit extends Fragment {
     private GroupFragmentBinding binding;
     int key = 0;
 
@@ -86,13 +86,13 @@ public class GroupAdd extends Fragment {
 
     void clickSave() {
         BOGroup newIns = getDataFromView();
-        DBUtility.DTOSaveUpdate(newIns, DB0Tables.GROUPS);
+        DBUtility.DTOSaveUpdate(newIns, DB1Tables.GROUPS);
         fillGridView();
         btnVisiblity("Save");
     }
 
     void clickDelete() {
-        DBUtility.DTOdelete(key, DB0Tables.GROUPS);
+        DBUtility.DTOdelete(key, DB1Tables.GROUPS);
         key = 0;
         fillGridView();
         btnVisiblity("Delete");
@@ -124,7 +124,7 @@ public class GroupAdd extends Fragment {
 
     void fillGridView() {
         CustomAdapter adapter = new CustomAdapter(this.getContext(), R.layout.activity_gridview,
-                DBUtility.DTOGetAlls(DB0Tables.GROUPS), "A");
+                DBUtility.DTOGetAlls(DB1Tables.GROUPS), "A");
         //binding.gvGroup.setAdapter(adapter);
     }
     AdapterView.OnItemClickListener itemSelect() {

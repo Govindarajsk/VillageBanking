@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
 import com.villagebanking.BOObjects.BOGroupPersonLink;
-import com.villagebanking.Database.DB0Tables;
+import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Utility.CustomAdapter;
 import com.villagebanking.Database.DBHelper;
 import com.villagebanking.Database.DBUtility;
@@ -58,7 +58,7 @@ public class GroupPersonLink extends Fragment {
     }
 
     void clickDelete() {
-        DBUtility.DTOdelete(key, DB0Tables.GROUP_PERSON_LINK);
+        DBUtility.DTOdelete(key, DB1Tables.GROUP_PERSON_LINK);
         key = 0;
         assignToGridView();
         binding.btnSave.setVisibility(View.VISIBLE);
@@ -68,7 +68,7 @@ public class GroupPersonLink extends Fragment {
 
     void clickSave() {
         BOGroupPersonLink newIns = getDataFromView();
-        DBUtility.DTOSaveUpdate(newIns, DB0Tables.GROUP_PERSON_LINK);
+        DBUtility.DTOSaveUpdate(newIns, DB1Tables.GROUP_PERSON_LINK);
         assignToGridView();
         key = 0;
     }
@@ -90,7 +90,7 @@ public class GroupPersonLink extends Fragment {
 
     void fillGroup() {
         CustomAdapter adapter = new CustomAdapter(this.getContext(), R.layout.activity_gridview,
-                DBUtility.DTOGetAlls(DB0Tables.GROUPS), "B");
+                DBUtility.DTOGetAlls(DB1Tables.GROUPS), "B");
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.editGroup.setAdapter(adapter);
@@ -99,7 +99,7 @@ public class GroupPersonLink extends Fragment {
 
     void fillPerson() {
         CustomAdapter adapter = new CustomAdapter(this.getContext(), R.layout.activity_gridview,
-                DBUtility.DTOGetAlls(DB0Tables.PERSONS), "B");
+                DBUtility.DTOGetAlls(DB1Tables.PERSONS), "B");
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.editPerson.setAdapter(adapter);
@@ -110,7 +110,7 @@ public class GroupPersonLink extends Fragment {
 
     void assignToGridView() {
         CustomAdapter adapter = new CustomAdapter(this.getContext(), R.layout.activity_gridview,
-                DBUtility.DTOGetAlls(DB0Tables.GROUP_PERSON_LINK), "A");
+                DBUtility.DTOGetAlls(DB1Tables.GROUP_PERSON_LINK), "A");
         binding.gvPersons.setAdapter(adapter);
 
         binding.gvPersons.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -4,26 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:columnCount="3"
-    tools:context=".ui.Person.PersonsAdd">
+    tools:context=".ui.Person.PersonsEdit">
 
-    <ImageView android:layout_height="100dp"
-        android:tooltipText="Photo"
-        android:layout_marginTop="10dp"
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_row="0"
-        android:background="#112bf2"
         android:layout_column="1"
         android:layout_columnSpan="2"
-        android:layout_width="100dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="15dp">
-    </ImageView>
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp"
+        android:background="#112bf2"
+        android:tooltipText="Photo"/>
+
     <EditText
-        android:hint="@string/first_name"
         android:id="@+id/editFName"
         style="@style/editText"
         android:layout_row="1"
         android:layout_column="1"
         android:layout_columnWeight="@integer/config_navAnimTime"
+        android:hint="@string/first_name"
         android:inputType="text" />
 
     <EditText
@@ -41,35 +42,36 @@
         style="@style/editText"
         android:layout_row="3"
         android:layout_column="1"
-        android:hint="@string/mobile"
-        android:maxLength="10"
         android:layout_columnWeight="@integer/config_navAnimTime"
-        android:inputType="number" />
+        android:hint="@string/mobile"
+        android:inputType="number"
+        android:maxLength="10" />
 
     <EditText
         android:id="@+id/editRef1"
-        android:hint="Reference by 1"
         style="@style/editText"
         android:layout_row="4"
         android:layout_column="1"
         android:layout_columnWeight="@integer/config_navAnimTime"
+        android:hint="Reference by 1"
         android:inputType="textAutoComplete" />
 
     <EditText
         android:id="@+id/editRef2"
-        android:hint="Reference by 2"
         style="@style/editText"
         android:layout_row="5"
         android:layout_column="1"
         android:layout_columnWeight="@integer/config_navAnimTime"
+        android:hint="Reference by 2"
         android:inputType="textAutoComplete" />
 
-        <Button android:layout_marginTop="30dp"
-            android:id="@+id/btnSave"
-            android:layout_row="6"
-            android:layout_column="0"
-            android:layout_columnSpan="2"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="30dp"
-            android:text="Submit" />
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_row="6"
+        android:layout_column="0"
+        android:layout_columnSpan="2"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:text="Submit" />
 </GridLayout>

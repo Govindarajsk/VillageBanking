@@ -3,9 +3,18 @@ package com.villagebanking.BOObjects;
 import java.util.Date;
 
 public class BOPeriod extends BOBase {
+    private int periodType;
     private String periodName;
-    private Date startDate;
-    private Date endDate;
+    private Date actualDate;
+    private String periodRemarks;
+
+    public int getPeriodType() {
+        return periodType;
+    }
+
+    public void setPeriodType(Integer periodType) {
+        this.periodType = periodType;
+    }
 
     public String getPeriodName() {
         return periodName;
@@ -15,19 +24,19 @@ public class BOPeriod extends BOBase {
         this.periodName = periodName;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public Date getActualDate() {
+        return actualDate;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setActualDate(Date actualDate) {
+        this.actualDate = actualDate;
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public String getPeriodRemarks() {
+        return periodRemarks;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setPeriodRemarks(String periodRemarks) {
+        this.periodRemarks = periodRemarks;
     }
 }

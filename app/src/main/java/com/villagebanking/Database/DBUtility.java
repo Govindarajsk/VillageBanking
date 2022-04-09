@@ -6,11 +6,13 @@ import android.database.Cursor;
 import java.util.ArrayList;
 
 public class DBUtility {
+    public static final String dateFormat="EEE MMM d HH:mm:ss zz yyyy";
+
     //region Database Instance
     public static DBHelper dbHelper;
 
     public static void CreateDB(Context cntxt) {
-        dbHelper = new DBHelper(cntxt, 3);
+        dbHelper = new DBHelper(cntxt, 5);
     }
 
     public static DBHelper getDB() {
@@ -23,7 +25,7 @@ public class DBUtility {
     }
 
     public static <T> String DTOSaveUpdate(T data,String tableName) {
-        BOMap map = DB1Save.DTOSaveUpdate(data,tableName);
+        BOMap map = DB2Save.DTOSaveUpdate(data,tableName);
         if (map != null) //SAVE TO TABLE
             dbHelper.DBSaveUpdate(map.getPrimary_key(), map.getContentValues(), tableName);
         return "";

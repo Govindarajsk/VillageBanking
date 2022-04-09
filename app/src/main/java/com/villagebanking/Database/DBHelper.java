@@ -17,14 +17,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        for (String tableCreateQuery : DB0Tables.getCreateTables()) {
+        for (String tableCreateQuery : DB1Tables.getCreateTables()) {
             db.execSQL("CREATE TABLE " + tableCreateQuery);
         }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        for (String tableName : DB0Tables.getTables()) {
+        for (String tableName : DB1Tables.getTables()) {
             db.execSQL("DROP TABLE IF EXISTS " + tableName);
         }
         onCreate(db);

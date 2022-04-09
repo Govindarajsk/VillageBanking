@@ -1,4 +1,4 @@
-package com.villagebanking.ui.Master;
+package com.villagebanking.ui.Period;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.villagebanking.BOObjects.BOPeriod;
-import com.villagebanking.BOObjects.BOPerson;
+import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.databinding.PeriodsViewBinding;
 
@@ -17,7 +17,7 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class PeriodsAdd extends Fragment {
+public class PeriodsEdit extends Fragment {
 
     private PeriodsViewBinding binding;
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class PeriodsAdd extends Fragment {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //DBUtility.DTOSaveUpdate(getPersonDataFromView(),D);
+                DBUtility.DTOSaveUpdate(getPersonDataFromView(), DB1Tables.PERIODS);
             }
         };
     }
@@ -48,15 +48,13 @@ public class PeriodsAdd extends Fragment {
     BOPeriod getPersonDataFromView() {
         BOPeriod newData = new BOPeriod();
         newData.setPrimary_key(0);
+        String str=binding.editType.getText().toString();
+        newData.setPeriodType(Integer.valueOf(str));
         newData.setPeriodName(binding.editName.getText().toString());
-
         ParsePosition pos = new ParsePosition(0);
-        newData.setStartDate(new SimpleDateFormat("dd/MM/yyyy").parse
-                (binding.editStartDate.getText().toString(),pos)
-        );
-        newData.setEndDate(new SimpleDateFormat("dd/MM/yyyy").parse
-                (binding.editStartDate.getText().toString(),pos)
-        );
+        Date dt=new SimpleDateFormat("dd/MM/yyyy").parse(binding.editDate.getText().toString(),pos);
+        newData.setActualDate(dt);
+        newData.setPeriodRemarks(binding.editDetail.getText().toString());
         return newData;
     }
 }
