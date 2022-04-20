@@ -1,27 +1,20 @@
 package com.villagebanking.BOObjects;
 
-public class BOGroupPersonLink {
-    public int getKeyID() {
-        return keyID;
-    }
+public class BOGroupPersonLink extends BOBase {
 
-    public void setKeyID(int keyID) {
-        this.keyID = keyID;
-    }
-
-    public int getGroup_key() {
+    public long getGroup_key() {
         return group_key;
     }
 
-    public void setGroup_key(int group_key) {
+    public void setGroup_key(long group_key) {
         this.group_key = group_key;
     }
 
-    public int getPerson_key() {
+    public long getPerson_key() {
         return person_key;
     }
 
-    public void setPerson_key(int person_key) {
+    public void setPerson_key(long person_key) {
         this.person_key = person_key;
     }
 
@@ -41,9 +34,8 @@ public class BOGroupPersonLink {
         this.person_role = person_role;
     }
 
-    private int keyID;
-    private int group_key;
-    private int person_key;
+    private long group_key;
+    private long person_key;
     private int orderBy;
     private String person_role;
 }

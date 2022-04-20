@@ -31,11 +31,11 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //Persons,Groups,group_person_link
-    public Integer DBdelete(Integer key, String TBLNAME) {
+    public Integer DBdelete(long key, String TBLNAME) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TBLNAME,
                 "id = ? ",
-                new String[]{Integer.toString(key)});
+                new String[]{Long.toString(key)});
     }
 
     public boolean DBSaveUpdate(Long key, ContentValues data, String TBLNAME) {

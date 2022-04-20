@@ -4,29 +4,14 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-
         <item
             android:id="@+id/nav_person_grid_view"
             android:title="@string/menu_persons" />
-
         <item
             android:id="@+id/nav_group_grid_view"
-            android:title="@string/menu_group_detail" />
+            android:title="Groups" />
         <item
             android:id="@+id/nav_period_grid_view"
             android:title="Periods" />
-
-
-        <item
-            android:id="@+id/nav_person_edit_view"
-            android:title="Add Person" />
-        <item
-            android:id="@+id/nav_group_edit_view"
-            android:title="Add Group" />
-
-        <item
-            android:id="@+id/nav_period_edit_view"
-            android:title="Add Period" />
-
     </group>
 </menu>

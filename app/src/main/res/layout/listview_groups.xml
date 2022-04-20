@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/maingrid"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="5"
+    android:layoutDirection="locale"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txtSNo"
+        style="@style/stylDgTxt"
+        android:layout_row="0"
+        android:layout_rowSpan="2"
+        android:layout_column="0"
+        android:layout_gravity="top"
+        android:text="1."
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txtGrpName"
+        style="@style/stylDgTxt"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:layout_columnWeight="@integer/config_navAnimTime"
+        android:text="Group 1"
+        android:textStyle="bold" />
+
+    <GridLayout
+        android:layout_row="1"
+        android:layout_column="1"
+        android:layout_columnWeight="@integer/config_navAnimTime">
+
+        <TextView
+            android:id="@+id/txtNoPerson"
+            style="@style/stylDgTxt"
+            android:layout_column="0"
+            android:text="11"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtActualDate"
+            style="@style/stylDgTxt"
+            android:layout_column="1"
+            android:text="12/05/1989"
+            android:textStyle="bold" />
+    </GridLayout>
+
+    <TextView
+        android:id="@+id/txtAmount"
+        style="@style/stylDgTxt"
+        android:layout_row="0"
+        android:layout_rowSpan="2"
+        android:layout_column="2"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="20dp"
+        android:inputType="number"
+        android:text="4000.00"
+        android:textAlignment="viewEnd"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnDelete"
+        style="@style/stylDgbtn"
+        android:layout_row="0"
+        android:layout_rowWeight="@integer/config_navAnimTime"
+        android:layout_column="3"
+        android:layout_gravity="center_vertical"
+        android:background="@color/design_default_color_error"
+        android:text="D"
+        app:backgroundTintMode="screen" />
+
+    <Button
+        android:id="@+id/btnPersonDetail"
+        style="@style/stylDgbtn"
+        android:layout_row="1"
+        android:layout_rowWeight="@integer/config_navAnimTime"
+        android:layout_column="3"
+        android:layout_gravity="center_vertical"
+        android:background="@color/design_default_color_error"
+        android:text="D"
+        app:backgroundTintMode="screen" />
+
+    <TextView
+        android:layout_row="4"
+        android:layout_column="0"
+        android:layout_columnSpan="4"
+        android:layout_columnWeight="@integer/config_navAnimTime"
+        android:layout_gravity="top"
+        android:height="1dp"
+        android:background="#c2bfb6"
+        android:gravity="top" />
+
+</GridLayout>

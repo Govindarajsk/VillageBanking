@@ -12,7 +12,7 @@ public class DBUtility {
     public static DBHelper dbHelper;
 
     public static void CreateDB(Context cntxt) {
-        dbHelper = new DBHelper(cntxt, 5);
+        dbHelper = new DBHelper(cntxt, 8);
     }
 
     public static DBHelper getDB() {
@@ -20,7 +20,7 @@ public class DBUtility {
     }
     //endregion
 
-    public static void DTOdelete(Integer ID, String tableName) {
+    public static void DTOdelete(long ID, String tableName) {
         dbHelper.DBdelete(ID, tableName);
     }
 

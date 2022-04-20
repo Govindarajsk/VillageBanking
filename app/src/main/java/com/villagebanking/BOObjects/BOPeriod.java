@@ -5,8 +5,9 @@ import java.util.Date;
 public class BOPeriod extends BOBase {
     private int periodType;
     private String periodName;
-    private Date actualDate;
+    private String actualDate;
     private String periodRemarks;
+    private long periodValue;
 
     public int getPeriodType() {
         return periodType;
@@ -24,11 +25,11 @@ public class BOPeriod extends BOBase {
         this.periodName = periodName;
     }
 
-    public Date getActualDate() {
+    public String getActualDate() {
         return actualDate;
     }
 
-    public void setActualDate(Date actualDate) {
+    public void setActualDate(String actualDate) {
         this.actualDate = actualDate;
     }
 
@@ -38,5 +39,14 @@ public class BOPeriod extends BOBase {
 
     public void setPeriodRemarks(String periodRemarks) {
         this.periodRemarks = periodRemarks;
+    }
+
+
+    public long getPeriodValue() {
+        return periodValue;
+    }
+
+    public void setPeriodValue(long periodValue) {
+        this.periodValue = periodValue;
     }
 }

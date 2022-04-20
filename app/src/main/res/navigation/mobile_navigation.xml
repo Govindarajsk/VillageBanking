@@ -3,41 +3,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_person_grid_view">
-
+    app:startDestination="@+id/nav_group_grid_view">
+    <!--Main -->
     <fragment
         android:id="@+id/nav_person_grid_view"
-        android:name="com.villagebanking.ui.Person.PersonsDetail"
+        android:name="com.villagebanking.ui.Person.Persons"
         android:label="Persons"
-        tools:layout="@layout/activity_gridview" />
+        tools:layout="@layout/app_gridview" />
 
     <fragment
         android:id="@+id/nav_group_grid_view"
-        android:name="com.villagebanking.ui.Group.GroupDetail"
+        android:name="com.villagebanking.ui.Group.Groups"
         android:label="Groups"
-        tools:layout="@layout/activity_gridview" />
+        tools:layout="@layout/app_gridview" />
 
     <fragment
         android:id="@+id/nav_period_grid_view"
-        android:name="com.villagebanking.ui.Period.PeriodsDetail"
+        android:name="com.villagebanking.ui.Period.Periods"
         android:label="Periods"
-        tools:layout="@layout/activity_gridview" />
-<!--
+        tools:layout="@layout/app_gridview" />
+
+    <!--Sub-->
     <fragment
         android:id="@+id/nav_person_edit_view"
         android:name="com.villagebanking.ui.Person.PersonsEdit"
         android:label="Add Person"
-        tools:layout="@layout/persons_fragment" />
+        tools:layout="@layout/editview_persons" />
     <fragment
         android:id="@+id/nav_group_edit_view"
-        android:name="com.villagebanking.ui.Group.GroupEdit"
+        android:name="com.villagebanking.ui.Group.GroupsEdit"
         android:label="Add Group"
-        tools:layout="@layout/group_fragment" />
+        tools:layout="@layout/editview_groups" />
     <fragment
         android:id="@+id/nav_period_edit_view"
         android:name="com.villagebanking.ui.Period.PeriodsEdit"
         android:label="Period"
-        tools:layout="@layout/periods_view" />
+        tools:layout="@layout/editview_periods" />
 
--->
+    <!--Link-->
+    <fragment
+        android:id="@+id/nav_linkview_group_person"
+        android:name="com.villagebanking.ui.GroupPerson.GroupPersons"
+        android:label="Group Person"
+        tools:layout="@layout/linkview_group_person" />
+
 </navigation>

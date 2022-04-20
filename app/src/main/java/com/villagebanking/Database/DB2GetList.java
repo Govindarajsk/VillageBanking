@@ -7,6 +7,7 @@ import com.villagebanking.BOObjects.BOGroupPersonLink;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.BOObjects.BOPersonTransaction;
+import com.villagebanking.Utility.StaticUtility;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -43,27 +44,37 @@ public class DB2GetList {
 
     static BOPerson getValue(Cursor res, BOPerson test) {
         BOPerson newData = new BOPerson();
-        newData.setKeyID(res.getInt(0));
+        newData.setPrimary_key(res.getLong(0));
         newData.setStrFName(res.getString(1));
         newData.setStrLName(res.getString(2));
         newData.setNumMobile(res.getLong(3));
         return newData;
     }
 
+    /*
+        "ID INTEGER PRIMARY KEY, " +
+                "NAME TEXT," +
+                "NO_OF_PERSON INTEGER," +
+                "AMOUNT DECIMAL" +
+                "START_PERIOD_KEY INTEGER"+
+                "BOND_CHARGE DECIMAL"+
+     */
     static BOGroup getValue(Cursor res, BOGroup test) {
         BOGroup newData = new BOGroup();
-        newData.setKeyID(res.getInt(0));
+        newData.setPrimary_key(res.getInt(0));
         newData.setName(res.getString(1));
         newData.setNoOfPerson(res.getInt(2));
         newData.setAmount(res.getDouble(3));
+        newData.setStartPeriodKey(res.getInt(4));
+        newData.setBondCharge(res.getDouble(5));
         return newData;
     }
 
     static BOGroupPersonLink getValue(Cursor res, BOGroupPersonLink test) {
         BOGroupPersonLink newData = new BOGroupPersonLink();
-        newData.setKeyID(res.getInt(0));
-        newData.setGroup_key(res.getInt(1));
-        newData.setPerson_key(res.getInt(2));
+        newData.setPrimary_key(res.getLong(0));
+        newData.setGroup_key(res.getLong(1));
+        newData.setPerson_key(res.getLong(2));
         newData.setOrderBy(res.getInt(3));
         newData.setPerson_role(res.getString(4));
         return newData;
@@ -85,11 +96,7 @@ public class DB2GetList {
         newData.setPrimary_key(res.getInt(0));
         newData.setPeriodType(res.getInt(1));
         newData.setPeriodName(res.getString(2));
-
-        String sDate1 = res.getString(3);
-        ParsePosition parsePosition = new ParsePosition(0);
-        newData.setActualDate(new SimpleDateFormat(DBUtility.dateFormat).parse(sDate1, parsePosition));
-
+        newData.setActualDate(StaticUtility.getDateString(res.getString(3)));
         newData.setPeriodRemarks(res.getString(4));
         return newData;
     }

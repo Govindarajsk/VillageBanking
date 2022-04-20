@@ -2,16 +2,7 @@ package com.villagebanking.BOObjects;
 
 import java.sql.Blob;
 
-public class BOPerson {
-    private int keyID;
-
-    public int getKeyID() {
-        return keyID;
-    }
-
-    public void setKeyID(int keyID) {
-        this.keyID = keyID;
-    }
+public class BOPerson extends BOBase {
 
     public String getStrFName() {
         return strFName;

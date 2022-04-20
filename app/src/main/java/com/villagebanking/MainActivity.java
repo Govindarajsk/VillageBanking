@@ -14,19 +14,19 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.villagebanking.Database.DBUtility;
-import com.villagebanking.databinding.MainActivityBinding;
+import com.villagebanking.databinding.AppActivityBinding;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private MainActivityBinding binding;
+    private AppActivityBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         DBUtility.CreateDB(this);
-        binding = MainActivityBinding.inflate(getLayoutInflater());
+        binding = AppActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);

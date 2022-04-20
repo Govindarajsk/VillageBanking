@@ -1,12 +1,10 @@
 package com.villagebanking.Utility;
 
 import android.content.Context;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
@@ -53,29 +51,17 @@ public class CustomAdapter<T> extends ArrayAdapter {
 
     private View customeView(int row, T data) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View convertView = inflater.inflate(R.layout.activity_gridview, null);
+        View convertView = inflater.inflate(R.layout.app_gridview, null);
         String value1, value2 = "", value3 = "", value4 = "", value5 = "";
 
         value1 = Integer.toString(row);
 
         if (data instanceof BOGroupPersonLink) {
             BOGroupPersonLink bindData = (BOGroupPersonLink) data;
-            value2 = Integer.toString(bindData.getGroup_key());
-            value3 = Integer.toString(bindData.getPerson_key());
+            value2 = Long.toString(bindData.getGroup_key());
+            value3 = Long.toString(bindData.getPerson_key());
             value4 = Integer.toString(bindData.getOrderBy());
             value5 = bindData.getPerson_role();
-        } else if (data instanceof BOPerson) {
-            BOPerson bindData = (BOPerson) data;
-            value2 = bindData.getStrFName() + "-" + bindData.getKeyID();
-            value3 = bindData.getStrLName();
-            value4 = Long.toString(bindData.getNumMobile());
-            value5 = bindData.getReference1() + " & " + bindData.getReference2();
-        } else if (data instanceof BOGroup) {
-            BOGroup bindData = (BOGroup) data;
-            value2 = bindData.getName();
-            value3 = String.format("%.2f", bindData.getAmount());
-            value4 = Integer.toString(bindData.getNoOfPerson());
-            value5 = bindData.getStatus();
         } else if (data instanceof BOPersonTransaction) {
             BOPersonTransaction bindData = (BOPersonTransaction) data;
             value2 = bindData.getLinkName();
@@ -88,23 +74,11 @@ public class CustomAdapter<T> extends ArrayAdapter {
         TextView column4 = ((TextView) convertView.findViewById(R.id.txtColumn4));
 
 
-        column1.setText(value1);
-        column2.setText(value2);
-        column3.setText(value3);
-        column4.setText(value4);
-        ApplyColor(convertView,row);
-        return dgAllignment(convertView,displayType);
-    }
-    void ApplyColor(View convertView,int row)
-    {
-        GridLayout grdlyout = ((GridLayout) convertView.findViewById(R.id.maingrid));
-        if(row%2==0)
-        {
-            grdlyout.setBackgroundColor(0xffffff);
-        }
-        else {
-            grdlyout.setBackgroundColor(0xebe6e6);
-        }
+       // column1.setText(value1);
+        //column2.setText(value2);
+        //column3.setText(value3);
+       // column4.setText(value4);
+        return convertView;
     }
 
     View dgAllignment(View convertView,String type) {

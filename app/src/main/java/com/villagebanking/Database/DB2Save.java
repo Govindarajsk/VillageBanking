@@ -7,26 +7,27 @@ import com.villagebanking.BOObjects.BOGroupPersonLink;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.BOObjects.BOPersonTransaction;
+import com.villagebanking.Utility.StaticUtility;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class DB2Save {
 
-    public static <T> BOMap DTOSaveUpdate(T data,String tableName) {
+    public static <T> BOMap DTOSaveUpdate(T data, String tableName) {
         switch (tableName) {
             case DB1Tables.PERSONS:
                 BOPerson p = (BOPerson) data;
-                return new BOMap(p.getKeyID(), getContentValue(p));
+                return new BOMap(p.getPrimary_key(), getContentValue(p));
             case DB1Tables.GROUPS:
                 BOGroup g = (BOGroup) data;
-                return new BOMap(g.getKeyID(), getContentValue(g));
+                return new BOMap(g.getPrimary_key(), getContentValue(g));
             case DB1Tables.PERIODS:
                 BOPeriod pd = (BOPeriod) data;
                 return new BOMap(pd.getPrimary_key(), getContentValue(pd));
             case DB1Tables.GROUP_PERSON_LINK:
                 BOGroupPersonLink gp = (BOGroupPersonLink) data;
-                return new BOMap(gp.getKeyID(), getContentValue(gp));
+                return new BOMap(gp.getPrimary_key(), getContentValue(gp));
             case DB1Tables.PERSON_TRANSACTION:
                 BOPersonTransaction pt = (BOPersonTransaction) data;
                 return new BOMap(pt.getKeyID(), getContentValue(pt));
@@ -54,12 +55,21 @@ public class DB2Save {
         return contentValues;
     }
 
-    //Groups =>id integer primary key, name text,personsCount integer,amount decimal
+    /*
+        "ID INTEGER PRIMARY KEY, " +
+                "NAME TEXT," +
+                "NO_OF_PERSON INTEGER," +
+                "AMOUNT DECIMAL" +
+                "START_PERIOD_KEY INTEGER"+
+                "BOND_CHARGE DECIMAL"+
+     */
     static ContentValues getContentValue(BOGroup g) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("name", g.getName());
-        contentValues.put("personsCount", g.getNoOfPerson());
-        contentValues.put("amount", g.getAmount());
+        contentValues.put("NAME", g.getName());
+        contentValues.put("NO_OF_PERSON", g.getNoOfPerson());
+        contentValues.put("AMOUNT", g.getAmount());
+        contentValues.put("START_PERIOD_KEY", g.getStartPeriodKey());
+        contentValues.put("BOND_CHARGE", g.getBondCharge());
         return contentValues;
     }
 
@@ -71,6 +81,7 @@ public class DB2Save {
         contentValues.put("phone", g.getNumMobile());
         return contentValues;
     }
+
     // PERIODS =>ID integer primary key,PERIOD_TYPE INTEGER,PERIOD_NAME TEXT,ACTUAL_DATE DATE,PERIOD_REMARKS TEXT
     static ContentValues getContentValue(BOPeriod g) {
         ContentValues contentValues = new ContentValues();
@@ -78,9 +89,11 @@ public class DB2Save {
         contentValues.put("PERIOD_TYPE", g.getPeriodType());
         contentValues.put("PERIOD_NAME", g.getPeriodName());
 
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-M-yyyy", Locale.ENGLISH);
-        String formattedDateString = formatter.format(g.getActualDate());
-        contentValues.put("ACTUAL_DATE",formattedDateString);
+        String formattedDateString = StaticUtility.getDateString(g.getActualDate());
+        contentValues.put("ACTUAL_DATE", formattedDateString);
+
+        contentValues.put("DATEVALUE",StaticUtility.getDateInteger(g.getPeriodValue()));
+
         contentValues.put("PERIOD_REMARKS", g.getPeriodRemarks());
         return contentValues;
     }

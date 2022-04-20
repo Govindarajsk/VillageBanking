@@ -177,7 +177,7 @@ public class PersonTrans extends Fragment {
     void personSelectedData(BOPerson seletedData) {
 
         ArrayList<BOGroupPersonLink> gpList = DBUtility.DTOGetAlls(DB1Tables.GROUP_PERSON_LINK);
-        Predicate<BOGroupPersonLink> condition = x -> x.getPerson_key() != seletedData.getKeyID();
+        Predicate<BOGroupPersonLink> condition = x -> x.getPerson_key() != seletedData.getPrimary_key();
         gpList.removeIf(condition);
 
         if (gpList.stream().count() > 0) {
@@ -225,23 +225,22 @@ public class PersonTrans extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.N)
     BOPersonTransaction getBOgroup(BOGroupPersonLink linkdata) {
         ArrayList<BOGroup> groupLst = DBUtility.DTOGetAlls(DB1Tables.GROUPS);
-        groupLst.removeIf(x -> x.getKeyID() != linkdata.getGroup_key());
+        groupLst.removeIf(x -> x.getPrimary_key() != linkdata.getGroup_key());
         BOGroup gpData = (BOGroup) groupLst.get(0);
 
         BOPersonTransaction data = new BOPersonTransaction();
-        data.setGp_key(linkdata.getKeyID());
+        //data.setGp_key(linkdata.getPrimary_key());
         data.setLinktype('G');
         data.setLinkName(gpData.getName());
         data.setCalcAmount(gpData.getAmount());
         data.setAmount(0.00);
-        gpData.setKeyID(linkdata.getKeyID());
+        gpData.setPrimary_key(linkdata.getPrimary_key());
         return data;
     }
 
     //Display
     void DataToView(BOPersonTransaction data) {
         key = data.getKeyID();
-        //binding.editTransDate.setText(data.getTransDate().toString());
 
         binding.lblNarration.setText(data.getLinkName());
         binding.lblpendingAmount.setText(Double.toString(data.getCalcAmount()));
@@ -260,13 +259,13 @@ public class PersonTrans extends Fragment {
         if (transactions == null)
             transactions = DBUtility.DTOGetAlls(DB1Tables.PERSON_TRANSACTION);
 
-        CustomAdapter adapter = new CustomAdapter(this.getContext(), R.layout.activity_gridview,
+        CustomAdapter adapter = new CustomAdapter(this.getContext(), R.layout.app_gridview,
                 transactions, "A");
         binding.gvDataView.setAdapter(adapter);
     }
 
     void fillGroupPerson(Spinner spinner) {
-        CustomAdapter adapter = new CustomAdapter(this.getContext(), R.layout.activity_gridview,
+        CustomAdapter adapter = new CustomAdapter(this.getContext(), R.layout.app_gridview,
                 DBUtility.DTOGetAlls(DB1Tables.PERSONS), "B");
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);

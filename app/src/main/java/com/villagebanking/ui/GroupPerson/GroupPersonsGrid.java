@@ -1,4 +1,4 @@
-package com.villagebanking.ui.Person;
+package com.villagebanking.ui.GroupPerson;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.TextView;
 
 import androidx.navigation.Navigation;
@@ -18,8 +17,8 @@ import com.villagebanking.R;
 
 import java.util.ArrayList;
 
-public class PersonsGrid<T> extends ArrayAdapter {
-    public PersonsGrid(Context context, int textViewResourceId, ArrayList<T> objects) {
+public class GroupPersonsGrid<T> extends ArrayAdapter{
+    public GroupPersonsGrid(Context context, int textViewResourceId, ArrayList<T> objects) {
         super(context, textViewResourceId, objects);
     }
 
@@ -58,6 +57,7 @@ public class PersonsGrid<T> extends ArrayAdapter {
         btnDelete.setOnClickListener(clickMethod(bindData.getPrimary_key()));
         return convertView;
     }
+
     View.OnClickListener clickMethod(long primaryKey) {
         return new View.OnClickListener() {
             @Override

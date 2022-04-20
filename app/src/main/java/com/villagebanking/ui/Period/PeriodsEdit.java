@@ -4,28 +4,29 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.villagebanking.BOObjects.BOPeriod;
+import com.villagebanking.Controls.DatePickerFragment;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
-import com.villagebanking.databinding.PeriodsViewBinding;
-
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.villagebanking.Utility.StaticUtility;
+import com.villagebanking.databinding.EditviewPeriodsBinding;
 
 public class PeriodsEdit extends Fragment {
+    private EditviewPeriodsBinding binding;
 
-    private PeriodsViewBinding binding;
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = PeriodsViewBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        binding = EditviewPeriodsBinding.inflate(inflater, container, false);
         initilize();
-        return root;
+        return binding.getRoot();
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -33,7 +34,14 @@ public class PeriodsEdit extends Fragment {
     }
 
     void initilize() {
+
         binding.btnSave.setOnClickListener(clickMethod());
+        DatePicker simpleDatePicker = (DatePicker)binding.editDate; // initiate a date picker
+        simpleDatePicker.setSpinnersShown(true);
+
+        binding.editDate.setOnClickListener(
+                StaticUtility.DisplayDate(getContext(),
+                        binding.editDate));
     }
 
     public View.OnClickListener clickMethod() {
@@ -41,6 +49,7 @@ public class PeriodsEdit extends Fragment {
             @Override
             public void onClick(View view) {
                 DBUtility.DTOSaveUpdate(getPersonDataFromView(), DB1Tables.PERIODS);
+                getActivity().onBackPressed();
             }
         };
     }
@@ -48,12 +57,11 @@ public class PeriodsEdit extends Fragment {
     BOPeriod getPersonDataFromView() {
         BOPeriod newData = new BOPeriod();
         newData.setPrimary_key(0);
-        String str=binding.editType.getText().toString();
+        String str = binding.editType.getText().toString();
         newData.setPeriodType(Integer.valueOf(str));
         newData.setPeriodName(binding.editName.getText().toString());
-        ParsePosition pos = new ParsePosition(0);
-        Date dt=new SimpleDateFormat("dd/MM/yyyy").parse(binding.editDate.getText().toString(),pos);
-        newData.setActualDate(dt);
+        newData.setActualDate(StaticUtility.getDate(binding.editDate));
+        newData.setPeriodValue(StaticUtility.getDateInt(binding.editDate));
         newData.setPeriodRemarks(binding.editDetail.getText().toString());
         return newData;
     }
