@@ -1,6 +1,9 @@
 package com.villagebanking.Database;
 
 import android.database.Cursor;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOGroupPersonLink;
@@ -52,7 +55,7 @@ public class DB2GetList {
     }
 
     /*
-        "ID INTEGER PRIMARY KEY, " +
+                "ID INTEGER PRIMARY KEY, " +
                 "NAME TEXT," +
                 "NO_OF_PERSON INTEGER," +
                 "AMOUNT DECIMAL" +
@@ -73,8 +76,19 @@ public class DB2GetList {
     static BOGroupPersonLink getValue(Cursor res, BOGroupPersonLink test) {
         BOGroupPersonLink newData = new BOGroupPersonLink();
         newData.setPrimary_key(res.getLong(0));
-        newData.setGroup_key(res.getLong(1));
-        newData.setPerson_key(res.getLong(2));
+        long group_key = res.getLong(1);
+
+        ArrayList<Object> groupList = DBUtility.DTOGetData(DB1Tables.GROUPS, group_key);
+        if(groupList.size()>0) {
+            BOGroup group = (BOGroup) groupList.get(0);
+            newData.setGroup_Detail(group);
+        }
+        long person_key = res.getLong(2);
+        ArrayList<Object> personList=DBUtility.DTOGetData(DB1Tables.PERSONS, person_key);
+        if(personList.size()>0) {
+            BOPerson person = (BOPerson) personList.get(0);
+            newData.setPerson_Detail(person);
+        }
         newData.setOrderBy(res.getInt(3));
         newData.setPerson_role(res.getString(4));
         return newData;

@@ -2,6 +2,9 @@ package com.villagebanking.Database;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 
@@ -33,6 +36,10 @@ public class DBUtility {
 
     public static <T> ArrayList<T> DTOGetAlls(String tableName) {
         Cursor res = dbHelper.DBGetAll(tableName);
+        return DB2GetList.DTOGetAlls(res, tableName);
+    }
+    public static <T> ArrayList<T> DTOGetData(String tableName, long primary_key) {
+        Cursor res = dbHelper.DBGetData(tableName,primary_key);
         return DB2GetList.DTOGetAlls(res, tableName);
     }
 }

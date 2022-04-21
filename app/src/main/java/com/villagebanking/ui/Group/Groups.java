@@ -1,11 +1,13 @@
 package com.villagebanking.ui.Group;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -25,7 +27,6 @@ public class Groups extends Fragment {
     }
 
     void initilize() {
-
         assignToGridView();
         binding.btnAdd.setOnClickListener(clickMethod());
     }

@@ -177,7 +177,7 @@ public class PersonTrans extends Fragment {
     void personSelectedData(BOPerson seletedData) {
 
         ArrayList<BOGroupPersonLink> gpList = DBUtility.DTOGetAlls(DB1Tables.GROUP_PERSON_LINK);
-        Predicate<BOGroupPersonLink> condition = x -> x.getPerson_key() != seletedData.getPrimary_key();
+        Predicate<BOGroupPersonLink> condition = x -> x.getPerson_Detail().getPrimary_key() != seletedData.getPrimary_key();
         gpList.removeIf(condition);
 
         if (gpList.stream().count() > 0) {
@@ -225,7 +225,7 @@ public class PersonTrans extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.N)
     BOPersonTransaction getBOgroup(BOGroupPersonLink linkdata) {
         ArrayList<BOGroup> groupLst = DBUtility.DTOGetAlls(DB1Tables.GROUPS);
-        groupLst.removeIf(x -> x.getPrimary_key() != linkdata.getGroup_key());
+        groupLst.removeIf(x -> x.getPrimary_key() != linkdata.getGroup_Detail().getPrimary_key());
         BOGroup gpData = (BOGroup) groupLst.get(0);
 
         BOPersonTransaction data = new BOPersonTransaction();

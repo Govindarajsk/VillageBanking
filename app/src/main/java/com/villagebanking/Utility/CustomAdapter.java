@@ -58,8 +58,8 @@ public class CustomAdapter<T> extends ArrayAdapter {
 
         if (data instanceof BOGroupPersonLink) {
             BOGroupPersonLink bindData = (BOGroupPersonLink) data;
-            value2 = Long.toString(bindData.getGroup_key());
-            value3 = Long.toString(bindData.getPerson_key());
+            value2 = Long.toString(bindData.getGroup_Detail().getPrimary_key());
+            value3 = Long.toString(bindData.getPerson_Detail().getPrimary_key());
             value4 = Integer.toString(bindData.getOrderBy());
             value5 = bindData.getPerson_role();
         } else if (data instanceof BOPersonTransaction) {
@@ -68,10 +68,10 @@ public class CustomAdapter<T> extends ArrayAdapter {
             value3 = String.format("%.2f", bindData.getCalcAmount());
             value4 = String.format("%.2f", bindData.getAmount());
         }
-        TextView column1 = ((TextView) convertView.findViewById(R.id.txtColumn1));
-        TextView column2 = ((TextView) convertView.findViewById(R.id.txtColumn2));
-        TextView column3 = ((TextView) convertView.findViewById(R.id.txtColumn3));
-        TextView column4 = ((TextView) convertView.findViewById(R.id.txtColumn4));
+        TextView column1 = ((TextView) convertView.findViewById(R.id.txtSNo));
+        TextView column2 = ((TextView) convertView.findViewById(R.id.txtFirstName));
+        TextView column3 = ((TextView) convertView.findViewById(R.id.txtLastName));
+        TextView column4 = ((TextView) convertView.findViewById(R.id.txtPhoneNo));
 
 
        // column1.setText(value1);
@@ -83,10 +83,10 @@ public class CustomAdapter<T> extends ArrayAdapter {
 
     View dgAllignment(View convertView,String type) {
 
-        TextView column1 = ((TextView) convertView.findViewById(R.id.txtColumn1));
-        TextView column2 = ((TextView) convertView.findViewById(R.id.txtColumn2));
-        TextView column3 = ((TextView) convertView.findViewById(R.id.txtColumn3));
-        TextView column4 = ((TextView) convertView.findViewById(R.id.txtColumn4));
+        TextView column1 = ((TextView) convertView.findViewById(R.id.txtSNo));
+        TextView column2 = ((TextView) convertView.findViewById(R.id.txtFirstName));
+        TextView column3 = ((TextView) convertView.findViewById(R.id.txtLastName));
+        TextView column4 = ((TextView) convertView.findViewById(R.id.txtPhoneNo));
 
         switch (type) {
             case "A":

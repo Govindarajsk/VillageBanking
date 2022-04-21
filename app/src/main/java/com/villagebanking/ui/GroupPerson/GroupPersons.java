@@ -11,11 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.villagebanking.BOObjects.BOAutoComplete;
+import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOGroupPersonLink;
-import com.villagebanking.BOObjects.BOPeriod;
-import com.villagebanking.Controls.DataGrid;
+import com.villagebanking.Controls.AutoCompleteBox;
 import com.villagebanking.Database.DB1Tables;
-import com.villagebanking.Utility.CustomAdapter;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 import com.villagebanking.BOObjects.BOPerson;
@@ -30,7 +30,7 @@ public class GroupPersons extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = LinkviewGroupPersonBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        long group_key=getArguments().getLong("group_key");
+        long group_key = getArguments().getLong("group_key");
         initilize(group_key);
         return root;
     }
@@ -38,7 +38,7 @@ public class GroupPersons extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.N)
     void initilize(long group_Key) {
         binding.btnSave.setOnClickListener(clickMethod(group_Key));
-        binding.editPerson.setOnItemSelectedListener(personSelected());
+        binding.editPerson.setOnItemClickListener(personSelected());
         fill_GridView(group_Key);
         fill_person();
     }
@@ -48,54 +48,65 @@ public class GroupPersons extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                DBUtility.DTOSaveUpdate(getDataFromView(groupKey), DB1Tables.GROUP_PERSON_LINK);
+                BOGroupPersonLink saveData = getDataFromView(groupKey);
+                if (saveData != null)
+                    DBUtility.DTOSaveUpdate(saveData, DB1Tables.GROUP_PERSON_LINK);
                 fill_GridView(groupKey);
             }
         };
     }
 
     BOGroupPersonLink getDataFromView(long group_Key) {
-        BOGroupPersonLink newData = new BOGroupPersonLink();
-        newData.setGroup_key(group_Key);
-        newData.setPerson_key(personSelected.getPrimary_key());
+        BOGroupPersonLink newData = null;
+        if (group_Key > 0 && personKey > 0) {
+            newData = new BOGroupPersonLink();
+            newData.getGroup_Detail().setPrimary_key(group_Key);
+            newData.getPerson_Detail().setPrimary_key(personKey);
+        }
         return newData;
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_GridView(long groupKey) {
-        ArrayList<BOGroupPersonLink> groupPersons = DBUtility.DTOGetAlls(DB1Tables.GROUP_PERSON_LINK);
-        groupPersons.removeIf(x -> x.getGroup_key() != groupKey);
+        ArrayList<BOGroup> groups= DBUtility.DTOGetData(DB1Tables.GROUPS,groupKey);
+if(groups.size()>0)
+        binding.editGroup.setText(groups.get(0).getName());
 
-        GroupPersonsGrid adapter = new GroupPersonsGrid(this.getContext(), R.layout.app_gridview,
-                groupPersons);
+        ArrayList<BOGroupPersonLink> groupPersons = DBUtility.DTOGetAlls(DB1Tables.GROUP_PERSON_LINK);
+        groupPersons.removeIf(x -> x.getGroup_Detail().getPrimary_key() != groupKey);
+        GroupPersonsGrid adapter = new GroupPersonsGrid(this.getContext(), R.layout.app_gridview, groupPersons);
         binding.gvPersons.setAdapter(adapter);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_person() {
-        ArrayList<BOPeriod> actualList = DBUtility.DTOGetAlls(DB1Tables.PERSONS);
-        DataGrid dataGrid = new DataGrid(this.getContext(), R.layout.listview_dropdown, actualList);
-        dataGrid.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        binding.editPerson.setAdapter(dataGrid);
+        ArrayList<BOPerson> actualList = DBUtility.DTOGetAlls(DB1Tables.PERSONS);
+
+        ArrayList<BOAutoComplete> autoCompleteList = new ArrayList<>();
+        actualList.forEach(x -> autoCompleteList.add
+                (
+                        new BOAutoComplete(x.getPrimary_key(),
+                                x.getStrFName() + "-" + x.getStrLName()))
+        );
+
+        AutoCompleteBox autoComplete = new AutoCompleteBox(this.getContext(), autoCompleteList);
+        binding.editPerson.setAdapter(autoComplete);
         binding.editPerson.setSelection(0);
+        binding.editPerson.showDropDown();
+
     }
 
-    BOPerson personSelected = null;
+    long personKey = 0;
 
-    AdapterView.OnItemSelectedListener personSelected() {
-        return new AdapterView.OnItemSelectedListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
+    AdapterView.OnItemClickListener personSelected() {
+        return new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                // Get the selected item
-                personSelected = (BOPerson) adapterView.getItemAtPosition(i);
-            }
-
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                personSelected = null;
+            public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
+                Object item = parent.getItemAtPosition(position);
+                if (item instanceof BOAutoComplete) {
+                    BOAutoComplete student = (BOAutoComplete) item;
+                    personKey = student.getPrimary_key();
+                }
             }
         };
     }

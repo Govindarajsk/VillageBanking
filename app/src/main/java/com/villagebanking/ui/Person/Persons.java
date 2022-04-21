@@ -1,11 +1,13 @@
 package com.villagebanking.ui.Person;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -17,14 +19,17 @@ import com.villagebanking.databinding.AppGridviewBinding;
 
 public class Persons extends Fragment {
     private AppGridviewBinding binding;
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = AppGridviewBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        assignToGridView();
         initilize();
         return root;
     }
+
     void initilize() {
+
+        assignToGridView();
         binding.btnAdd.setOnClickListener(clickMethod());
     }
 
@@ -36,6 +41,7 @@ public class Persons extends Fragment {
             }
         };
     }
+
     void assignToGridView() {
         PersonsGrid adapter = new PersonsGrid(this.getContext(), R.layout.listview_persons,
                 DBUtility.DTOGetAlls(DB1Tables.PERSONS));

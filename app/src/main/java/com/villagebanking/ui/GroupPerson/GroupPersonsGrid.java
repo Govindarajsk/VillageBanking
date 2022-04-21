@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 
+import com.villagebanking.BOObjects.BOGroup;
+import com.villagebanking.BOObjects.BOGroupPersonLink;
 import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
@@ -38,11 +40,18 @@ public class GroupPersonsGrid<T> extends ArrayAdapter{
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View convertView = inflater.inflate(R.layout.listview_persons, null);
 
-        BOPerson bindData = (BOPerson) data;
+        BOGroupPersonLink bindData = (BOGroupPersonLink) data;
         String value1 = Integer.toString(row);
-        String value2 = bindData.getStrFName() + "-" + bindData.getPrimary_key();
-        String value3 = bindData.getStrLName();
-        String value4 = Long.toString(bindData.getNumMobile());
+        String value2=null;
+        String value3=null;
+        String value4=null;
+
+        BOPerson person=bindData.getPerson_Detail();
+        if(person!=null) {
+            value2 = person.getStrFName() + "-" + bindData.getPrimary_key();
+            value3 = person.getStrLName();
+            value4 = Long.toString(person.getNumMobile());
+        }
 
         TextView txtSNo = ((TextView) convertView.findViewById(R.id.txtSNo));
         TextView txtFirstName = ((TextView) convertView.findViewById(R.id.txtFirstName));
@@ -62,8 +71,7 @@ public class GroupPersonsGrid<T> extends ArrayAdapter{
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBUtility.DTOdelete(primaryKey, DB1Tables.PERSONS);
-                Navigation.findNavController(view).navigate(R.id.nav_person_grid_view);
+                DBUtility.DTOdelete(primaryKey, DB1Tables.GROUP_PERSON_LINK);
             }
         };
     }

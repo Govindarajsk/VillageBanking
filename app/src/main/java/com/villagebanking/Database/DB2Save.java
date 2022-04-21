@@ -48,8 +48,8 @@ public class DB2Save {
     //group_person_link(id integer primary key, group_key integer,person_key integer,order_by integer,person_role text)
     static ContentValues getContentValue(BOGroupPersonLink g) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("group_key", g.getGroup_key());
-        contentValues.put("person_key", g.getPerson_key());
+        contentValues.put("group_key",g.getGroup_Detail().getPrimary_key());
+        contentValues.put("person_key", g.getPerson_Detail().getPrimary_key());
         contentValues.put("order_by", g.getOrderBy());
         contentValues.put("person_role", g.getPerson_role());
         return contentValues;

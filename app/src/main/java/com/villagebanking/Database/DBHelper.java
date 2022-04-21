@@ -53,4 +53,9 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor res = db.rawQuery("SELECT * FROM " + TBLNAME, null);
         return res;
     }
+    public Cursor DBGetData(String TBLNAME,long primary_key) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM " + TBLNAME + " WHERE ID="+primary_key, null);
+        return res;
+    }
 }

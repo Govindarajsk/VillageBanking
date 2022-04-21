@@ -1,11 +1,13 @@
 package com.villagebanking.ui.Period;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import com.villagebanking.Database.DB1Tables;
@@ -19,11 +21,11 @@ public class Periods extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = AppGridviewBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        assignToGridView();
         initilize();
         return root;
     }
     void initilize() {
+        assignToGridView();
         binding.btnAdd.setOnClickListener(clickMethod());
     }
 
