@@ -45,6 +45,12 @@ public class DB2GetList {
         return returnList;
     }
 
+    /*
+       "ID INTEGER PRIMARY KEY, " +
+       "FIRSTNAME TEXT," +
+       "LASTNAME TEXT," +
+       "PHONE TEXT"+;
+    */
     static BOPerson getValue(Cursor res, BOPerson test) {
         BOPerson newData = new BOPerson();
         newData.setPrimary_key(res.getLong(0));
@@ -55,12 +61,12 @@ public class DB2GetList {
     }
 
     /*
-                "ID INTEGER PRIMARY KEY, " +
-                "NAME TEXT," +
-                "NO_OF_PERSON INTEGER," +
-                "AMOUNT DECIMAL" +
-                "START_PERIOD_KEY INTEGER"+
-                "BOND_CHARGE DECIMAL"+
+        "ID INTEGER PRIMARY KEY, " +
+        "NAME TEXT," +
+        "NO_OF_PERSON INTEGER," +
+        "AMOUNT DECIMAL" +
+        "START_PERIOD_KEY INTEGER"+
+        "BOND_CHARGE DECIMAL"+
      */
     static BOGroup getValue(Cursor res, BOGroup test) {
         BOGroup newData = new BOGroup();
@@ -103,15 +109,22 @@ public class DB2GetList {
         newData.setStatus(res.getString(4));
         return newData;
     }
-
-    //PERIODS =>ID integer primary key,PERIOD_TYPE INTEGER,PERIOD_NAME TEXT,ACTUAL_DATE DATE,PERIOD_REMARKS TEXT
+    /*
+        "ID INTEGER PRIMARY KEY," +
+        "PERIOD_TYPE INTEGER, " +
+        "PERIOD_NAME TEXT, " +
+        "ACTUAL_DATE TEXT," +
+        "DATEVALUE INTEGER," +
+        "PERIOD_REMARKS TEXT" +
+     */
     static BOPeriod getValue(Cursor res, BOPeriod test) {
         BOPeriod newData = new BOPeriod();
         newData.setPrimary_key(res.getInt(0));
         newData.setPeriodType(res.getInt(1));
         newData.setPeriodName(res.getString(2));
-        newData.setActualDate(StaticUtility.getDateString(res.getString(3)));
-        newData.setPeriodRemarks(res.getString(4));
+        newData.setActualDate(res.getString(3));
+        newData.setPeriodValue(res.getLong(4));
+        newData.setPeriodRemarks(res.getString(5));
         return newData;
     }
 }

@@ -1,27 +1,61 @@
 package com.villagebanking.Utility;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-
+import com.villagebanking.BOObjects.BOAutoComplete;
 import com.villagebanking.BOObjects.BOPeriod;
+import com.villagebanking.Controls.AutoCompleteBox;
 
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class StaticUtility {
+
+    //region Constants
     public static final String LISTBOX = "LISTBOX";
     public static final String DATAGRID = "DATAGRID";
+
+    public static final String V_NUMBER = "NUMBER";
+    public static final String V_STRING = "STRING";
+    //endregion
+
+    //region Validation
+    static final String V_StringRequired = "This field is required";
+    static final String V_NumberRequired = "Value should be greater than zero";
+
+    public static boolean IsFieldEmpty(String type, TextView field) {
+        switch (type) {
+            case V_NUMBER:
+                Double Val2 = Double.parseDouble(field.getText().length() == 0 ? "0" : field.getText().toString());
+                if (Val2 <= 0) {
+                    field.setError(V_NumberRequired);
+                    return true;
+                }
+            case V_STRING:
+                if (field.length() == 0) {
+                    field.setError(V_StringRequired);
+                    return true;
+                }
+
+        }
+        return false;
+    }
+    //endregion
 
     //region Datepicker Selecter
     public static View.OnClickListener DisplayDate(Context context, DatePicker dpDispField) {
@@ -41,54 +75,91 @@ public class StaticUtility {
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
-                                // set day of month , month and year value in the edit text
-                                // dpDispField.se(dayOfMonth + "/"+
-                                //       (monthOfYear + 1) + "/" + year);
                             }
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();
             }
         };
     }
-    //endregion
 
-    public static String getDateString(String date) {
-//        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-//        sdf.format(date);
-        return date;
-    }
-
-    public static long  getDateInteger(long  periodValue )
-    {
-        return  periodValue;
-    }
-
-    public static String getDate(DatePicker strDate) {
+    public static String getDateString(DatePicker strDate) {
         int day = strDate.getDayOfMonth();
         int month = strDate.getMonth();
         int year = strDate.getYear();
-        return day + "/" + month + "/" + year;
+        return String.format("%02d", day) + "/" + String.format("%02d", month) + "/" + year;
     }
+
     public static long getDateInt(DatePicker strDate) {
         int day = strDate.getDayOfMonth();
         int month = strDate.getMonth();
         int year = strDate.getYear();
-        return year  + month  + day;
+        return Long.valueOf(year + String.format("%02d", month) + String.format("%02d", day));
     }
+    //endregion
 
-    public static Map<Integer, List<BOPeriod>> GroupByPeriod(ArrayList<BOPeriod> periods) {
-        Map<Integer, List<BOPeriod>> map = new HashMap<>();
+    public static Map<String, List<BOPeriod>> GroupByPeriod(ArrayList<BOPeriod> periods) {
+        Map<String, List<BOPeriod>> map = new HashMap<>();
         for (BOPeriod item : periods) {
+            String value = item.getPeriodType() + ":" + item.getPeriodName();
             List<BOPeriod> list;
-            if (map.containsKey(item.getPeriodType())) {
-                list = map.get(item.getPeriodType());
+            if (map.containsKey(value)) {
+                list = map.get(value);
             } else {
                 list = new ArrayList<>();
             }
             list.add(item);
-            map.put(item.getPeriodType(), list);
+            map.put(value, list);
         }
         map.values(); // this will give Collection of values.
         return map;
+    }
+
+    public static void SetAutoCompleteBox(Context cnxt, ArrayList<BOAutoComplete> list, AutoCompleteTextView control) {
+        AutoCompleteBox autoComplete = new AutoCompleteBox(cnxt, list);
+        control.setAdapter(autoComplete);
+        control.setSelection(0);
+    }
+
+    public static void ApplyTextWatcher(Context context, EditText editText1, EditText editText2, TextView txtView) {
+        TextWatcher fieldValidatorTextWatcher = new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                //ShowMessage(context, "afterTextChanged");
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //ShowMessage(context, "beforeTextChanged");
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Double Val1 = Double.parseDouble(editText1.getText().length() == 0 ? "1" : editText1.getText().toString());
+                Double Val2 = Double.parseDouble(editText2.getText().length() == 0 ? "1" : editText2.getText().toString());
+
+                Double oldValue = Val1.doubleValue() * Val2.doubleValue();
+                txtView.setText(oldValue.toString());
+            }
+        };
+        editText1.addTextChangedListener(fieldValidatorTextWatcher);
+        editText2.addTextChangedListener(fieldValidatorTextWatcher);
+
+    }
+
+    public static void ShowMessage(Context cntxt, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(cntxt);
+        builder.setMessage(message);
+        builder.setTitle("Alert !");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog,
+                                int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

@@ -11,10 +11,11 @@ public class DB1Tables {
 
     public static final String CREATE_PERSON =
             PERSONS + "(" +
-                    "id integer primary key, " +
-                    "FirstName text," +
-                    "LastName text," +
-                    "phone text)";
+                    "ID INTEGER PRIMARY KEY, " +
+                    "FIRSTNAME TEXT," +
+                    "LASTNAME TEXT," +
+                    "PHONE TEXT" +
+                    ")";
 
     public static final String CREATE_GROUPS =
             GROUPS + "(" +
@@ -28,19 +29,21 @@ public class DB1Tables {
 
     public static final String CREATE_GROUP_PERSON_LINK =
             GROUP_PERSON_LINK + "(" +
-                    "id integer primary key, " +
-                    "group_key integer," +
-                    "person_key integer," +
-                    "order_by integer," +
-                    "person_role text)";
+                    "ID INTEGER PRIMARY_KEY, " +
+                    "GROUP_KEY INTEGER," +
+                    "PERSON_KEY INTEGER," +
+                    "ORDER_BY INTEGER," +
+                    "PERSON_ROLE TEXT" +
+                    ")";
 
     public static final String CREATE_PERSON_TRANSACTION =
             PERSON_TRANSACTION + "(" +
-                    "ID integer primary key," +
-                    "TRANS_DATE text, " +
-                    "GROUP_PERSON_KEY integer," +
-                    "AMOUNT decimal," +
-                    "STATUS text)";
+                    "ID INTEGER PRIMARY_KEY," +
+                    "TRANS_DATE TEXT, " +
+                    "GROUP_PERSON_KEY INTEGER," +
+                    "AMOUNT DECIMAL," +
+                    "STATUS TEXT" +
+                    ")";
 
     public static final String CREATE_PERIODS =
             PERIODS + "(" +

@@ -1,7 +1,5 @@
 package com.villagebanking.BOObjects;
 
-import java.util.Date;
-
 public class BOPeriod extends BOBase {
     private int periodType;
     private String periodName;
@@ -40,7 +38,6 @@ public class BOPeriod extends BOBase {
     public void setPeriodRemarks(String periodRemarks) {
         this.periodRemarks = periodRemarks;
     }
-
 
     public long getPeriodValue() {
         return periodValue;

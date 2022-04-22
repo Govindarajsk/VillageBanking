@@ -43,9 +43,9 @@ public class PeriodsGrid<T> extends ArrayAdapter {
         View convertView = inflater.inflate(R.layout.listview_periods, null);
 
         BOPeriod bindData = (BOPeriod) data;
-        String value1 = Integer.toString(row);
+        String value1 = Long.toString(row);
         String value2 = bindData.getPeriodType() + "-" + bindData.getPeriodName();
-        String value3 = StaticUtility.getDateString(bindData.getActualDate());//String.valueOf(bindData.getActualDate()!=null?bindData.getActualDate():"");
+        String value3 = bindData.getActualDate();//String.valueOf(bindData.getActualDate()!=null?bindData.getActualDate():"");
 
         TextView column1 = ((TextView) convertView.findViewById(R.id.txtSNo));
         TextView column2 = ((TextView) convertView.findViewById(R.id.txtPeriodType));

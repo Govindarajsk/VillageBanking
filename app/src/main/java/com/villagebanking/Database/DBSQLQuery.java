@@ -7,11 +7,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DBHelper extends SQLiteOpenHelper {
+public class DBSQLQuery extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "MyDBName.db";
 
-    public DBHelper(Context context, int version) {
+    public DBSQLQuery(Context context, int version) {
         super(context, DATABASE_NAME, null, version);
     }
 

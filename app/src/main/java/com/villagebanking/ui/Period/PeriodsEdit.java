@@ -49,18 +49,17 @@ public class PeriodsEdit extends Fragment {
             @Override
             public void onClick(View view) {
                 DBUtility.DTOSaveUpdate(getPersonDataFromView(), DB1Tables.PERIODS);
-                getActivity().onBackPressed();
+                //getActivity().onBackPressed();
             }
         };
     }
 
     BOPeriod getPersonDataFromView() {
         BOPeriod newData = new BOPeriod();
-        newData.setPrimary_key(0);
         String str = binding.editType.getText().toString();
         newData.setPeriodType(Integer.valueOf(str));
         newData.setPeriodName(binding.editName.getText().toString());
-        newData.setActualDate(StaticUtility.getDate(binding.editDate));
+        newData.setActualDate(StaticUtility.getDateString(binding.editDate));
         newData.setPeriodValue(StaticUtility.getDateInt(binding.editDate));
         newData.setPeriodRemarks(binding.editDetail.getText().toString());
         return newData;

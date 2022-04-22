@@ -18,19 +18,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AutoCompleteBox extends ArrayAdapter<BOAutoComplete> {
-    private List<BOAutoComplete> allPlacesList;
-    private List<BOAutoComplete> filteredPlacesList;
+    private List<BOAutoComplete> fullList;
+    private List<BOAutoComplete> filteredList;
 
-    public AutoCompleteBox(@NonNull Context context, @NonNull List<BOAutoComplete> placesList) {
-        super(context, 0, placesList);
+    public AutoCompleteBox(@NonNull Context context, @NonNull List<BOAutoComplete> inputList) {
+        super(context, 0, inputList);
 
-        allPlacesList = new ArrayList<>(placesList);
+        fullList = new ArrayList<>(inputList);
     }
 
     @NonNull
     @Override
     public Filter getFilter() {
-        return placeFilter;
+        return filterList;
     }
 
     @NonNull
@@ -42,36 +42,36 @@ public class AutoCompleteBox extends ArrayAdapter<BOAutoComplete> {
             );
         }
 
-        TextView placeLabel = convertView.findViewById(R.id.txtDropdownValue);
+        TextView txtDropdownValue = convertView.findViewById(R.id.txtDropdownValue);
 
         BOAutoComplete place = getItem(position);
         if (place != null) {
-            placeLabel.setText(place.getDisplayValue());
+            txtDropdownValue.setText(place.getDisplayValue());
         }
 
         return convertView;
     }
 
-    private Filter placeFilter = new Filter() {
+    private Filter filterList = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
 
-            filteredPlacesList = new ArrayList<>();
+            filteredList = new ArrayList<>();
 
             if (constraint == null || constraint.length() == 0) {
-                filteredPlacesList.addAll(allPlacesList);
+                filteredList.addAll(fullList);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
-                for (BOAutoComplete place: allPlacesList) {
-                    if (place.getDisplayValue().toLowerCase().contains(filterPattern)) {
-                        filteredPlacesList.add(place);
+                for (BOAutoComplete item: fullList) {
+                    if (item.getDisplayValue().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
                     }
                 }
             }
 
-            results.values = filteredPlacesList;
-            results.count = filteredPlacesList.size();
+            results.values = filteredList;
+            results.count = filteredList.size();
 
             return results;
         }

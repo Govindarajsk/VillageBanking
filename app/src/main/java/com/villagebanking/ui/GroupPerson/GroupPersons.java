@@ -19,6 +19,7 @@ import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 import com.villagebanking.BOObjects.BOPerson;
+import com.villagebanking.Utility.StaticUtility;
 import com.villagebanking.databinding.LinkviewGroupPersonBinding;
 
 import java.util.ArrayList;
@@ -68,9 +69,9 @@ public class GroupPersons extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_GridView(long groupKey) {
-        ArrayList<BOGroup> groups= DBUtility.DTOGetData(DB1Tables.GROUPS,groupKey);
-if(groups.size()>0)
-        binding.editGroup.setText(groups.get(0).getName());
+        ArrayList<BOGroup> groups = DBUtility.DTOGetData(DB1Tables.GROUPS, groupKey);
+        if (groups.size() > 0)
+            binding.editGroup.setText(groups.get(0).getName());
 
         ArrayList<BOGroupPersonLink> groupPersons = DBUtility.DTOGetAlls(DB1Tables.GROUP_PERSON_LINK);
         groupPersons.removeIf(x -> x.getGroup_Detail().getPrimary_key() != groupKey);
@@ -88,12 +89,7 @@ if(groups.size()>0)
                         new BOAutoComplete(x.getPrimary_key(),
                                 x.getStrFName() + "-" + x.getStrLName()))
         );
-
-        AutoCompleteBox autoComplete = new AutoCompleteBox(this.getContext(), autoCompleteList);
-        binding.editPerson.setAdapter(autoComplete);
-        binding.editPerson.setSelection(0);
-        binding.editPerson.showDropDown();
-
+        StaticUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editPerson);
     }
 
     long personKey = 0;
@@ -104,8 +100,8 @@ if(groups.size()>0)
             public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
                 Object item = parent.getItemAtPosition(position);
                 if (item instanceof BOAutoComplete) {
-                    BOAutoComplete student = (BOAutoComplete) item;
-                    personKey = student.getPrimary_key();
+                    BOAutoComplete itemSelected = (BOAutoComplete) item;
+                    personKey = itemSelected.getPrimary_key();
                 }
             }
         };

@@ -35,7 +35,27 @@ public class DB2Save {
         return null;
     }
 
-    //ID integer primary key,TRANS_DATE text, GROUP_PERSON_KEY integer,AMOUNT decimal,STATUS text
+    /*
+        "ID INTEGER PRIMARY KEY, " +
+        "FIRSTNAME TEXT," +
+        "LASTNAME TEXT," +
+        "PHONE TEXT"+;
+     */
+    static ContentValues getContentValue(BOPerson g) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("FIRSTNAME", g.getStrFName());
+        contentValues.put("LASTNAME", g.getStrLName());
+        contentValues.put("PHONE", g.getNumMobile());
+        return contentValues;
+    }
+
+    /*
+        "ID INTEGER PRIMARY_KEY," +
+        "TRANS_DATE TEXT, " +
+        "GROUP_PERSON_KEY INTEGER," +
+        "AMOUNT DECIMAL," +
+        "STATUS TEXT" +
+     */
     static ContentValues getContentValue(BOPersonTransaction g) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("TRANS_DATE", g.getTransDate().toString());
@@ -45,23 +65,29 @@ public class DB2Save {
         return contentValues;
     }
 
-    //group_person_link(id integer primary key, group_key integer,person_key integer,order_by integer,person_role text)
+    /*
+        "ID INTEGER PRIMARY_KEY, " +
+        "GROUP_KEY INTEGER," +
+        "PERSON_KEY INTEGER," +
+        "ORDER_BY INTEGER," +
+        "PERSON_ROLE TEXT" +
+     */
     static ContentValues getContentValue(BOGroupPersonLink g) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("group_key",g.getGroup_Detail().getPrimary_key());
-        contentValues.put("person_key", g.getPerson_Detail().getPrimary_key());
-        contentValues.put("order_by", g.getOrderBy());
-        contentValues.put("person_role", g.getPerson_role());
+        contentValues.put("GROUP_KEY", g.getGroup_Detail().getPrimary_key());
+        contentValues.put("PERSON_KEY", g.getPerson_Detail().getPrimary_key());
+        contentValues.put("ORDER_BY", g.getOrderBy());
+        contentValues.put("PERSON_ROLE", g.getPerson_role());
         return contentValues;
     }
 
     /*
         "ID INTEGER PRIMARY KEY, " +
-                "NAME TEXT," +
-                "NO_OF_PERSON INTEGER," +
-                "AMOUNT DECIMAL" +
-                "START_PERIOD_KEY INTEGER"+
-                "BOND_CHARGE DECIMAL"+
+        "NAME TEXT," +
+        "NO_OF_PERSON INTEGER," +
+        "AMOUNT DECIMAL" +
+        "START_PERIOD_KEY INTEGER"+
+        "BOND_CHARGE DECIMAL"+
      */
     static ContentValues getContentValue(BOGroup g) {
         ContentValues contentValues = new ContentValues();
@@ -73,26 +99,23 @@ public class DB2Save {
         return contentValues;
     }
 
-    //Persons =>id integer primary key, FirstName text,LastName text,phone text
-    static ContentValues getContentValue(BOPerson g) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("FirstName", g.getStrFName());
-        contentValues.put("LastName", g.getStrLName());
-        contentValues.put("phone", g.getNumMobile());
-        return contentValues;
-    }
-
-    // PERIODS =>ID integer primary key,PERIOD_TYPE INTEGER,PERIOD_NAME TEXT,ACTUAL_DATE DATE,PERIOD_REMARKS TEXT
+    /*
+        "ID INTEGER PRIMARY KEY," +
+        "PERIOD_TYPE INTEGER, " +
+        "PERIOD_NAME TEXT, " +
+        "ACTUAL_DATE TEXT," +
+        "DATEVALUE INTEGER," +
+        "PERIOD_REMARKS TEXT" +
+     */
     static ContentValues getContentValue(BOPeriod g) {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put("PERIOD_TYPE", g.getPeriodType());
         contentValues.put("PERIOD_NAME", g.getPeriodName());
 
-        String formattedDateString = StaticUtility.getDateString(g.getActualDate());
-        contentValues.put("ACTUAL_DATE", formattedDateString);
+        contentValues.put("ACTUAL_DATE",  g.getActualDate());
 
-        contentValues.put("DATEVALUE",StaticUtility.getDateInteger(g.getPeriodValue()));
+        contentValues.put("DATEVALUE", g.getPeriodValue());
 
         contentValues.put("PERIOD_REMARKS", g.getPeriodRemarks());
         return contentValues;

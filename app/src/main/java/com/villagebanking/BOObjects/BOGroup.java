@@ -60,7 +60,7 @@ public class BOGroup extends BOBase {
         return periodKey;
     }
 
-    public void setPeriodKey(int periodKey) {
+    public void setPeriodKey(long periodKey) {
         this.periodKey = periodKey;
     }
 

@@ -13,8 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.villagebanking.BOObjects.BOAutoComplete;
 import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOPeriod;
+import com.villagebanking.Controls.AutoCompleteBox;
 import com.villagebanking.Controls.DataGrid;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
@@ -51,28 +53,44 @@ public class GroupsEdit extends Fragment {
     void initialize() {
         fill_periodType();
         binding.btnSave.setOnClickListener(clickMethod());
-        binding.editPeridType.setOnItemSelectedListener(periodTypeSelected());
-        binding.editStartDate.setOnItemSelectedListener(periodSelected());
+        binding.editPeridType.setOnItemClickListener(periodItemSelected());
+        binding.editStartDate.setOnItemClickListener(periodTypeItemSelected());
+
+        StaticUtility.ApplyTextWatcher(this.getContext(),binding.editAmount,binding.editNoOfPerson,binding.lblTotalAmount);
     }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public View.OnClickListener clickMethod() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBUtility.DTOSaveUpdate(getDataFromView(), DB1Tables.GROUPS);
-                getActivity().onBackPressed();
+                if (!checkFields()) {
+                    DBUtility.DTOSaveUpdate(getDataFromView(), DB1Tables.GROUPS);
+                    getActivity().onBackPressed();
+                }
             }
         };
     }
 
+    boolean checkFields() {
+        //binding.editName.setError("Ok google");
+        boolean ok1 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING, binding.editName);
+        boolean ok2 = StaticUtility.IsFieldEmpty(StaticUtility.V_NUMBER,binding.editNoOfPerson);
+        boolean ok3 = StaticUtility.IsFieldEmpty(StaticUtility.V_NUMBER,binding.editAmount);
+        boolean ok4 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING,binding.editBondCharge);
+        boolean ok5 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING,binding.editPeridType);
+        boolean ok6 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING,binding.editStartDate);
+
+        return ok1 || ok2 || ok3 || ok4 || ok5 || ok6;
+    }
+
     BOGroup getDataFromView() {
         BOGroup newData = new BOGroup();
-        newData.setPrimary_key(0);
         newData.setName(binding.editName.getText().toString());
         newData.setNoOfPerson(Integer.valueOf(binding.editNoOfPerson.getText().toString()));
         newData.setAmount(Double.parseDouble(binding.editAmount.getText().toString()));
-        newData.setPeriodKey(Integer.valueOf(periodTypeSelected != null ? periodTypeSelected : "0"));
-        newData.setStartPeriodKey(periodSelected.getPrimary_key());
+        newData.setPeriodKey(periodKey1);
+        newData.setStartPeriodKey(periodKey2);
         newData.setBondCharge(Double.parseDouble(binding.editBondCharge.getText().toString()));
         return newData;
     }
@@ -80,67 +98,58 @@ public class GroupsEdit extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_periodType() {
         ArrayList<BOPeriod> actualList = DBUtility.DTOGetAlls(DB1Tables.PERIODS);
-        Map<Integer, List<BOPeriod>> okperiod = StaticUtility.GroupByPeriod(actualList);
-        Set<Integer> list = okperiod.keySet();
+        Map<String, List<BOPeriod>> okperiod = StaticUtility.GroupByPeriod(actualList);
+        Set<String> list = okperiod.keySet();
 
-        ArrayList<String> periodTypes = new ArrayList<>();
-        for (Integer i : list) {
-            periodTypes.add(i.toString());
+        ArrayList<BOAutoComplete> autoCompleteList = new ArrayList<>();
+        for (String item : list) {
+            String[] strings=item.split(":");
+            if(strings.length>1)
+                autoCompleteList.add(new BOAutoComplete(Integer.valueOf(strings[0]), item));
         }
-
-        DataGrid dataGrid = new DataGrid(this.getContext(), R.layout.listview_dropdown, periodTypes);
-        dataGrid.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        binding.editPeridType.setAdapter(dataGrid);
-        binding.editPeridType.setSelection(0);
+        StaticUtility.SetAutoCompleteBox(this.getContext(),autoCompleteList, binding.editPeridType);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    void fill_periodStart(Integer periodType) {
+    void fill_periodStart(long periodType) {
         ArrayList<BOPeriod> boPeriods = DBUtility.DTOGetAlls(DB1Tables.PERIODS);
-
         boPeriods.removeIf(x -> x.getPeriodType() != periodType);
 
-        PeriodsGrid adapter = new PeriodsGrid(this.getContext(), R.layout.app_gridview,
-                boPeriods, StaticUtility.LISTBOX);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        binding.editStartDate.setAdapter(adapter);
-        binding.editStartDate.setSelection(0);
+        ArrayList<BOAutoComplete> autoCompleteList = new ArrayList<>();
+        for (BOPeriod item : boPeriods) {
+            autoCompleteList.add(new BOAutoComplete(item.getPrimary_key(),item.getActualDate()));
+        }
+        StaticUtility.SetAutoCompleteBox(this.getContext(),autoCompleteList, binding.editStartDate);
     }
 
-    String periodTypeSelected = null;
-    AdapterView.OnItemSelectedListener periodTypeSelected() {
-        return new AdapterView.OnItemSelectedListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                // Get the selected item
-                periodTypeSelected = (String) adapterView.getItemAtPosition(i);
-                fill_periodStart(Integer.valueOf(periodTypeSelected));
-            }
+    long periodKey1 = 0;
 
+    AdapterView.OnItemClickListener periodItemSelected() {
+        return new AdapterView.OnItemClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                periodTypeSelected = null;
-                fill_periodStart(0);
+            public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
+                Object item = parent.getItemAtPosition(position);
+                if (item instanceof BOAutoComplete) {
+                    BOAutoComplete itemSelected = (BOAutoComplete) item;
+                    periodKey1 = itemSelected.getPrimary_key();
+                    fill_periodStart(periodKey1);
+                }
             }
         };
     }
 
+    long periodKey2 = 0;
 
-    BOPeriod periodSelected = null;
-    AdapterView.OnItemSelectedListener periodSelected() {
-        return new AdapterView.OnItemSelectedListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
+    AdapterView.OnItemClickListener periodTypeItemSelected() {
+        return new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                // Get the selected item
-                periodSelected = (BOPeriod) adapterView.getItemAtPosition(i);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                periodSelected = null;
+            public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
+                Object item = parent.getItemAtPosition(position);
+                if (item instanceof BOAutoComplete) {
+                    BOAutoComplete itemSelected = (BOAutoComplete) item;
+                    periodKey2 = itemSelected.getPrimary_key();
+                }
             }
         };
     }
