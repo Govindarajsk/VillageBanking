@@ -30,7 +30,7 @@ public class DB2Save {
                 return new BOMap(gp.getPrimary_key(), getContentValue(gp));
             case DB1Tables.PERSON_TRANSACTION:
                 BOPersonTransaction pt = (BOPersonTransaction) data;
-                return new BOMap(pt.getKeyID(), getContentValue(pt));
+                return new BOMap(pt.getPrimary_key(), getContentValue(pt));
         }
         return null;
     }
@@ -50,23 +50,25 @@ public class DB2Save {
     }
 
     /*
-        "ID INTEGER PRIMARY_KEY," +
-        "TRANS_DATE TEXT, " +
-        "GROUP_PERSON_KEY INTEGER," +
+        "ID INTEGER PRIMARY KEY," +
+        "PERIOD_KEY INTEGER, " +
+        "TABLE_NAME TEXT,"+
+        "TABLE_LINK_KEY INTEGER,"+
+        "REMARKS TEXT,"+
         "AMOUNT DECIMAL," +
-        "STATUS TEXT" +
      */
     static ContentValues getContentValue(BOPersonTransaction g) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("TRANS_DATE", g.getTransDate().toString());
-        contentValues.put("GROUP_PERSON_KEY", g.getGp_key());
-        contentValues.put("AMOUNT", g.getAmount());
-        contentValues.put("STATUS", g.getStatus());
+        contentValues.put("PERIOD_KEY", g.getPeriod_detail().getPrimary_key());
+        contentValues.put("TABLE_NAME", g.getTableName());
+        contentValues.put("TABLE_LINK_KEY", g.getForien_key());
+        contentValues.put("REMARKS", g.getRemarks());
+        contentValues.put("AMOUNT", g.getNewAmount());
         return contentValues;
     }
 
     /*
-        "ID INTEGER PRIMARY_KEY, " +
+        "ID INTEGER PRIMARY KEY, " +
         "GROUP_KEY INTEGER," +
         "PERSON_KEY INTEGER," +
         "ORDER_BY INTEGER," +
@@ -94,7 +96,7 @@ public class DB2Save {
         contentValues.put("NAME", g.getName());
         contentValues.put("NO_OF_PERSON", g.getNoOfPerson());
         contentValues.put("AMOUNT", g.getAmount());
-        contentValues.put("START_PERIOD_KEY", g.getStartPeriodKey());
+        contentValues.put("START_PERIOD_KEY", g.getPeriodDetail().getPrimary_key());
         contentValues.put("BOND_CHARGE", g.getBondCharge());
         return contentValues;
     }

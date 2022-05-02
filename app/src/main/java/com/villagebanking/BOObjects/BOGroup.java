@@ -32,14 +32,6 @@ public class BOGroup extends BOBase {
         this.amount =  amount;
     }
 
-    public long getStartPeriodKey() {
-        return startPeriodKey;
-    }
-
-    public void setStartPeriodKey(long startPeriodKey) {
-        this.startPeriodKey = startPeriodKey;
-    }
-
     public String getType() {
         return type;
     }
@@ -56,14 +48,6 @@ public class BOGroup extends BOBase {
         this.bondCharge = bondCharge;
     }
 
-    public long getPeriodKey() {
-        return periodKey;
-    }
-
-    public void setPeriodKey(long periodKey) {
-        this.periodKey = periodKey;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -72,12 +56,20 @@ public class BOGroup extends BOBase {
         this.status = status;
     }
 
+    public BOPeriod getPeriodDetail() {
+        if(periodDetail==null)
+            periodDetail=new BOPeriod();
+        return periodDetail;
+    }
+
+    public void setPeriodDetail(BOPeriod periodDetail) {
+        this.periodDetail = periodDetail;
+    }
     private String name;
     private int noOfPerson;
     private double amount;
-    private long startPeriodKey;
     private String type;
     private double bondCharge;
-    private long periodKey;
+    private BOPeriod periodDetail;
     private String status;
 }

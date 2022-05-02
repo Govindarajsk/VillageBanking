@@ -1,6 +1,7 @@
 package com.villagebanking.ui.Person;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 
+import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
@@ -55,15 +57,27 @@ public class PersonsGrid<T> extends ArrayAdapter {
         txtLastName.setText(value3);
         txtPhoneNo.setText(value4);
         Button btnDelete = ((Button) convertView.findViewById(R.id.btnDelete));
-        btnDelete.setOnClickListener(clickMethod(bindData.getPrimary_key()));
+        btnDelete.setOnClickListener(deleteMethod(bindData.getPrimary_key()));
+        Button btnEdit = ((Button) convertView.findViewById(R.id.btnEdit));
+        btnEdit.setOnClickListener(editMethod(bindData));
         return convertView;
     }
-    View.OnClickListener clickMethod(long primaryKey) {
+    View.OnClickListener deleteMethod(long primaryKey) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DBUtility.DTOdelete(primaryKey, DB1Tables.PERSONS);
                 Navigation.findNavController(view).navigate(R.id.nav_person_grid_view);
+            }
+        };
+    }
+    View.OnClickListener editMethod(BOPerson bindData) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle args=new Bundle();
+                args.putLong("primary_key",bindData.getPrimary_key());
+                Navigation.findNavController(view).navigate(R.id.nav_linkview_person_trans,args);
             }
         };
     }

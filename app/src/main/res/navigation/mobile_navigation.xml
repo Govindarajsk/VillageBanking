@@ -3,12 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_group_grid_view">
+    app:startDestination="@+id/nav_person_grid_view">
     <!--Main -->
     <fragment
         android:id="@+id/nav_person_grid_view"
         android:name="com.villagebanking.ui.Person.Persons"
         android:label="Persons"
+        tools:layout="@layout/app_gridview" />
+
+    <fragment
+        android:id="@+id/nav_period_grid_view"
+        android:name="com.villagebanking.ui.Period.Periods"
+        android:label="Periods"
         tools:layout="@layout/app_gridview" />
 
     <fragment
@@ -18,11 +24,10 @@
         tools:layout="@layout/app_gridview" />
 
     <fragment
-        android:id="@+id/nav_period_grid_view"
-        android:name="com.villagebanking.ui.Period.Periods"
-        android:label="Periods"
+        android:id="@+id/nav_trans_grid_view"
+        android:name="com.villagebanking.ui.Transaction.Trans"
+        android:label="Transaction"
         tools:layout="@layout/app_gridview" />
-
     <!--Sub-->
     <fragment
         android:id="@+id/nav_person_edit_view"
@@ -39,12 +44,22 @@
         android:name="com.villagebanking.ui.Period.PeriodsEdit"
         android:label="Period"
         tools:layout="@layout/editview_periods" />
+    <fragment
+        android:id="@+id/nav_trans_edit_view"
+        android:name="com.villagebanking.ui.Transaction.TransEdit"
+        android:label="Transaction Edit"
+        tools:layout="@layout/editview_trans" />
 
     <!--Link-->
     <fragment
         android:id="@+id/nav_linkview_group_person"
         android:name="com.villagebanking.ui.GroupPerson.GroupPersons"
         android:label="Group Person"
-        tools:layout="@layout/linkview_group_person" />
+        tools:layout="@layout/linkview_group_person" /> <!--Link-->
+    <fragment
+        android:id="@+id/nav_linkview_person_trans"
+        android:name="com.villagebanking.ui.Transaction.PersonTrans"
+        android:label="Person Transaction"
+        tools:layout="@layout/linkview_persons_trans" />
 
 </navigation>

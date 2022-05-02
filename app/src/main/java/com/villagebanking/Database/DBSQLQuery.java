@@ -53,9 +53,49 @@ public class DBSQLQuery extends SQLiteOpenHelper {
         Cursor res = db.rawQuery("SELECT * FROM " + TBLNAME, null);
         return res;
     }
-    public Cursor DBGetData(String TBLNAME,long primary_key) {
+
+    public Cursor DBGetData(String TBLNAME, long primary_key) {
+        if (TBLNAME == DB1Tables.PERSON_TRANSACTION) {
+            return DBGetTrans(primary_key);
+        }
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM " + TBLNAME + " WHERE ID="+primary_key, null);
+        Cursor res = db.rawQuery("SELECT * FROM " + TBLNAME + " WHERE ID=" + primary_key, null);
+        return res;
+    }
+
+    /*
+        GROUPS => "ID INTEGER PRIMARY KEY, " +
+                    "NAME TEXT," +
+                    "NO_OF_PERSON INTEGER," +
+                    "AMOUNT DECIMAL," +
+                    "START_PERIOD_KEY INTEGER,"+
+                    "BOND_CHARGE DECIMAL"
+    */
+    /*
+        GROUP_PERSON_LINK =>"ID INTEGER PRIMARY KEY, " +
+                            "GROUP_KEY INTEGER," +
+                            "PERSON_KEY INTEGER," +
+                            "ORDER_BY INTEGER," +
+                            "PERSON_ROLE TEXT"
+    */
+    /*
+        PERSON_TRANSACTION + "(" +
+                        "ID INTEGER PRIMARY KEY," +
+                        "PERIOD_KEY INTEGER, " +
+                        "TABLE_NAME TEXT,"+
+                        "TABLE_LINK_KEY INTEGER,"+
+                        "REMARKS TEXT,"+
+                        "AMOUNT DECIMAL"
+
+    */
+    public Cursor DBGetTrans(long person_key) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery(
+                "SELECT PTR.ID AS ID,PERIOD_KEY,TABLE_NAME,GPL.ID AS TABLE_LINK_KEY," +
+                        "G.NAME AS REMARKS,PTR.AMOUNT AS AMOUNT,G.AMOUNT AS TRANSAMOUNT FROM " +
+                        "GROUPS G JOIN "+
+                        "GROUP_PERSON_LINK GPL ON G.ID=GPL.GROUP_KEY LEFT JOIN " +
+                        "PERSON_TRANSACTION PTR ON TABLE_LINK_KEY=GPL.ID  WHERE PERSON_KEY ="+person_key, null);
         return res;
     }
 }

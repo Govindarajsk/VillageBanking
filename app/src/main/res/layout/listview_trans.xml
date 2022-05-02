@@ -19,35 +19,35 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/txtFirstName"
+        android:id="@+id/txtRemarks"
         style="@style/stylDgTxt"
         android:layout_row="0"
         android:layout_column="1"
         android:layout_columnSpan="2"
         android:layout_columnWeight="@integer/config_navAnimTime"
-        android:text="Govindaraj"
+        android:text="Group 1"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/txtLastName"
+        android:id="@+id/txtAmount"
         style="@style/stylDgTxt"
-        android:layout_row="1"
-        android:layout_column="1"
-        android:layout_columnWeight="@integer/config_navAnimTime"
-        android:text="Pavithra"
-        android:textSize="15dp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/txtPhoneNo"
-        style="@style/stylDgTxt"
-        android:layout_row="1"
+        android:layout_row="0"
         android:layout_column="2"
         android:layout_marginRight="20dp"
         android:minWidth="120dp"
-        android:text="9840233286"
-        android:layout_gravity="center_vertical"
-        android:textAlignment="gravity"
+        android:text="4000"
+        android:textAlignment="viewEnd"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txtTableName"
+        style="@style/stylDgTxt"
+        android:layout_row="1"
+        android:layout_column="0"
+        android:layout_marginRight="20dp"
+        android:layout_columnSpan="5"
+        android:layout_columnWeight="@integer/config_navAnimTime"
+        android:text="Table Name + Key"
         android:textStyle="bold" />
 
     <Button
@@ -71,6 +71,7 @@
         app:backgroundTintMode="screen"
         android:layout_width="30dp"
         android:text="D"
+        android:visibility="gone"
         />
 
     <TextView

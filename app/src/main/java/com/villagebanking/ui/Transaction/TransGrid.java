@@ -1,4 +1,4 @@
-package com.villagebanking.ui.Period;
+package com.villagebanking.ui.Transaction;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -7,21 +7,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 
-import com.villagebanking.BOObjects.BOPeriod;
+import com.villagebanking.BOObjects.BOPerson;
+import com.villagebanking.BOObjects.BOPersonTransaction;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
-import com.villagebanking.Utility.StaticUtility;
 
 import java.util.ArrayList;
 
-public class PeriodsGrid<T> extends ArrayAdapter {
-    public PeriodsGrid(Context context, int textViewResourceId, ArrayList<T> objects) {
+public class TransGrid <T> extends ArrayAdapter {
+    public TransGrid(Context context, int textViewResourceId, ArrayList<T> objects) {
         super(context, textViewResourceId, objects);
     }
 
@@ -39,46 +38,44 @@ public class PeriodsGrid<T> extends ArrayAdapter {
 
     private View customeView(int row, T data) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View convertView = inflater.inflate(R.layout.listview_periods, null);
+        View convertView = inflater.inflate(R.layout.listview_trans, null);
 
-        BOPeriod bindData = (BOPeriod) data;
-        String value1 = Long.toString(row);
-        String value2 = bindData.getPeriodType() + "-" + bindData.getPeriodName();
-        String value3 = bindData.getActualDate();//String.valueOf(bindData.getActualDate()!=null?bindData.getActualDate():"");
+        BOPersonTransaction bindData = (BOPersonTransaction) data;
+        String value1 = Integer.toString(row);
+        String value2 = bindData.getRemarks() + "-" + bindData.getPrimary_key();
+        String value3 = bindData.getTableName()+bindData.getForien_key();
+        String value4 = Double.toString(bindData.getNewAmount());
 
-        TextView column1 = ((TextView) convertView.findViewById(R.id.txtSNo));
-        TextView column2 = ((TextView) convertView.findViewById(R.id.txtPeriodType));
-        TextView column3 = ((TextView) convertView.findViewById(R.id.txtActualDate));
+        TextView txtSNo = ((TextView) convertView.findViewById(R.id.txtSNo));
+        TextView txtRemarks = ((TextView) convertView.findViewById(R.id.txtRemarks));
+        TextView txtTableName = ((TextView) convertView.findViewById(R.id.txtTableName));
+        TextView txtAmount = ((TextView) convertView.findViewById(R.id.txtAmount));
 
-        column1.setText(value1);
-        column2.setText(value2);
-        column3.setText(value3);
+        txtSNo.setText(value1);
+        txtRemarks.setText(value2);
+        txtTableName.setText(value3);
+        txtAmount.setText(value4);
 
         Button btnDelete = ((Button) convertView.findViewById(R.id.btnDelete));
         btnDelete.setOnClickListener(deleteMethod(bindData.getPrimary_key()));
-
         Button btnEdit = ((Button) convertView.findViewById(R.id.btnEdit));
-        btnEdit.setOnClickListener(editMethod(bindData));
         return convertView;
     }
-
     View.OnClickListener deleteMethod(long primaryKey) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBUtility.DTOdelete(primaryKey,DB1Tables.PERIODS);
-                Navigation.findNavController(view).navigate(R.id.nav_period_grid_view);
+                DBUtility.DTOdelete(primaryKey, DB1Tables.PERSON_TRANSACTION);
             }
         };
     }
-
-    View.OnClickListener editMethod(BOPeriod bindData) {
+    View.OnClickListener editMethod(long primaryKey) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle args=new Bundle();
-                args.putLong("primary_key",bindData.getPrimary_key());
-                Navigation.findNavController(view).navigate(R.id.nav_period_edit_view,args);
+                args.putLong("primary_key",primaryKey);
+                Navigation.findNavController(view).navigate(R.id.nav_trans_edit_view,args);
             }
         };
     }

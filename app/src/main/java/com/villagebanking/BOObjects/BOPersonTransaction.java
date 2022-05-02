@@ -4,31 +4,58 @@ import android.text.format.DateUtils;
 
 import java.util.Date;
 
-public class BOPersonTransaction {
-    private int keyID;
-    private String transDate= new Date().toString();
-    private int gp_key;
-    private Double amount=0.00;
-    private Double calcAmount=0.00;
-    private String status;
-    private char linktype;
-    private int linkId;
-    private String linkName;
+public class BOPersonTransaction extends BOBase {
+    private BOPeriod period_detail;
+    private BOPerson person_detail;
+    private String tableName;
+    private String remarks;
 
-    public String getLinkName() {
-        return linkName;
+    public BOPerson getPerson_detail() {
+        if (person_detail == null) person_detail = new BOPerson();
+        return person_detail;
     }
 
-    public void setLinkName(String linkName) {
-        this.linkName = linkName;
+    public BOPeriod getPeriod_detail() {
+        if (period_detail == null) period_detail = new BOPeriod();
+        return period_detail;
     }
 
-    public int getKeyID() {
-        return keyID;
+    public void setPeriod_detail(BOPeriod period_detail) {
+        this.period_detail = period_detail;
     }
 
-    public void setKeyID(int keyID) {
-        this.keyID = keyID;
+    public void setPerson_detail(BOPerson person_detail) {
+        this.person_detail = person_detail;
+    }
+
+    private long forien_key;
+    private String transDate;
+    private Double actualAmount;
+
+    public Double getNewAmount() {
+        return newAmount;
+    }
+
+    public void setNewAmount(Double newAmount) {
+        this.newAmount = newAmount;
+    }
+
+    private Double newAmount;
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public long getForien_key() {
+        return forien_key;
+    }
+
+    public void setForien_key(long forien_key) {
+        this.forien_key = forien_key;
     }
 
     public String getTransDate() {
@@ -39,51 +66,19 @@ public class BOPersonTransaction {
         this.transDate = transDate;
     }
 
-    public int getGp_key() {
-        return gp_key;
+    public Double getActualAmount() {
+        return actualAmount;
     }
 
-    public void setGp_key(int gp_key) {
-        this.gp_key = gp_key;
+    public void setActualAmount(Double actualAmount) {
+        this.actualAmount = actualAmount;
     }
 
-    public Double getAmount() {
-        return amount;
+    public String getRemarks() {
+        return remarks;
     }
 
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
-
-    public Double getCalcAmount() {
-        return calcAmount;
-    }
-
-    public void setCalcAmount(Double calcAmount) {
-        this.calcAmount = calcAmount;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public char getLinktype() {
-        return linktype;
-    }
-
-    public void setLinktype(char linktype) {
-        this.linktype = linktype;
-    }
-
-    public int getLinkId() {
-        return linkId;
-    }
-
-    public void setLinkId(int linkId) {
-        this.linkId = linkId;
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }

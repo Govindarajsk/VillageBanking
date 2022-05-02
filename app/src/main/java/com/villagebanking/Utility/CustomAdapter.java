@@ -64,9 +64,7 @@ public class CustomAdapter<T> extends ArrayAdapter {
             value5 = bindData.getPerson_role();
         } else if (data instanceof BOPersonTransaction) {
             BOPersonTransaction bindData = (BOPersonTransaction) data;
-            value2 = bindData.getLinkName();
-            value3 = String.format("%.2f", bindData.getCalcAmount());
-            value4 = String.format("%.2f", bindData.getAmount());
+
         }
         TextView column1 = ((TextView) convertView.findViewById(R.id.txtSNo));
         TextView column2 = ((TextView) convertView.findViewById(R.id.txtFirstName));

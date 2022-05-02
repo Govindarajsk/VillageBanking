@@ -9,69 +9,53 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/txtSNo"
+        android:id="@+id/txtDetails"
         style="@style/stylDgTxt"
         android:layout_row="0"
-        android:layout_rowSpan="2"
         android:layout_column="0"
-        android:layout_gravity="top"
-        android:text="1."
+        android:layout_columnWeight="@integer/config_navAnimTime"
+        android:text="Group1"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/txtFirstName"
+        android:id="@+id/txtAmount"
         style="@style/stylDgTxt"
         android:layout_row="0"
         android:layout_column="1"
-        android:layout_columnSpan="2"
-        android:layout_columnWeight="@integer/config_navAnimTime"
-        android:text="Govindaraj"
+        android:text="4000"
+        android:minWidth="70dp"
+        android:textAlignment="viewEnd"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/txtLastName"
-        style="@style/stylDgTxt"
-        android:layout_row="1"
-        android:layout_column="1"
-        android:layout_columnWeight="@integer/config_navAnimTime"
-        android:text="Pavithra"
-        android:textSize="15dp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/txtPhoneNo"
-        style="@style/stylDgTxt"
-        android:layout_row="1"
+    <CheckBox
+        android:id="@+id/chkIsFull"
+        android:layout_row="0"
         android:layout_column="2"
-        android:layout_marginRight="20dp"
-        android:minWidth="120dp"
-        android:text="9840233286"
+        android:minWidth="15dp"
         android:layout_gravity="center_vertical"
-        android:textAlignment="gravity"
-        android:textStyle="bold" />
+        android:checked="false" />
+
+    <EditText
+        android:id="@+id/txtNewAmount"
+        style="@style/stylDgTxt"
+        android:layout_row="0"
+        android:layout_column="3"
+        android:text="4000"
+        android:textStyle="bold"
+        android:minWidth="80dp"
+        android:textAlignment="viewEnd"
+        android:inputType="numberDecimal"/>
 
     <Button
         android:id="@+id/btnDelete"
         style="@style/stylDgbtn"
-        android:layout_row="0"
-        android:layout_column="3"
-        android:layout_gravity="center_vertical"
-        android:background="@color/design_default_color_error"
-        app:backgroundTintMode="screen"
         android:layout_width="30dp"
-        android:text="D"
-        />
-    <Button
-        android:id="@+id/btnEdit" android:layout_marginLeft="10dp"
-        style="@style/stylDgbtn"
         android:layout_row="0"
         android:layout_column="4"
         android:layout_gravity="center_vertical"
         android:background="@color/design_default_color_error"
-        app:backgroundTintMode="screen"
-        android:layout_width="30dp"
         android:text="D"
-        />
+        app:backgroundTintMode="screen" />
 
     <TextView
         android:layout_row="2"

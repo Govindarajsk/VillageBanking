@@ -74,41 +74,67 @@ public class DB2GetList {
         newData.setName(res.getString(1));
         newData.setNoOfPerson(res.getInt(2));
         newData.setAmount(res.getDouble(3));
-        newData.setStartPeriodKey(res.getInt(4));
+
+        long period_key = res.getLong(4);
+        ArrayList<Object> periodList = DBUtility.DTOGetData(DB1Tables.PERIODS, period_key);
+        if (periodList.size() > 0) {
+            BOPeriod item = (BOPeriod) periodList.get(0);
+            newData.setPeriodDetail(item);
+        }
+
         newData.setBondCharge(res.getDouble(5));
         return newData;
     }
 
+    /*
+        "ID INTEGER PRIMARY KEY, " +
+        "GROUP_KEY INTEGER," +
+        "PERSON_KEY INTEGER," +
+        "ORDER_BY INTEGER," +
+        "PERSON_ROLE TEXT" +
+    */
     static BOGroupPersonLink getValue(Cursor res, BOGroupPersonLink test) {
         BOGroupPersonLink newData = new BOGroupPersonLink();
         newData.setPrimary_key(res.getLong(0));
         long group_key = res.getLong(1);
+        long person_key = res.getLong(2);
+        newData.setOrderBy(res.getInt(3));
+        newData.setPerson_role(res.getString(4));
 
         ArrayList<Object> groupList = DBUtility.DTOGetData(DB1Tables.GROUPS, group_key);
-        if(groupList.size()>0) {
+        if (groupList.size() > 0) {
             BOGroup group = (BOGroup) groupList.get(0);
             newData.setGroup_Detail(group);
         }
-        long person_key = res.getLong(2);
-        ArrayList<Object> personList=DBUtility.DTOGetData(DB1Tables.PERSONS, person_key);
-        if(personList.size()>0) {
+        ArrayList<Object> personList = DBUtility.DTOGetData(DB1Tables.PERSONS, person_key);
+        if (personList.size() > 0) {
             BOPerson person = (BOPerson) personList.get(0);
             newData.setPerson_Detail(person);
         }
-        newData.setOrderBy(res.getInt(3));
-        newData.setPerson_role(res.getString(4));
         return newData;
     }
 
+    /*
+       "ID INTEGER PRIMARY KEY," +
+       "PERIOD_KEY INTEGER, " +
+       "TABLE_NAME TEXT,"+
+       "TABLE_LINK_KEY INTEGER,"+
+       "REMARKS TEXT,"+
+       "AMOUNT DECIMAL," +
+    */
     static BOPersonTransaction getValue(Cursor res, BOPersonTransaction test) {
         BOPersonTransaction newData = new BOPersonTransaction();
-        newData.setKeyID(res.getInt(0));
-        newData.setTransDate(res.getString(1));
-        newData.setGp_key(res.getInt(2));
-        newData.setAmount(res.getDouble(3));
-        newData.setStatus(res.getString(4));
+        newData.setPrimary_key(res.getLong(0));
+        newData.getPeriod_detail().setPrimary_key(res.getLong(1));
+        newData.setTableName(res.getString(2));
+        newData.setForien_key(res.getLong(3));
+        newData.setRemarks(res.getString(4));
+        newData.setNewAmount(res.getDouble(5));
+        if (res.getColumnCount() == 7)
+            newData.setActualAmount(res.getDouble(6));
         return newData;
     }
+
     /*
         "ID INTEGER PRIMARY KEY," +
         "PERIOD_TYPE INTEGER, " +

@@ -29,7 +29,7 @@ public class DB1Tables {
 
     public static final String CREATE_GROUP_PERSON_LINK =
             GROUP_PERSON_LINK + "(" +
-                    "ID INTEGER PRIMARY_KEY, " +
+                    "ID INTEGER PRIMARY KEY, " +
                     "GROUP_KEY INTEGER," +
                     "PERSON_KEY INTEGER," +
                     "ORDER_BY INTEGER," +
@@ -38,11 +38,12 @@ public class DB1Tables {
 
     public static final String CREATE_PERSON_TRANSACTION =
             PERSON_TRANSACTION + "(" +
-                    "ID INTEGER PRIMARY_KEY," +
-                    "TRANS_DATE TEXT, " +
-                    "GROUP_PERSON_KEY INTEGER," +
-                    "AMOUNT DECIMAL," +
-                    "STATUS TEXT" +
+                    "ID INTEGER PRIMARY KEY," +
+                    "PERIOD_KEY INTEGER, " +
+                    "TABLE_NAME TEXT,"+
+                    "TABLE_LINK_KEY INTEGER,"+
+                    "REMARKS TEXT,"+
+                    "AMOUNT DECIMAL" +
                     ")";
 
     public static final String CREATE_PERIODS =

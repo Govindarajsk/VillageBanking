@@ -6,13 +6,12 @@ import android.database.Cursor;
 import java.util.ArrayList;
 
 public class DBUtility {
-    public static final String dateFormat="EEE MMM d HH:mm:ss zz yyyy";
 
     //region Database Instance
     public static DBSQLQuery DBSQLQuery;
 
     public static void CreateDB(Context cntxt) {
-        DBSQLQuery = new DBSQLQuery(cntxt, 8);
+        DBSQLQuery = new DBSQLQuery(cntxt, 12);
     }
 
     public static DBSQLQuery getDB() {
@@ -33,7 +32,8 @@ public class DBUtility {
 
     public static <T> ArrayList<T> DTOGetAlls(String tableName) {
         Cursor res = DBSQLQuery.DBGetAll(tableName);
-        return DB2GetList.DTOGetAlls(res, tableName);
+        ArrayList<T> getList=DB2GetList.DTOGetAlls(res, tableName);
+        return getList;
     }
     public static <T> ArrayList<T> DTOGetData(String tableName, long primary_key) {
         Cursor res = DBSQLQuery.DBGetData(tableName,primary_key);

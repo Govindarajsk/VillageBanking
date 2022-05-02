@@ -27,18 +27,19 @@ import java.util.Map;
 public class StaticUtility {
 
     //region Constants
-    public static final String LISTBOX = "LISTBOX";
-    public static final String DATAGRID = "DATAGRID";
-
     public static final String V_NUMBER = "NUMBER";
     public static final String V_STRING = "STRING";
+
+
+    public static final String dateFormat = "dd/MM/yyyy";
+    public static final String dateValue = "yyyyMMdd";
     //endregion
 
     //region Validation
     static final String V_StringRequired = "This field is required";
     static final String V_NumberRequired = "Value should be greater than zero";
 
-    public static boolean IsFieldEmpty(String type, TextView field) {
+    public static boolean IsFieldEmpty(String type, long min, long max, TextView field) {
         switch (type) {
             case V_NUMBER:
                 Double Val2 = Double.parseDouble(field.getText().length() == 0 ? "0" : field.getText().toString());
@@ -75,28 +76,51 @@ public class StaticUtility {
                             @Override
                             public void onDateSet(DatePicker view, int year,
                                                   int monthOfYear, int dayOfMonth) {
+                                dpDispField.updateDate(year, monthOfYear, dayOfMonth);
                             }
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();
             }
         };
     }
-
+    public static DatePicker.OnDateChangedListener DisplayDate1(Context context, DatePicker dpDispField) {
+        return new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker datePicker, int i, int i1, int i2) {
+                // calender class's instance and get current date , month and year from calender
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR); // current year
+                int mMonth = c.get(Calendar.MONTH); // current month
+                int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+            }
+        };
+    }
     public static String getDateString(DatePicker strDate) {
         int day = strDate.getDayOfMonth();
-        int month = strDate.getMonth();
+        int month = strDate.getMonth()+1;
         int year = strDate.getYear();
         return String.format("%02d", day) + "/" + String.format("%02d", month) + "/" + year;
     }
 
     public static long getDateInt(DatePicker strDate) {
         int day = strDate.getDayOfMonth();
-        int month = strDate.getMonth();
+        int month = strDate.getMonth()+1;
         int year = strDate.getYear();
         return Long.valueOf(year + String.format("%02d", month) + String.format("%02d", day));
     }
+
+    public static DatePicker getDateFromString(String strDate, DatePicker dp) {
+        String[] strings = strDate.split("/");
+
+        int day = Integer.valueOf(strings[0]);
+        int month = Integer.valueOf(strings[1])+1;
+        int year = Integer.valueOf(strings[2]);
+        dp.updateDate(year, month, day);
+        return dp;
+    }
     //endregion
 
+    //region others
     public static Map<String, List<BOPeriod>> GroupByPeriod(ArrayList<BOPeriod> periods) {
         Map<String, List<BOPeriod>> map = new HashMap<>();
         for (BOPeriod item : periods) {
@@ -117,7 +141,9 @@ public class StaticUtility {
     public static void SetAutoCompleteBox(Context cnxt, ArrayList<BOAutoComplete> list, AutoCompleteTextView control) {
         AutoCompleteBox autoComplete = new AutoCompleteBox(cnxt, list);
         control.setAdapter(autoComplete);
-        control.setSelection(0);
+        //control.setSelection(0);
+        //control.setListSelection(0);
+        control.setText(autoComplete.getItem(0).getDisplayValue());
     }
 
     public static void ApplyTextWatcher(Context context, EditText editText1, EditText editText2, TextView txtView) {
@@ -162,4 +188,5 @@ public class StaticUtility {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+    //endregion
 }

@@ -1,17 +1,17 @@
 package com.villagebanking.BOObjects;
 
 public class BOPeriod extends BOBase {
-    private int periodType;
+    private long periodType;
     private String periodName;
     private String actualDate;
     private String periodRemarks;
     private long periodValue;
 
-    public int getPeriodType() {
+    public long getPeriodType() {
         return periodType;
     }
 
-    public void setPeriodType(Integer periodType) {
+    public void setPeriodType(long periodType) {
         this.periodType = periodType;
     }
 

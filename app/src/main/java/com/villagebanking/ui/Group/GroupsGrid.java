@@ -42,18 +42,20 @@ public class GroupsGrid<T> extends ArrayAdapter {
 
         BOGroup bindData = (BOGroup) data;
         String sNo = Integer.toString(row);
-        String groupName = bindData.getName() + "-" + bindData.getPrimary_key();
+        String groupName = bindData.getName();
         String amount = Double.toString(bindData.getAmount());
-        String noPerson = Double.toString(bindData.getNoOfPerson());
-        String actDate = Double.toString(bindData.getStartPeriodKey());
+        String noPerson = Integer.toString(bindData.getNoOfPerson());
+        String actDate = bindData.getPeriodDetail().getActualDate();
+        String total = Double.toString(bindData.getNoOfPerson() * bindData.getAmount());
 
-        TextView txtSNo = ((TextView) convertView.findViewById(R.id.txtSNo));
+
+        TextView txtTotal = ((TextView) convertView.findViewById(R.id.txtTotal));
         TextView txtGrpName = ((TextView) convertView.findViewById(R.id.txtGrpName));
         TextView txtAmount = ((TextView) convertView.findViewById(R.id.txtAmount));
         TextView txtActualDate = ((TextView) convertView.findViewById(R.id.txtActualDate));
         TextView txtNoOfPerson = ((TextView) convertView.findViewById(R.id.txtNoPerson));
 
-        txtSNo.setText(sNo);
+        txtTotal.setText(total);
         txtGrpName.setText(groupName);
         txtAmount.setText(amount);
         txtNoOfPerson.setText(noPerson);
@@ -61,7 +63,6 @@ public class GroupsGrid<T> extends ArrayAdapter {
 
         Button btnDelete = ((Button) convertView.findViewById(R.id.btnDelete));
         btnDelete.setOnClickListener(clickMethod(bindData.getPrimary_key()));
-
 
         Button btnPersonDetail = ((Button) convertView.findViewById(R.id.btnPersonDetail));
         btnPersonDetail.setOnClickListener(showPersonDetail(bindData.getPrimary_key()));

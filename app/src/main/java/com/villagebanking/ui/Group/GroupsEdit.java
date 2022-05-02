@@ -73,13 +73,12 @@ public class GroupsEdit extends Fragment {
     }
 
     boolean checkFields() {
-        //binding.editName.setError("Ok google");
-        boolean ok1 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING, binding.editName);
-        boolean ok2 = StaticUtility.IsFieldEmpty(StaticUtility.V_NUMBER,binding.editNoOfPerson);
-        boolean ok3 = StaticUtility.IsFieldEmpty(StaticUtility.V_NUMBER,binding.editAmount);
-        boolean ok4 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING,binding.editBondCharge);
-        boolean ok5 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING,binding.editPeridType);
-        boolean ok6 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING,binding.editStartDate);
+        boolean ok1 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING,0,10, binding.editName);
+        boolean ok2 = StaticUtility.IsFieldEmpty(StaticUtility.V_NUMBER,0,100, binding.editNoOfPerson);
+        boolean ok3 = StaticUtility.IsFieldEmpty(StaticUtility.V_NUMBER,0,50000, binding.editAmount);
+        boolean ok4 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING,0,1000, binding.editBondCharge);
+        boolean ok5 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING,0,15, binding.editPeridType);
+        boolean ok6 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING,0,15, binding.editStartDate);
 
         return ok1 || ok2 || ok3 || ok4 || ok5 || ok6;
     }
@@ -89,8 +88,8 @@ public class GroupsEdit extends Fragment {
         newData.setName(binding.editName.getText().toString());
         newData.setNoOfPerson(Integer.valueOf(binding.editNoOfPerson.getText().toString()));
         newData.setAmount(Double.parseDouble(binding.editAmount.getText().toString()));
-        newData.setPeriodKey(periodKey1);
-        newData.setStartPeriodKey(periodKey2);
+        newData.getPeriodDetail().setPeriodType(periodKey1);
+        newData.getPeriodDetail().setPrimary_key(periodKey2);
         newData.setBondCharge(Double.parseDouble(binding.editBondCharge.getText().toString()));
         return newData;
     }
@@ -114,7 +113,7 @@ public class GroupsEdit extends Fragment {
     void fill_periodStart(long periodType) {
         ArrayList<BOPeriod> boPeriods = DBUtility.DTOGetAlls(DB1Tables.PERIODS);
         boPeriods.removeIf(x -> x.getPeriodType() != periodType);
-
+        boPeriods.sort((t1, t2) ->Long.toString(t1.getPeriodValue()).compareTo(Long.toString(t2.getPeriodValue())));
         ArrayList<BOAutoComplete> autoCompleteList = new ArrayList<>();
         for (BOPeriod item : boPeriods) {
             autoCompleteList.add(new BOAutoComplete(item.getPrimary_key(),item.getActualDate()));

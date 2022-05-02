@@ -69,14 +69,21 @@ public class GroupPersons extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_GridView(long groupKey) {
-        ArrayList<BOGroup> groups = DBUtility.DTOGetData(DB1Tables.GROUPS, groupKey);
-        if (groups.size() > 0)
-            binding.editGroup.setText(groups.get(0).getName());
-
         ArrayList<BOGroupPersonLink> groupPersons = DBUtility.DTOGetAlls(DB1Tables.GROUP_PERSON_LINK);
         groupPersons.removeIf(x -> x.getGroup_Detail().getPrimary_key() != groupKey);
         GroupPersonsGrid adapter = new GroupPersonsGrid(this.getContext(), R.layout.app_gridview, groupPersons);
         binding.gvPersons.setAdapter(adapter);
+
+        ArrayList<BOGroup> groups = DBUtility.DTOGetData(DB1Tables.GROUPS, groupKey);
+        if (groups.size() > 0) {
+            BOGroup group = groups.get(0);
+            binding.editGroup.setText(group.getName());
+            if (groupPersons.size() == group.getNoOfPerson()) {
+                binding.editPart.setVisibility(View.GONE);
+            } else {
+                binding.editPart.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
