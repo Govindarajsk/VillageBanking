@@ -2,9 +2,10 @@ package com.villagebanking.BOObjects;
 
 import android.text.format.DateUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 
-public class BOPersonTransaction extends BOBase {
+public class BOPersonTrans extends BOBase {
     private BOPeriod period_detail;
     private BOPerson person_detail;
     private String tableName;
@@ -29,8 +30,17 @@ public class BOPersonTransaction extends BOBase {
     }
 
     private long forien_key;
+    private long table_link_key;
     private String transDate;
     private Double actualAmount;
+
+    public long getTable_link_key() {
+        return table_link_key;
+    }
+
+    public void setTable_link_key(long table_link_key) {
+        this.table_link_key = table_link_key;
+    }
 
     public Double getNewAmount() {
         return newAmount;
@@ -67,6 +77,7 @@ public class BOPersonTransaction extends BOBase {
     }
 
     public Double getActualAmount() {
+        //if(newAmount>0) actualAmount=actualAmount-(newAmount);
         return actualAmount;
     }
 
@@ -80,5 +91,26 @@ public class BOPersonTransaction extends BOBase {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    private ArrayList<BOPersonTrans> subTransList;
+
+    public ArrayList<BOPersonTrans> getSubTransList() {
+        if (subTransList == null) subTransList = new ArrayList<BOPersonTrans>();
+        return subTransList;
+    }
+
+    public void setSubTransList(ArrayList<BOPersonTrans> subTransList) {
+        this.subTransList = subTransList;
+    }
+
+    private long parentKey;
+
+    public long getParentKey() {
+        return parentKey;
+    }
+
+    public void setParentKey(long parentKey) {
+        this.parentKey = parentKey;
     }
 }

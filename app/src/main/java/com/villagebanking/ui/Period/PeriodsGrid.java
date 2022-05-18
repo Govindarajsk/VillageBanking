@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.navigation.Navigation;
@@ -54,10 +55,10 @@ public class PeriodsGrid<T> extends ArrayAdapter {
         column2.setText(value2);
         column3.setText(value3);
 
-        Button btnDelete = ((Button) convertView.findViewById(R.id.btnDelete));
+        ImageButton btnDelete = ((ImageButton) convertView.findViewById(R.id.btnDelete));
         btnDelete.setOnClickListener(deleteMethod(bindData.getPrimary_key()));
 
-        Button btnEdit = ((Button) convertView.findViewById(R.id.btnEdit));
+        ImageButton btnEdit = ((ImageButton) convertView.findViewById(R.id.btnEdit));
         btnEdit.setOnClickListener(editMethod(bindData));
         return convertView;
     }

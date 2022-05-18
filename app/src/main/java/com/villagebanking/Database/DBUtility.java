@@ -11,7 +11,7 @@ public class DBUtility {
     public static DBSQLQuery DBSQLQuery;
 
     public static void CreateDB(Context cntxt) {
-        DBSQLQuery = new DBSQLQuery(cntxt, 12);
+        DBSQLQuery = new DBSQLQuery(cntxt, 14);
     }
 
     public static DBSQLQuery getDB() {

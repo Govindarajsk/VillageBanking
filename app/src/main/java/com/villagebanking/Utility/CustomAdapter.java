@@ -5,13 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.GridLayout;
 import android.widget.TextView;
 
-import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOGroupPersonLink;
-import com.villagebanking.BOObjects.BOPerson;
-import com.villagebanking.BOObjects.BOPersonTransaction;
+import com.villagebanking.BOObjects.BOPersonTrans;
 import com.villagebanking.R;
 
 import java.util.ArrayList;
@@ -62,8 +59,8 @@ public class CustomAdapter<T> extends ArrayAdapter {
             value3 = Long.toString(bindData.getPerson_Detail().getPrimary_key());
             value4 = Integer.toString(bindData.getOrderBy());
             value5 = bindData.getPerson_role();
-        } else if (data instanceof BOPersonTransaction) {
-            BOPersonTransaction bindData = (BOPersonTransaction) data;
+        } else if (data instanceof BOPersonTrans) {
+            BOPersonTrans bindData = (BOPersonTrans) data;
 
         }
         TextView column1 = ((TextView) convertView.findViewById(R.id.txtSNo));

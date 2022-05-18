@@ -28,13 +28,12 @@
             android:autofillHints="Person Name"
             android:inputType="textAutoComplete" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnSave"
-            style="@style/btnStyle"
+            style="@style/styleBtnSave"
             android:layout_row="2"
             android:layout_column="0"
-            android:layout_columnSpan="3"
-            android:text="@string/save" />
+            android:layout_columnSpan="3"/>
     </GridLayout>
 
     <GridView android:layout_columnWeight="@integer/config_navAnimTime"

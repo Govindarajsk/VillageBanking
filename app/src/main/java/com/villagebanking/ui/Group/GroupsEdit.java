@@ -52,20 +52,24 @@ public class GroupsEdit extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.N)
     void initialize() {
         fill_periodType();
-        binding.btnSave.setOnClickListener(clickMethod());
+        if (getArguments() != null) {
+            long group_Key = getArguments().getLong("group_key");
+            writeView(group_Key);
+        }
+        binding.btnSave.setOnClickListener(clickSave());
         binding.editPeridType.setOnItemClickListener(periodItemSelected());
         binding.editStartDate.setOnItemClickListener(periodTypeItemSelected());
 
-        StaticUtility.ApplyTextWatcher(this.getContext(),binding.editAmount,binding.editNoOfPerson,binding.lblTotalAmount);
+        StaticUtility.ApplyTextWatcher(this.getContext(), binding.editAmount, binding.editNoOfPerson, binding.lblTotalAmount);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public View.OnClickListener clickMethod() {
+    public View.OnClickListener clickSave() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!checkFields()) {
-                    DBUtility.DTOSaveUpdate(getDataFromView(), DB1Tables.GROUPS);
+                    DBUtility.DTOSaveUpdate(readView(), DB1Tables.GROUPS);
                     getActivity().onBackPressed();
                 }
             }
@@ -73,25 +77,14 @@ public class GroupsEdit extends Fragment {
     }
 
     boolean checkFields() {
-        boolean ok1 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING,0,10, binding.editName);
-        boolean ok2 = StaticUtility.IsFieldEmpty(StaticUtility.V_NUMBER,0,100, binding.editNoOfPerson);
-        boolean ok3 = StaticUtility.IsFieldEmpty(StaticUtility.V_NUMBER,0,50000, binding.editAmount);
-        boolean ok4 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING,0,1000, binding.editBondCharge);
-        boolean ok5 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING,0,15, binding.editPeridType);
-        boolean ok6 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING,0,15, binding.editStartDate);
+        boolean ok1 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING, 0, 10, binding.editName);
+        boolean ok2 = StaticUtility.IsFieldEmpty(StaticUtility.V_NUMBER, 0, 100, binding.editNoOfPerson);
+        boolean ok3 = StaticUtility.IsFieldEmpty(StaticUtility.V_NUMBER, 0, 50000, binding.editAmount);
+        boolean ok4 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING, 0, 1000, binding.editBondCharge);
+        boolean ok5 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING, 0, 15, binding.editPeridType);
+        boolean ok6 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING, 0, 15, binding.editStartDate);
 
         return ok1 || ok2 || ok3 || ok4 || ok5 || ok6;
-    }
-
-    BOGroup getDataFromView() {
-        BOGroup newData = new BOGroup();
-        newData.setName(binding.editName.getText().toString());
-        newData.setNoOfPerson(Integer.valueOf(binding.editNoOfPerson.getText().toString()));
-        newData.setAmount(Double.parseDouble(binding.editAmount.getText().toString()));
-        newData.getPeriodDetail().setPeriodType(periodKey1);
-        newData.getPeriodDetail().setPrimary_key(periodKey2);
-        newData.setBondCharge(Double.parseDouble(binding.editBondCharge.getText().toString()));
-        return newData;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -102,54 +95,79 @@ public class GroupsEdit extends Fragment {
 
         ArrayList<BOAutoComplete> autoCompleteList = new ArrayList<>();
         for (String item : list) {
-            String[] strings=item.split(":");
-            if(strings.length>1)
+            String[] strings = item.split(":");
+            if (strings.length > 1)
                 autoCompleteList.add(new BOAutoComplete(Integer.valueOf(strings[0]), item));
         }
-        StaticUtility.SetAutoCompleteBox(this.getContext(),autoCompleteList, binding.editPeridType);
+        StaticUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editPeridType);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_periodStart(long periodType) {
         ArrayList<BOPeriod> boPeriods = DBUtility.DTOGetAlls(DB1Tables.PERIODS);
         boPeriods.removeIf(x -> x.getPeriodType() != periodType);
-        boPeriods.sort((t1, t2) ->Long.toString(t1.getPeriodValue()).compareTo(Long.toString(t2.getPeriodValue())));
+        boPeriods.sort((t1, t2) -> Long.toString(t1.getPeriodValue()).compareTo(Long.toString(t2.getPeriodValue())));
         ArrayList<BOAutoComplete> autoCompleteList = new ArrayList<>();
         for (BOPeriod item : boPeriods) {
-            autoCompleteList.add(new BOAutoComplete(item.getPrimary_key(),item.getActualDate()));
+            autoCompleteList.add(new BOAutoComplete(item.getPrimary_key(), item.getActualDate()));
         }
-        StaticUtility.SetAutoCompleteBox(this.getContext(),autoCompleteList, binding.editStartDate);
+        StaticUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editStartDate);
     }
-
-    long periodKey1 = 0;
 
     AdapterView.OnItemClickListener periodItemSelected() {
         return new AdapterView.OnItemClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-                Object item = parent.getItemAtPosition(position);
-                if (item instanceof BOAutoComplete) {
-                    BOAutoComplete itemSelected = (BOAutoComplete) item;
-                    periodKey1 = itemSelected.getPrimary_key();
-                    fill_periodStart(periodKey1);
-                }
+                long key = StaticUtility.getAutoBoxKey(parent.getItemAtPosition(position));
+                selectedData.getPeriodDetail().setPeriodType(key);
+                fill_periodStart(key);
             }
         };
     }
-
-    long periodKey2 = 0;
 
     AdapterView.OnItemClickListener periodTypeItemSelected() {
         return new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-                Object item = parent.getItemAtPosition(position);
-                if (item instanceof BOAutoComplete) {
-                    BOAutoComplete itemSelected = (BOAutoComplete) item;
-                    periodKey2 = itemSelected.getPrimary_key();
-                }
+                long key = StaticUtility.getAutoBoxKey(parent.getItemAtPosition(position));
+                selectedData.getPeriodDetail().setPrimary_key(key);
             }
         };
+    }
+
+    BOGroup selectedData = new BOGroup();
+
+    BOGroup readView() {
+        if (selectedData == null)
+            selectedData = new BOGroup();
+        selectedData.setName(binding.editName.getText().toString());
+        selectedData.setNoOfPerson(Integer.valueOf(binding.editNoOfPerson.getText().toString()));
+        selectedData.setAmount(Double.parseDouble(binding.editAmount.getText().toString()));
+        selectedData.setBondCharge(Double.parseDouble(binding.editBondCharge.getText().toString()));
+        return selectedData;
+    }
+
+    void writeView(long primary_key) {
+        ArrayList<BOGroup> fList = DBUtility.DTOGetData(DB1Tables.GROUPS, primary_key);
+        if (fList.size() > 0) {
+            selectedData = fList.get(0);
+            StaticUtility.applyValue(binding.editName, selectedData.getName());
+            StaticUtility.applyValue(binding.editNoOfPerson, selectedData.getNoOfPerson());
+            StaticUtility.applyValue(binding.editAmount, selectedData.getAmount());
+            StaticUtility.applyValue(binding.editStartDate, selectedData.getPeriodDetail().getActualDate());
+            StaticUtility.applyValue(binding.editPeridType, selectedData.getPeriodDetail().getPeriodName());
+            StaticUtility.applyValue(binding.editBondCharge, selectedData.getBondCharge());
+            StaticUtility.applyValue(binding.lblTotalAmount, selectedData.getAmount() * selectedData.getNoOfPerson());
+            //diableField();
+        }
+    }
+
+    void diableField() {
+        StaticUtility.disableField(binding.editNoOfPerson);
+        StaticUtility.disableField(binding.editAmount);
+        StaticUtility.disableField(binding.editStartDate);
+        StaticUtility.disableField(binding.editPeridType);
+        StaticUtility.disableField(binding.editBondCharge);
     }
 }

@@ -1,6 +1,7 @@
 package com.villagebanking.Controls;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +11,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.villagebanking.BOObjects.BOAutoComplete;
 import com.villagebanking.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public class AutoCompleteBox extends ArrayAdapter<BOAutoComplete> {
     private List<BOAutoComplete> fullList;
@@ -55,9 +59,10 @@ public class AutoCompleteBox extends ArrayAdapter<BOAutoComplete> {
     private Filter filterList = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
+
             FilterResults results = new FilterResults();
 
-            filteredList = new ArrayList<>();
+            filteredList = fullList;/*new ArrayList<>();
 
             if (constraint == null || constraint.length() == 0) {
                 filteredList.addAll(fullList);
@@ -69,7 +74,7 @@ public class AutoCompleteBox extends ArrayAdapter<BOAutoComplete> {
                     }
                 }
             }
-
+            */
             results.values = filteredList;
             results.count = filteredList.size();
 
@@ -88,4 +93,17 @@ public class AutoCompleteBox extends ArrayAdapter<BOAutoComplete> {
             return ((BOAutoComplete) resultValue).getDisplayValue();
         }
     };
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void SetDefault(TextView txtView, long... keys) {
+        long key = keys.length > 0 ? keys[0] : 0;
+        if(fullList!=null) {
+            Stream<BOAutoComplete> fItem = fullList.stream().filter(x -> key == 0 || x.getPrimary_key() == key);
+
+            if (fItem != null) {
+                Optional<BOAutoComplete> item = fItem.findFirst();
+                txtView.setText(item.get() != null ? item.get().getDisplayValue() : "");
+            }
+        }
+    }
 }

@@ -2,22 +2,25 @@ package com.villagebanking.Utility;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+
 import com.villagebanking.BOObjects.BOAutoComplete;
 import com.villagebanking.BOObjects.BOPeriod;
+import com.villagebanking.BOObjects.BOPersonTrans;
 import com.villagebanking.Controls.AutoCompleteBox;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -83,6 +86,7 @@ public class StaticUtility {
             }
         };
     }
+
     public static DatePicker.OnDateChangedListener DisplayDate1(Context context, DatePicker dpDispField) {
         return new DatePicker.OnDateChangedListener() {
             @Override
@@ -95,16 +99,17 @@ public class StaticUtility {
             }
         };
     }
+
     public static String getDateString(DatePicker strDate) {
         int day = strDate.getDayOfMonth();
-        int month = strDate.getMonth()+1;
+        int month = strDate.getMonth() + 1;
         int year = strDate.getYear();
         return String.format("%02d", day) + "/" + String.format("%02d", month) + "/" + year;
     }
 
     public static long getDateInt(DatePicker strDate) {
         int day = strDate.getDayOfMonth();
-        int month = strDate.getMonth()+1;
+        int month = strDate.getMonth() + 1;
         int year = strDate.getYear();
         return Long.valueOf(year + String.format("%02d", month) + String.format("%02d", day));
     }
@@ -113,14 +118,31 @@ public class StaticUtility {
         String[] strings = strDate.split("/");
 
         int day = Integer.valueOf(strings[0]);
-        int month = Integer.valueOf(strings[1])+1;
+        int month = Integer.valueOf(strings[1]) + 1;
         int year = Integer.valueOf(strings[2]);
         dp.updateDate(year, month, day);
         return dp;
     }
     //endregion
 
-    //region others
+    //region AutoCompleteBox
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static void SetAutoCompleteBox(Context cnxt, ArrayList<BOAutoComplete> list, AutoCompleteTextView control, long... key) {
+        AutoCompleteBox autoComplete = new AutoCompleteBox(cnxt, list);
+        control.setAdapter(autoComplete);
+        autoComplete.SetDefault(control, key);
+    }
+
+    public static long getAutoBoxKey(Object item) {
+        if (item instanceof BOAutoComplete) {
+            BOAutoComplete itemSelected = (BOAutoComplete) item;
+            return itemSelected.getPrimary_key();
+        }
+        return 0;
+    }
+    //endregion
+
+    //region Other
     public static Map<String, List<BOPeriod>> GroupByPeriod(ArrayList<BOPeriod> periods) {
         Map<String, List<BOPeriod>> map = new HashMap<>();
         for (BOPeriod item : periods) {
@@ -138,12 +160,22 @@ public class StaticUtility {
         return map;
     }
 
-    public static void SetAutoCompleteBox(Context cnxt, ArrayList<BOAutoComplete> list, AutoCompleteTextView control) {
-        AutoCompleteBox autoComplete = new AutoCompleteBox(cnxt, list);
-        control.setAdapter(autoComplete);
-        //control.setSelection(0);
-        //control.setListSelection(0);
-        control.setText(autoComplete.getItem(0).getDisplayValue());
+    public static Map<Long, ArrayList<Long>> GetPersonAmount(ArrayList<BOPersonTrans> transDetails) {
+
+        Map<Long, ArrayList<Long>> map = new HashMap<>();
+        for (BOPersonTrans item : transDetails) {
+            Long value = item.getForien_key();
+            ArrayList<Long> list=new ArrayList<>();
+            if (map.containsKey(value)) {
+                list = map.get(value);
+            } else {
+                list = new ArrayList<>();
+            }
+            list.add(item.getPrimary_key());
+            map.put(value, list);
+        }
+        map.values(); // this will give Collection of values.
+        return map;
     }
 
     public static void ApplyTextWatcher(Context context, EditText editText1, EditText editText2, TextView txtView) {
@@ -187,6 +219,22 @@ public class StaticUtility {
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+    //endregion
+
+    //region Get/Apply
+    public static void applyValue(TextView txtView, Object value) {
+        String val = value != null ? value.toString() : "";
+        if (value instanceof Double) {
+            DecimalFormat formater = new DecimalFormat("0.00");
+            //formater.format(value instanceof  Double);
+            // txtView.setText(String.format("%.##",val));
+        }
+        txtView.setText(val);
+    }
+
+    public static void disableField(TextView txtView) {
+        txtView.setEnabled(false);
     }
     //endregion
 }

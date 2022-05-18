@@ -44,12 +44,10 @@
         android:layout_columnSpan="3"
         android:hint="Remarks"
         android:inputType="text" />
-
-    <Button
+    <ImageButton
         android:id="@+id/btnSave"
-        style="@style/btnStyle"
+        style="@style/styleBtnSave"
         android:layout_row="4"
         android:layout_column="0"
-        android:layout_columnSpan="3"
-        android:text="Submit" />
+        android:layout_columnSpan="2"/>
 </GridLayout>

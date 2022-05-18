@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.navigation.Navigation;
@@ -61,15 +62,19 @@ public class GroupsGrid<T> extends ArrayAdapter {
         txtNoOfPerson.setText(noPerson);
         txtActualDate.setText(actDate);
 
-        Button btnDelete = ((Button) convertView.findViewById(R.id.btnDelete));
-        btnDelete.setOnClickListener(clickMethod(bindData.getPrimary_key()));
+        ImageButton btnDelete = ((ImageButton) convertView.findViewById(R.id.btnDelete));
+        btnDelete.setOnClickListener(clickDelete(bindData.getPrimary_key()));
 
-        Button btnPersonDetail = ((Button) convertView.findViewById(R.id.btnPersonDetail));
-        btnPersonDetail.setOnClickListener(showPersonDetail(bindData.getPrimary_key()));
+        ImageButton btnDetail = ((ImageButton) convertView.findViewById(R.id.btnDetail));
+        btnDetail.setOnClickListener(clickDetail(bindData.getPrimary_key()));
+
+
+        ImageButton btnEdit = ((ImageButton) convertView.findViewById(R.id.btnEdit));
+        btnEdit.setOnClickListener(clickEdit(bindData.getPrimary_key()));
 
         return convertView;
     }
-    View.OnClickListener clickMethod(long primaryKey) {
+    View.OnClickListener clickDelete(long primaryKey) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,7 +83,7 @@ public class GroupsGrid<T> extends ArrayAdapter {
             }
         };
     }
-    View.OnClickListener showPersonDetail(long primaryKey) {
+    View.OnClickListener clickDetail(long primaryKey) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,4 +94,14 @@ public class GroupsGrid<T> extends ArrayAdapter {
         };
     }
 
+    View.OnClickListener clickEdit(long primaryKey) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle args=new Bundle();
+                args.putLong("group_key",primaryKey);
+                Navigation.findNavController(view).navigate(R.id.nav_group_edit_view,args);
+            }
+        };
+    }
 }

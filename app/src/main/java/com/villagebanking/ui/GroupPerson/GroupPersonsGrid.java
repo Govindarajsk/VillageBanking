@@ -1,11 +1,13 @@
 package com.villagebanking.ui.GroupPerson;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.navigation.Navigation;
@@ -19,7 +21,7 @@ import com.villagebanking.R;
 
 import java.util.ArrayList;
 
-public class GroupPersonsGrid<T> extends ArrayAdapter{
+public class GroupPersonsGrid<T> extends ArrayAdapter {
     public GroupPersonsGrid(Context context, int textViewResourceId, ArrayList<T> objects) {
         super(context, textViewResourceId, objects);
     }
@@ -42,15 +44,22 @@ public class GroupPersonsGrid<T> extends ArrayAdapter{
 
         BOGroupPersonLink bindData = (BOGroupPersonLink) data;
         String value1 = Integer.toString(row);
-        String value2=null;
-        String value3=null;
-        String value4=null;
+        String value2 = null;
+        String value3 = null;
+        String value4 = null;
+        long person_key = 0;
+        long group_key = 0;
 
-        BOPerson person=bindData.getPerson_Detail();
-        if(person!=null) {
-            value2 = person.getStrFName() + "-" + bindData.getPrimary_key();
+        BOPerson person = bindData.getPerson_Detail();
+        if (person != null) {
+            value2 = person.getStrFName() + "-" + person.getPrimary_key();
             value3 = person.getStrLName();
             value4 = Long.toString(person.getNumMobile());
+            person_key = person.getPrimary_key();
+        }
+        BOGroup group = bindData.getGroup_Detail();
+        if (group != null) {
+            group_key = group.getPrimary_key();
         }
 
         TextView txtSNo = ((TextView) convertView.findViewById(R.id.txtSNo));
@@ -62,16 +71,36 @@ public class GroupPersonsGrid<T> extends ArrayAdapter{
         txtFirstName.setText(value2);
         txtLastName.setText(value3);
         txtPhoneNo.setText(value4);
-        Button btnDelete = ((Button) convertView.findViewById(R.id.btnDelete));
-        btnDelete.setOnClickListener(clickMethod(bindData.getPrimary_key()));
+        ImageButton btnDelete = ((ImageButton) convertView.findViewById(R.id.btnDelete));
+        btnDelete.setOnClickListener(deleteMethod(bindData));
+
+        if (person_key > 0 && group_key > 0) {
+            ImageButton btnEdit = ((ImageButton) convertView.findViewById(R.id.btnEdit));
+            btnEdit.setOnClickListener(editMethod(group_key, person_key));
+        }
         return convertView;
     }
 
-    View.OnClickListener clickMethod(long primaryKey) {
+    View.OnClickListener deleteMethod(BOGroupPersonLink boGroupPerson) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBUtility.DTOdelete(primaryKey, DB1Tables.GROUP_PERSON_LINK);
+                DBUtility.DTOdelete(boGroupPerson.getPrimary_key(), DB1Tables.GROUP_PERSON_LINK);
+                Bundle args=new Bundle();
+                args.putLong("group_key",boGroupPerson.getGroup_Detail().getPrimary_key());
+                Navigation.findNavController(view).navigate(R.id.nav_linkview_group_person,args);
+            }
+        };
+    }
+
+    View.OnClickListener editMethod(long group_key, long person_key) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle args = new Bundle();
+                args.putLong("group_key", group_key);
+                args.putLong("person_key", person_key);
+                Navigation.findNavController(view).navigate(R.id.nav_linkview_person_trans, args);
             }
         };
     }

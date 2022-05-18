@@ -6,11 +6,7 @@ import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOGroupPersonLink;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPerson;
-import com.villagebanking.BOObjects.BOPersonTransaction;
-import com.villagebanking.Utility.StaticUtility;
-
-import java.text.SimpleDateFormat;
-import java.util.Locale;
+import com.villagebanking.BOObjects.BOPersonTrans;
 
 public class DB2Save {
 
@@ -29,7 +25,7 @@ public class DB2Save {
                 BOGroupPersonLink gp = (BOGroupPersonLink) data;
                 return new BOMap(gp.getPrimary_key(), getContentValue(gp));
             case DB1Tables.PERSON_TRANSACTION:
-                BOPersonTransaction pt = (BOPersonTransaction) data;
+                BOPersonTrans pt = (BOPersonTrans) data;
                 return new BOMap(pt.getPrimary_key(), getContentValue(pt));
         }
         return null;
@@ -57,13 +53,15 @@ public class DB2Save {
         "REMARKS TEXT,"+
         "AMOUNT DECIMAL," +
      */
-    static ContentValues getContentValue(BOPersonTransaction g) {
+    static ContentValues getContentValue(BOPersonTrans g) {
         ContentValues contentValues = new ContentValues();
+        contentValues.put("PARENT_KEY", g.getParentKey());
         contentValues.put("PERIOD_KEY", g.getPeriod_detail().getPrimary_key());
         contentValues.put("TABLE_NAME", g.getTableName());
-        contentValues.put("TABLE_LINK_KEY", g.getForien_key());
+        contentValues.put("TABLE_LINK_KEY", g.getTable_link_key());
         contentValues.put("REMARKS", g.getRemarks());
         contentValues.put("AMOUNT", g.getNewAmount());
+        //contentValues.put("AMOUNT", g.getForien_key());
         return contentValues;
     }
 

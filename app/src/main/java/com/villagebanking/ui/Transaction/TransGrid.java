@@ -6,13 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 
-import com.villagebanking.BOObjects.BOPerson;
-import com.villagebanking.BOObjects.BOPersonTransaction;
+import com.villagebanking.BOObjects.BOPersonTrans;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
@@ -40,7 +39,7 @@ public class TransGrid <T> extends ArrayAdapter {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View convertView = inflater.inflate(R.layout.listview_trans, null);
 
-        BOPersonTransaction bindData = (BOPersonTransaction) data;
+        BOPersonTrans bindData = (BOPersonTrans) data;
         String value1 = Integer.toString(row);
         String value2 = bindData.getRemarks() + "-" + bindData.getPrimary_key();
         String value3 = bindData.getTableName()+bindData.getForien_key();
@@ -56,9 +55,8 @@ public class TransGrid <T> extends ArrayAdapter {
         txtTableName.setText(value3);
         txtAmount.setText(value4);
 
-        Button btnDelete = ((Button) convertView.findViewById(R.id.btnDelete));
+        ImageButton btnDelete = ((ImageButton) convertView.findViewById(R.id.btnDelete));
         btnDelete.setOnClickListener(deleteMethod(bindData.getPrimary_key()));
-        Button btnEdit = ((Button) convertView.findViewById(R.id.btnEdit));
         return convertView;
     }
     View.OnClickListener deleteMethod(long primaryKey) {
@@ -66,6 +64,7 @@ public class TransGrid <T> extends ArrayAdapter {
             @Override
             public void onClick(View view) {
                 DBUtility.DTOdelete(primaryKey, DB1Tables.PERSON_TRANSACTION);
+                Navigation.findNavController(view).navigate(R.id.nav_trans_grid_view);
             }
         };
     }

@@ -1,17 +1,20 @@
 package com.villagebanking.ui.Transaction;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 
-import com.villagebanking.BOObjects.BOPersonTransaction;
+import com.villagebanking.BOObjects.BOPersonTrans;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
@@ -34,8 +37,9 @@ public class PersonTransGrid<T> extends ArrayAdapter {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View convertView = inflater.inflate(R.layout.listview_persons_trans, null);
 
-        BOPersonTransaction bindData = (BOPersonTransaction) data;
-        String value1 = bindData.getRemarks()+"-"+bindData.getPrimary_key();
+        BOPersonTrans bindData = (BOPersonTrans) data;
+        String value1 = bindData.getRemarks() + "-" + bindData.getPrimary_key() + "- Person "
+                + bindData.getPerson_detail().getPrimary_key();
         String value2 = String.valueOf(bindData.getActualAmount());
         String value3 = String.valueOf(bindData.getNewAmount());
         String value4 = null;
@@ -44,54 +48,76 @@ public class PersonTransGrid<T> extends ArrayAdapter {
         TextView txtAmount = ((TextView) convertView.findViewById(R.id.txtAmount));
         TextView txtNewAmount = ((TextView) convertView.findViewById(R.id.txtNewAmount));
 
+        txtNewAmount.addTextChangedListener(textChangedEvnt(bindData));
+
         txtDetails.setText(value1);
         txtAmount.setText(value2);
         txtNewAmount.setText(value3);
 
-
         CheckBox chkIsFull = ((CheckBox) convertView.findViewById(R.id.chkIsFull));
-        //chkIsFull.setChecked(true);
 
+        boolean isAmountExisit = bindData.getNewAmount() != 0 && bindData.getPrimary_key() > 0;
+        chkIsFull.setChecked(isAmountExisit);
+        chkIsFull.setEnabled(!isAmountExisit);
+        txtNewAmount.setEnabled(!isAmountExisit);
         chkIsFull.setOnClickListener(clickCheckBox(bindData, txtNewAmount));
 
-        Button btnDelete = ((Button) convertView.findViewById(R.id.btnDelete));
-        btnDelete.setOnClickListener(clickMethod(bindData.getPrimary_key()));
-        if (bindData.getNewAmount() > 0) {
-            btnDelete.setVisibility(View.VISIBLE);
-            chkIsFull.setVisibility(View.GONE);
+        ImageButton btnDelete = ((ImageButton) convertView.findViewById(R.id.btnDelete));
+        btnDelete.setOnClickListener(clickDelete(bindData.getPrimary_key()));
 
-        } else {
-            btnDelete.setVisibility(View.GONE);
-            chkIsFull.setVisibility(View.VISIBLE);
-        }
         return convertView;
     }
 
-    View.OnClickListener clickMethod(long primaryKey) {
+    View.OnClickListener clickDelete(long primaryKey) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (primaryKey > 0)
                     DBUtility.DTOdelete(primaryKey, DB1Tables.PERSON_TRANSACTION);
-                //Navigation.findNavController(view).navigate(R.id.nav_linkview_person_trans);
+                Navigation.findNavController(view).navigate(R.id.nav_linkview_person_trans);
             }
         };
     }
 
-    View.OnClickListener clickCheckBox(BOPersonTransaction bindData, TextView txtView) {
+    View.OnClickListener clickCheckBox(BOPersonTrans bindData, TextView txtView) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean checked = ((CheckBox) view).isChecked();
-                if (checked) {
-                    txtView.setText(bindData.getActualAmount().toString());
-                    bindData.setNewAmount(bindData.getActualAmount());
-                } else {
-                    // txtView.setText("0.00");
-                    //bindData.setNewAmount(0.00);
+                CheckBox chkBox = ((CheckBox) view);
+                boolean checked = chkBox.isChecked();
+
+                double newAmount = 0.0;
+
+                if (checked && bindData.getPrimary_key() == 0) {
+                    newAmount = bindData.getActualAmount();
+                } else if (bindData.getPrimary_key() > 0) {
+                    newAmount = bindData.getNewAmount();
                 }
+
+                txtView.setText(String.valueOf(newAmount));
+            }
+        };
+    }
+
+    TextWatcher textChangedEvnt(BOPersonTrans bindData) {
+        TextWatcher fieldValidatorTextWatcher = new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                bindData.setNewAmount(s != null ? Double.valueOf(s.toString()) : 0.00);
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //ShowMessage(context, "beforeTextChanged");
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                bindData.setNewAmount(s != null ? Double.valueOf(s.toString()) : 0.00);
 
             }
         };
+
+        return fieldValidatorTextWatcher;
     }
 }

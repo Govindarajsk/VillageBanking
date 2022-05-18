@@ -8,15 +8,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.villagebanking.BOObjects.BOPeriod;
-import com.villagebanking.BOObjects.BOPerson;
-import com.villagebanking.BOObjects.BOPersonTransaction;
+import com.villagebanking.BOObjects.BOPersonTrans;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
-import com.villagebanking.Utility.StaticUtility;
 import com.villagebanking.databinding.EditviewTransBinding;
-
-import java.util.ArrayList;
 
 public class TransEdit extends Fragment {
 
@@ -50,8 +45,8 @@ public class TransEdit extends Fragment {
             }
         };
     }
-    BOPersonTransaction getTransDataFromView() {
-        BOPersonTransaction newData = new BOPersonTransaction();
+    BOPersonTrans getTransDataFromView() {
+        BOPersonTrans newData = new BOPersonTrans();
         //newData.setPrimary_key(0);
         //newData.setStrFName(binding.editFName.getText().toString());
         //newData.setStrLName(binding.editLName.getText().toString());

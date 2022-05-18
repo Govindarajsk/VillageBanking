@@ -39,6 +39,7 @@ public class DB1Tables {
     public static final String CREATE_PERSON_TRANSACTION =
             PERSON_TRANSACTION + "(" +
                     "ID INTEGER PRIMARY KEY," +
+                    "PARENT_KEY INTEGER, " +
                     "PERIOD_KEY INTEGER, " +
                     "TABLE_NAME TEXT,"+
                     "TABLE_LINK_KEY INTEGER,"+

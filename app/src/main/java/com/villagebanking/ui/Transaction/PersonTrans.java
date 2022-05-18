@@ -14,18 +14,20 @@ import androidx.fragment.app.Fragment;
 import com.villagebanking.BOObjects.BOAutoComplete;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPerson;
-import com.villagebanking.BOObjects.BOPersonTransaction;
+import com.villagebanking.BOObjects.BOPersonTrans;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 import com.villagebanking.Utility.StaticUtility;
 import com.villagebanking.databinding.LinkviewPersonsTransBinding;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PersonTrans extends Fragment {
     private LinkviewPersonsTransBinding binding;
@@ -34,180 +36,197 @@ public class PersonTrans extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = LinkviewPersonsTransBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        long key = getArguments().getLong("primary_key");
-        initilize(key);
+        initialize();
         return root;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    void initilize(long key) {
-        person_key = key;
-        fill_Person(person_key);
-        fill_periods();
-        binding.editPeriod.setOnItemClickListener(periodItemSelected());
-        binding.editPerson.setOnItemClickListener(personItemSelected());
-        binding.btnSave.setOnClickListener(clickMethod());
+    private void initialize() {
+        if (getArguments() != null) {
+            long person_key = getArguments().getLong("person_key");
+            long group_key = getArguments().getLong("group_key");
+            long period_key = getArguments().getLong("period_key");
 
+            if (person_key > 0) {
+                ArrayList<BOPerson> persons = DBUtility.DTOGetData(DB1Tables.PERSONS, person_key);
+                if (persons.size() > 0) {
+                    selectedData.setPerson_detail(persons.get(0));
+                }
+            }
+            fillPerson(person_key);
+
+            if (group_key > 0) {
+                //ArrayList<BOGroup> groups = DBUtility.DTOGetData(DB1Tables.GROUPS, group_key);
+                selectedData.setForien_key(group_key);
+            }
+
+            if (period_key > 0) {
+                ArrayList<BOPeriod> periods = DBUtility.DTOGetData(DB1Tables.PERIODS, period_key);
+                if (periods.size() > 0) {
+                    selectedData.setPeriod_detail(periods.get(0));
+                }
+            }
+            fillPeriod(period_key);
+            fill_Person_trans(person_key, period_key);
+        }
+        binding.editPerson.setOnItemClickListener(personSelected());
+        binding.editPeriod.setOnItemClickListener(periodSelected());
+        binding.btnSave.setOnClickListener(clickSave());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    void fill_Person(long key) {
+    void fillPerson(long person_key) {
         ArrayList<BOPerson> list = DBUtility.DTOGetAlls(DB1Tables.PERSONS);
         ArrayList<BOAutoComplete> autoCompleteList = new ArrayList<>();
-        list.forEach(x -> autoCompleteList.add
-                (
-                        new BOAutoComplete(x.getPrimary_key(),
-                                x.getStrFName() + "-" + x.getStrLName()))
+        list.forEach(
+                x -> autoCompleteList.add(new BOAutoComplete(x.getPrimary_key(), x.getStrFName() + "-" + x.getStrLName()))
         );
-        StaticUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editPerson);
-
-        Optional<BOAutoComplete> item = autoCompleteList.stream().filter(x -> x.getPrimary_key() == key).findFirst();
-        if (item.get() != null)
-            binding.editPerson.setText(item.get().getDisplayValue());
-
+        StaticUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editPerson, person_key);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    void fill_periods() {
+    void fillPeriod(long period_key) {
         ArrayList<BOPeriod> boPeriods = DBUtility.DTOGetAlls(DB1Tables.PERIODS);
-        ArrayList<BOAutoComplete> autoCompleteList = new ArrayList<>();
+        ArrayList<BOAutoComplete> autoCompleteList1 = new ArrayList<>();
         for (BOPeriod item : boPeriods) {
-            autoCompleteList.add(new BOAutoComplete(item.getPrimary_key(), item.getActualDate()));
+            autoCompleteList1.add(new BOAutoComplete(item.getPrimary_key(), item.getActualDate()));
         }
-        StaticUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editPeriod);
+        StaticUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList1, binding.editPeriod, period_key);
 
-
-        DateFormat df = new SimpleDateFormat("yyyyMMdd");
-        String date = df.format(Calendar.getInstance().getTime());
-
-        Optional<BOPeriod> fItem = boPeriods.stream().findFirst();//.stream().filter(x -> x.getPeriodValue() >= Long.valueOf(date)).findFirst();
-        if (fItem.isPresent()) {
-            long key = fItem.get().getPrimary_key();
-            Optional<BOAutoComplete> item = autoCompleteList.stream().filter(x -> x.getPrimary_key() == key).findFirst();
-            if (item.get() != null) {
-                binding.editPeriod.setText(item.get().getDisplayValue());
-                period_key = item.get().getPrimary_key();
-                fill_Person_trans(person_key, period_key);
-            }
-        }
     }
 
-    long person_key = 0;
+    BOPersonTrans selectedData = new BOPersonTrans();
 
-    AdapterView.OnItemClickListener personItemSelected() {
+    AdapterView.OnItemClickListener personSelected() {
         return new AdapterView.OnItemClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-                Object item = parent.getItemAtPosition(position);
-                if (item instanceof BOAutoComplete) {
-                    BOAutoComplete itemSelected = (BOAutoComplete) item;
-                    person_key = itemSelected.getPrimary_key();
-                    fill_Person_trans(person_key, period_key);
-                }
+                long person_Key = StaticUtility.getAutoBoxKey(parent.getItemAtPosition(position));
+
+                selectedData.getPerson_detail().setPrimary_key(person_Key);
+
+                fill_Person_trans(person_Key, selectedData.getForien_key());
             }
         };
     }
 
-    long period_key = 0;
-
-    AdapterView.OnItemClickListener periodItemSelected() {
+    AdapterView.OnItemClickListener periodSelected() {
         return new AdapterView.OnItemClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-                Object item = parent.getItemAtPosition(position);
-                if (item instanceof BOAutoComplete) {
-                    BOAutoComplete itemSelected = (BOAutoComplete) item;
-                    person_key = itemSelected.getPrimary_key();
-                    fill_Person_trans(person_key, period_key);
-                }
+                long period_key = StaticUtility.getAutoBoxKey(parent.getItemAtPosition(position));
+                selectedData.getPerson_detail().setPrimary_key(period_key);
+                fill_Person_trans(selectedData.getPerson_detail().getPrimary_key(), selectedData.getForien_key());
             }
         };
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    void fill_Person_trans(long person_key, long period_key) {
+    void fill_Person_trans(long person_key, long group_key) {
+        ArrayList<BOPersonTrans> trans = DBUtility.DTOGetData(DB1Tables.PERSON_TRANSACTION, person_key);
+        ArrayList<BOPersonTrans> copyTrans = DBUtility.DTOGetData(DB1Tables.PERSON_TRANSACTION, person_key);
 
-        ArrayList<BOPersonTransaction> newlist = getNewlist(person_key);
+        if (group_key > 0) {
+            trans.removeIf(x -> x.getForien_key() != group_key);
+            copyTrans.removeIf(x -> x.getForien_key() != group_key);
+        }
 
-        PersonTransGrid adapter = new PersonTransGrid(this.getContext(), R.layout.listview_groups, newlist);
+        calculateAmount(trans);
+
+        PersonTransGrid adapter = new PersonTransGrid(this.getContext(), R.layout.listview_groups, trans);
         binding.gvGridView.setAdapter(adapter);
+        binding.gvGridView.addOnLayoutChangeListener(layoutChanged(trans));
 
-        totalAmount = 00.00;
-        newlist.forEach(x -> totalAmount = totalAmount + (x.getActualAmount() == null ? 0 : x.getActualAmount())
-                - (x.getNewAmount() == null ? 0 : x.getNewAmount()));
-        binding.txtTotal.setText(String.valueOf(totalAmount));
-       }
-
-    Double totalAmount = 0.00;
-
-    ArrayList<BOPersonTransaction> getNewlist(long person_key) {
-        ArrayList<BOPersonTransaction> transactionsList=DBUtility.DTOGetAlls(DB1Tables.PERSON_TRANSACTION);
-        ArrayList<BOPersonTransaction> personTrans = DBUtility.DTOGetData(DB1Tables.PERSON_TRANSACTION, person_key);
-        return personTrans;
     }
 
-    /*
-        @RequiresApi(api = Build.VERSION_CODES.N)
-        ArrayList<BOPersonTransaction> getNewlist() {
-            ArrayList<BOGroupPersonLink> grpPersonLink = DBUtility.DTOGetAlls(DB1Tables.GROUP_PERSON_LINK);
-            grpPersonLink.removeIf(x -> x.getPerson_Detail().getPrimary_key() != person_key);
+    Double totalAmount = 0.0;
+    Double totalPaid = 0.0;
+    Double totalBal = 0.0;
 
-            newlist = new ArrayList<>();
-            ArrayList<BOPersonTransaction> exList = DBUtility.DTOGetAlls(DB1Tables.PERSON_TRANSACTION);
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    void calculateAmount(ArrayList<BOPersonTrans> fullList) {
+        totalAmount = totalPaid = totalBal = 0.0;
 
-            for (int i = 0; i < grpPersonLink.size(); i++) {
-                BOGroupPersonLink grpPerson = grpPersonLink.get(i);
+        Map<Long, ArrayList<Long>> uniqueList = StaticUtility.GetPersonAmount(fullList);
+        uniqueList.forEach((x, y) -> applyVal(x, y, fullList));
 
-                BOPersonTransaction trans = new BOPersonTransaction();
-                trans.setTableName(DB1Tables.GROUP_PERSON_LINK);
-                trans.setForien_key(grpPerson.getPrimary_key());
-                trans.setPerson_detail(grpPerson.getPerson_Detail());
-                trans.getPeriod_detail().setPrimary_key(period_key);
-                trans.setRemarks(grpPerson.getGroup_Detail().getName());
-                trans.setActualAmount(grpPerson.getGroup_Detail().getAmount());
-                trans.setNewAmount(getTransData(trans, exList));
+        totalBal = totalAmount - totalPaid;
+        binding.txtTotal.setText(totalAmount.toString());
+        binding.txtPaid.setText(totalPaid.toString());
+        binding.txtBalance.setText(totalBal.toString());
+    }
 
-                newlist.add(trans);
+    Double balEach = 0.0;
 
-                if (trans.getForien_key() != 0 && trans.getActualAmount() != trans.getNewAmount()) {
-                    BOPersonTransaction trans1=trans;
-                    trans1.setNewAmount(0.00);
-                    newlist.add(trans1);
-                }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    void applyVal(Long key, ArrayList<Long> value, ArrayList<BOPersonTrans> fullList) {
+        balEach = 0.0;
 
+        Stream<BOPersonTrans> groupListAmount =
+                fullList.stream().filter(x -> x.getForien_key() == key);
+
+        List<BOPersonTrans> okGk = groupListAmount.collect(Collectors.toList());
+
+        BOPersonTrans transData = null;
+        Integer fSize = okGk.size();
+
+        if (fSize > 0) {
+            transData = okGk.get(fSize - 1);
+            balEach =  okGk.get(0).getActualAmount();
+            okGk.forEach(x -> fillBalAmount(x));
+
+
+            if (balEach != 0 && transData.getPrimary_key() > 0) {
+                BOPersonTrans newData = new BOPersonTrans();
+                newData.setParentKey(transData.getPrimary_key());
+
+                newData.setTableName(transData.getTableName());
+                newData.setPerson_detail(transData.getPerson_detail());
+                newData.setTableName(transData.getTableName());
+                newData.setTable_link_key(transData.getTable_link_key());
+                newData.setForien_key(transData.getForien_key());
+                newData.setPeriod_detail(transData.getPeriod_detail());
+                newData.setActualAmount(balEach);
+                newData.setNewAmount(0.00);
+                fullList.add(newData);
             }
-            return newlist;
         }
+    }
 
-        @RequiresApi(api = Build.VERSION_CODES.N)
-        Double getTransData(BOPersonTransaction trans, ArrayList<BOPersonTransaction> exList) {
 
-            pendingAmnt = 0.00;
-            for (int i = 0; i < exList.size(); i++) {
-                BOPersonTransaction gpLink = exList.get(i);
-                if (trans.getTableName().equals(gpLink.getTableName()) && trans.getForien_key() == gpLink.getForien_key()) {
-                    pendingAmnt = pendingAmnt + gpLink.getNewAmount();
-                }
-            }
-            return pendingAmnt;
+    void fillBalAmount(BOPersonTrans x) {
+        totalPaid = totalPaid + x.getNewAmount();
+        if (x.getParentKey() == 0) {
+            totalAmount = totalAmount + x.getActualAmount();
+        } else {
+            x.setActualAmount(balEach);
         }
+        balEach = balEach - x.getNewAmount();
+    }
 
-
-        Double pendingAmnt = 0.00;
-        ArrayList<BOPersonTransaction> newlist = new ArrayList<>();
-    */
-    View.OnClickListener clickMethod() {
+    View.OnClickListener clickSave() {
         return new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
                 for (int i = 0; i < binding.gvGridView.getCount(); i++) {
-                    BOPersonTransaction transaction = (BOPersonTransaction) binding.gvGridView.getItemAtPosition(i);
-                    if (transaction.getNewAmount() > 0)
+                    BOPersonTrans transaction = (BOPersonTrans) binding.gvGridView.getItemAtPosition(i);
+                    if (transaction.getNewAmount() != 0 || transaction.getPrimary_key() > 0)
                         DBUtility.DTOSaveUpdate(transaction, DB1Tables.PERSON_TRANSACTION);
                 }
+                fill_Person_trans(selectedData.getPerson_detail().getPrimary_key(), selectedData.getForien_key());
+            }
+        };
+    }
+
+    AdapterView.OnLayoutChangeListener layoutChanged(ArrayList<BOPersonTrans> newList) {
+        return new AdapterView.OnLayoutChangeListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
+                calculateAmount(newList);
             }
         };
     }

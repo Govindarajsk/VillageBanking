@@ -31,13 +31,13 @@ public class GroupPersons extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = LinkviewGroupPersonBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        long group_key = getArguments().getLong("group_key");
-        initilize(group_key);
+        initilize();
         return root;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    void initilize(long group_Key) {
+    void initilize() {
+        long group_Key = getArguments().getLong("group_key");
         binding.btnSave.setOnClickListener(clickMethod(group_Key));
         binding.editPerson.setOnItemClickListener(personSelected());
         fill_GridView(group_Key);

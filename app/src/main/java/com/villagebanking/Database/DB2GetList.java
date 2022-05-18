@@ -1,21 +1,14 @@
 package com.villagebanking.Database;
 
 import android.database.Cursor;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
 
 import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOGroupPersonLink;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPerson;
-import com.villagebanking.BOObjects.BOPersonTransaction;
-import com.villagebanking.Utility.StaticUtility;
+import com.villagebanking.BOObjects.BOPersonTrans;
 
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class DB2GetList {
 
@@ -37,7 +30,7 @@ public class DB2GetList {
                     returnList.add((T) getValue(res, new BOGroupPersonLink()));
                     break;
                 case DB1Tables.PERSON_TRANSACTION:
-                    returnList.add((T) getValue(res, new BOPersonTransaction()));
+                    returnList.add((T) getValue(res, new BOPersonTrans()));
                     break;
             }
             res.moveToNext();
@@ -122,16 +115,20 @@ public class DB2GetList {
        "REMARKS TEXT,"+
        "AMOUNT DECIMAL," +
     */
-    static BOPersonTransaction getValue(Cursor res, BOPersonTransaction test) {
-        BOPersonTransaction newData = new BOPersonTransaction();
+    static BOPersonTrans getValue(Cursor res, BOPersonTrans test) {
+        BOPersonTrans newData = new BOPersonTrans();
         newData.setPrimary_key(res.getLong(0));
-        newData.getPeriod_detail().setPrimary_key(res.getLong(1));
-        newData.setTableName(res.getString(2));
-        newData.setForien_key(res.getLong(3));
-        newData.setRemarks(res.getString(4));
-        newData.setNewAmount(res.getDouble(5));
-        if (res.getColumnCount() == 7)
-            newData.setActualAmount(res.getDouble(6));
+        newData.setParentKey(res.getLong(1));
+
+        newData.getPeriod_detail().setPrimary_key(res.getLong(2));
+        newData.setTableName(res.getString(3));
+        newData.setTable_link_key(res.getLong(4));
+        newData.setRemarks(res.getString(5));
+        newData.setNewAmount(res.getDouble(6));
+        if (res.getColumnCount() > 8)
+            newData.setActualAmount(res.getDouble(7));
+        if (res.getColumnCount() > 9)
+            newData.setForien_key(res.getLong(8));
         return newData;
     }
 

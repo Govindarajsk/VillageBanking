@@ -50,17 +50,12 @@
         android:text="Table Name + Key"
         android:textStyle="bold" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btnDelete"
-        style="@style/stylDgbtn"
+        style="@style/styleBtnDelete"
         android:layout_row="0"
-        android:layout_column="3"
-        android:layout_gravity="center_vertical"
-        android:background="@color/design_default_color_error"
-        app:backgroundTintMode="screen"
-        android:layout_width="30dp"
-        android:text="D"
-        />
+        android:layout_column="3"/>
+
     <Button
         android:id="@+id/btnEdit" android:layout_marginLeft="10dp"
         style="@style/stylDgbtn"

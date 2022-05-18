@@ -81,6 +81,7 @@ public class DBSQLQuery extends SQLiteOpenHelper {
     /*
         PERSON_TRANSACTION + "(" +
                         "ID INTEGER PRIMARY KEY," +
+                         PARENT_KEY INTEGER
                         "PERIOD_KEY INTEGER, " +
                         "TABLE_NAME TEXT,"+
                         "TABLE_LINK_KEY INTEGER,"+
@@ -91,8 +92,17 @@ public class DBSQLQuery extends SQLiteOpenHelper {
     public Cursor DBGetTrans(long person_key) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery(
-                "SELECT PTR.ID AS ID,PERIOD_KEY,TABLE_NAME,GPL.ID AS TABLE_LINK_KEY," +
-                        "G.NAME AS REMARKS,PTR.AMOUNT AS AMOUNT,G.AMOUNT AS TRANSAMOUNT FROM " +
+                "SELECT " +
+                        "PTR.ID AS ID," +
+                        "PTR.PARENT_KEY AS PARENTKEY,"+
+                        "PERIOD_KEY," +
+                        "'GROUP_PERSON_LINK' AS TABLE_NAME," +
+                        "GPL.ID AS TABLE_LINK_KEY," +
+                        "G.NAME AS REMARKS," +
+                        "PTR.AMOUNT AS AMOUNT," +
+                        "G.AMOUNT AS TRANSAMOUNT," +
+                        "G.ID AS GROUP_KEY " +
+                        "FROM " +
                         "GROUPS G JOIN "+
                         "GROUP_PERSON_LINK GPL ON G.ID=GPL.GROUP_KEY LEFT JOIN " +
                         "PERSON_TRANSACTION PTR ON TABLE_LINK_KEY=GPL.ID  WHERE PERSON_KEY ="+person_key, null);

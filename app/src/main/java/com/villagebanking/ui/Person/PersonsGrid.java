@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.navigation.Navigation;
@@ -56,9 +57,9 @@ public class PersonsGrid<T> extends ArrayAdapter {
         txtFirstName.setText(value2);
         txtLastName.setText(value3);
         txtPhoneNo.setText(value4);
-        Button btnDelete = ((Button) convertView.findViewById(R.id.btnDelete));
+        ImageButton btnDelete = (ImageButton) convertView.findViewById(R.id.btnDelete);
         btnDelete.setOnClickListener(deleteMethod(bindData.getPrimary_key()));
-        Button btnEdit = ((Button) convertView.findViewById(R.id.btnEdit));
+        ImageButton btnEdit = ((ImageButton) convertView.findViewById(R.id.btnEdit));
         btnEdit.setOnClickListener(editMethod(bindData));
         return convertView;
     }
@@ -76,7 +77,7 @@ public class PersonsGrid<T> extends ArrayAdapter {
             @Override
             public void onClick(View view) {
                 Bundle args=new Bundle();
-                args.putLong("primary_key",bindData.getPrimary_key());
+                args.putLong("person_key",bindData.getPrimary_key());
                 Navigation.findNavController(view).navigate(R.id.nav_linkview_person_trans,args);
             }
         };
