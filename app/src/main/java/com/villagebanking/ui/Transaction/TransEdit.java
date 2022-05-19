@@ -11,13 +11,13 @@ import androidx.fragment.app.Fragment;
 import com.villagebanking.BOObjects.BOPersonTrans;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
-import com.villagebanking.databinding.EditviewTransBinding;
+import com.villagebanking.databinding.TransEditviewBinding;
 
 public class TransEdit extends Fragment {
 
-    private EditviewTransBinding binding;
+    private TransEditviewBinding binding;
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = EditviewTransBinding.inflate(inflater, container, false);
+        binding = TransEditviewBinding.inflate(inflater, container, false);
         View root = binding.getRoot(); if (getArguments() != null) {
             long key = getArguments().getLong("primary_key");
             applyValue(key);

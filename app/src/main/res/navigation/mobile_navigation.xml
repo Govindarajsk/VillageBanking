@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_person_grid_view">
+    app:startDestination="@+id/nav_period_grid_view">
     <!--Main -->
     <fragment
         android:id="@+id/nav_person_grid_view"
@@ -33,33 +33,33 @@
         android:id="@+id/nav_person_edit_view"
         android:name="com.villagebanking.ui.Person.PersonsEdit"
         android:label="Add Person"
-        tools:layout="@layout/editview_persons" />
+        tools:layout="@layout/persons_editview" />
     <fragment
         android:id="@+id/nav_group_edit_view"
         android:name="com.villagebanking.ui.Group.GroupsEdit"
         android:label="Add Group"
-        tools:layout="@layout/editview_groups" />
+        tools:layout="@layout/groups_editview" />
     <fragment
         android:id="@+id/nav_period_edit_view"
         android:name="com.villagebanking.ui.Period.PeriodsEdit"
         android:label="Period"
-        tools:layout="@layout/editview_periods" />
+        tools:layout="@layout/periods_editview" />
     <fragment
         android:id="@+id/nav_trans_edit_view"
         android:name="com.villagebanking.ui.Transaction.TransEdit"
         android:label="Transaction Edit"
-        tools:layout="@layout/editview_trans" />
+        tools:layout="@layout/trans_editview" />
 
     <!--Link-->
     <fragment
         android:id="@+id/nav_linkview_group_person"
         android:name="com.villagebanking.ui.GroupPerson.GroupPersons"
         android:label="Group Person"
-        tools:layout="@layout/linkview_group_person" /> <!--Link-->
+        tools:layout="@layout/groups_person_linkview" /> <!--Link-->
     <fragment
         android:id="@+id/nav_linkview_person_trans"
         android:name="com.villagebanking.ui.Transaction.PersonTrans"
         android:label="Person Transaction"
-        tools:layout="@layout/linkview_persons_trans" />
+        tools:layout="@layout/persons_trans_linkview" />
 
 </navigation>

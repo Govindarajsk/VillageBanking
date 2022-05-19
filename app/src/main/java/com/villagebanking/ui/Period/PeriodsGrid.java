@@ -6,8 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -17,7 +15,6 @@ import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
-import com.villagebanking.Utility.StaticUtility;
 
 import java.util.ArrayList;
 
@@ -40,7 +37,7 @@ public class PeriodsGrid<T> extends ArrayAdapter {
 
     private View customeView(int row, T data) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View convertView = inflater.inflate(R.layout.listview_periods, null);
+        View convertView = inflater.inflate(R.layout.periods_gridview, null);
 
         BOPeriod bindData = (BOPeriod) data;
         String value1 = Long.toString(row);
@@ -60,6 +57,10 @@ public class PeriodsGrid<T> extends ArrayAdapter {
 
         ImageButton btnEdit = ((ImageButton) convertView.findViewById(R.id.btnEdit));
         btnEdit.setOnClickListener(editMethod(bindData));
+
+        ImageButton btnDetail = ((ImageButton) convertView.findViewById(R.id.btnDetail));
+        btnDetail.setOnClickListener(transMethod(bindData));
+
         return convertView;
     }
 
@@ -80,6 +81,17 @@ public class PeriodsGrid<T> extends ArrayAdapter {
                 Bundle args=new Bundle();
                 args.putLong("primary_key",bindData.getPrimary_key());
                 Navigation.findNavController(view).navigate(R.id.nav_period_edit_view,args);
+            }
+        };
+    }
+
+    View.OnClickListener transMethod(BOPeriod bindData) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle args=new Bundle();
+                args.putLong("primary_key",bindData.getPrimary_key());
+                Navigation.findNavController(view).navigate(R.id.nav_linkview_person_trans,args);
             }
         };
     }

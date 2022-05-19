@@ -76,4 +76,8 @@ public class BOPerson extends BOBase {
     private Blob profilePic;
     private Blob personSign;
     private String accountNo;
+
+    public  String getFullName(){
+        return getStrFName()+"."+getStrLName();
+    }
 }

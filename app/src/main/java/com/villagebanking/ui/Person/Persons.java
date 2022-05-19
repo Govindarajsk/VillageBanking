@@ -1,13 +1,11 @@
 package com.villagebanking.ui.Person;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -43,7 +41,7 @@ public class Persons extends Fragment {
     }
 
     void assignToGridView() {
-        PersonsGrid adapter = new PersonsGrid(this.getContext(), R.layout.listview_persons,
+        PersonsGrid adapter = new PersonsGrid(this.getContext(), R.layout.persons_gridview,
                 DBUtility.DTOGetAlls(DB1Tables.PERSONS));
         binding.gvDataView.setAdapter(adapter);
     }

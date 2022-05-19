@@ -21,11 +21,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class AutoCompleteBox extends ArrayAdapter<BOAutoComplete> {
+public class CCAutoComplete extends ArrayAdapter<BOAutoComplete> {
     private List<BOAutoComplete> fullList;
     private List<BOAutoComplete> filteredList;
 
-    public AutoCompleteBox(@NonNull Context context, @NonNull List<BOAutoComplete> inputList) {
+    public CCAutoComplete(@NonNull Context context, @NonNull List<BOAutoComplete> inputList) {
         super(context, 0, inputList);
 
         fullList = new ArrayList<>(inputList);
@@ -42,7 +42,7 @@ public class AutoCompleteBox extends ArrayAdapter<BOAutoComplete> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.listview_dropdown, parent, false
+                    R.layout.app_dropview, parent, false
             );
         }
 
@@ -62,7 +62,7 @@ public class AutoCompleteBox extends ArrayAdapter<BOAutoComplete> {
 
             FilterResults results = new FilterResults();
 
-            filteredList = fullList;/*new ArrayList<>();
+            filteredList = new ArrayList<>();
 
             if (constraint == null || constraint.length() == 0) {
                 filteredList.addAll(fullList);
@@ -74,7 +74,7 @@ public class AutoCompleteBox extends ArrayAdapter<BOAutoComplete> {
                     }
                 }
             }
-            */
+
             results.values = filteredList;
             results.count = filteredList.size();
 

@@ -1,6 +1,7 @@
 package com.villagebanking.ui.Transaction;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -8,12 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 
+import com.villagebanking.BOObjects.BOGroupPersonLink;
 import com.villagebanking.BOObjects.BOPersonTrans;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
@@ -35,11 +36,10 @@ public class PersonTransGrid<T> extends ArrayAdapter {
 
     private View customeView(int row, T data) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View convertView = inflater.inflate(R.layout.listview_persons_trans, null);
+        View convertView = inflater.inflate(R.layout.persons_trans_gridview, null);
 
         BOPersonTrans bindData = (BOPersonTrans) data;
-        String value1 = bindData.getRemarks() + "-" + bindData.getPrimary_key() + "- Person "
-                + bindData.getPerson_detail().getPrimary_key();
+        String value1 = bindData.getRemarks() + "-"+ bindData.getDetail2().getDisplayValue();
         String value2 = String.valueOf(bindData.getActualAmount());
         String value3 = String.valueOf(bindData.getNewAmount());
         String value4 = null;
@@ -63,18 +63,30 @@ public class PersonTransGrid<T> extends ArrayAdapter {
         chkIsFull.setOnClickListener(clickCheckBox(bindData, txtNewAmount));
 
         ImageButton btnDelete = ((ImageButton) convertView.findViewById(R.id.btnDelete));
-        btnDelete.setOnClickListener(clickDelete(bindData.getPrimary_key()));
+        btnDelete.setOnClickListener(clickDelete(bindData));
 
         return convertView;
     }
 
-    View.OnClickListener clickDelete(long primaryKey) {
+    View.OnClickListener clickDelete(BOPersonTrans bindData) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (primaryKey > 0)
-                    DBUtility.DTOdelete(primaryKey, DB1Tables.PERSON_TRANSACTION);
-                Navigation.findNavController(view).navigate(R.id.nav_linkview_person_trans);
+                if (bindData != null)
+                    if (bindData.getPrimary_key() > 0) {
+                        DBUtility.DTOdelete(bindData.getPrimary_key(), DB1Tables.PERSON_TRANSACTION);
+                        Bundle args = new Bundle();
+                        ArrayList<BOGroupPersonLink> tableLinkDetail = DBUtility.DTOGetData(DB1Tables.GROUP_PERSON_LINK, bindData.getTable_link_key());
+                        if (tableLinkDetail.size() > 0) {
+                            BOGroupPersonLink linkData = tableLinkDetail.get(0);
+                            args.putLong("person_key", linkData.getPerson_Detail().getPrimary_key());
+                            args.putLong("group_key", linkData.getGroup_Detail().getPrimary_key());
+                            args.putLong("period_key", linkData.getGroup_Detail().getPeriodDetail().getPrimary_key());
+                        }
+                        Navigation.findNavController(view).navigate(R.id.nav_linkview_person_trans, args);
+                    } else {
+                        bindData.setNewAmount(0.00);
+                    }
             }
         };
     }

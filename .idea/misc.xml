@@ -16,6 +16,8 @@
         <entry key="..\:/Project/VillageBanking/app/src/main/res/drawable/circle_bar.xml" value="0.2203125" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/drawable/ic_add_button_image_background.xml" value="0.2203125" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2203125" />
+        <entry key="..\:/Project/VillageBanking/app/src/main/res/drawable/ic_save1_background.xml" value="0.2203125" />
+        <entry key="..\:/Project/VillageBanking/app/src/main/res/drawable/ic_save1_foreground.xml" value="0.2203125" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/drawable/side_nav_bar.xml" value="0.2203125" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/activity_edit_gridview.xml" value="0.20416666666666666" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/activity_gridview.xml" value="0.1" />
@@ -25,6 +27,7 @@
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/app_activity.xml" value="0.20416666666666666" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/app_bar_main.xml" value="0.1" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/app_content.xml" value="0.20416666666666666" />
+        <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/app_dropview.xml" value="0.20416666666666666" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/app_gridview.xml" value="0.20416666666666666" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/app_header_profile.xml" value="0.20416666666666666" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/base_datagrid_view.xml" value="0.20416666666666666" />
@@ -43,6 +46,7 @@
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/group_gridview.xml" value="0.20416666666666666" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/group_occurence_details.xml" value="0.20416666666666666" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/group_person_link.xml" value="0.20416666666666666" />
+        <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/group_person_linkview.xml" value="0.20416666666666666" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/group_view.xml" value="0.20416666666666666" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/keyvalue_view.xml" value="0.20416666666666666" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/linkview_group_period.xml" value="0.20416666666666666" />
@@ -72,6 +76,7 @@
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/persons_fragment.xml" value="0.1" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/persons_gridview.xml" value="0.20416666666666666" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/persons_listview.xml" value="0.20416666666666666" />
+        <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/persons_trans_linkview.xml" value="0.20416666666666666" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/persons_view.xml" value="0.20416666666666666" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/testgrid_view.xml" value="0.20416666666666666" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/layout/v_person_group_link.xml" value="0.20416666666666666" />

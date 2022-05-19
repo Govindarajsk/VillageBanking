@@ -37,7 +37,7 @@ public class TransGrid <T> extends ArrayAdapter {
 
     private View customeView(int row, T data) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View convertView = inflater.inflate(R.layout.listview_trans, null);
+        View convertView = inflater.inflate(R.layout.trans_gridview, null);
 
         BOPersonTrans bindData = (BOPersonTrans) data;
         String value1 = Integer.toString(row);

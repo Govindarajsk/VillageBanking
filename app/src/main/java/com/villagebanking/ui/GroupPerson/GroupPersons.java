@@ -14,22 +14,21 @@ import androidx.fragment.app.Fragment;
 import com.villagebanking.BOObjects.BOAutoComplete;
 import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOGroupPersonLink;
-import com.villagebanking.Controls.AutoCompleteBox;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.Utility.StaticUtility;
-import com.villagebanking.databinding.LinkviewGroupPersonBinding;
+import com.villagebanking.databinding.GroupsPersonLinkviewBinding;
 
 import java.util.ArrayList;
 
 public class GroupPersons extends Fragment {
-    private LinkviewGroupPersonBinding binding;
+    private GroupsPersonLinkviewBinding binding;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = LinkviewGroupPersonBinding.inflate(inflater, container, false);
+        binding = GroupsPersonLinkviewBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         initilize();
         return root;

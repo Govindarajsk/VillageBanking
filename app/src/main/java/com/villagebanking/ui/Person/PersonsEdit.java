@@ -11,13 +11,13 @@ import androidx.fragment.app.Fragment;
 import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
-import com.villagebanking.databinding.EditviewPersonsBinding;
+import com.villagebanking.databinding.PersonsEditviewBinding;
 
 public class PersonsEdit extends Fragment {
 
-    private EditviewPersonsBinding binding;
+    private PersonsEditviewBinding binding;
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = EditviewPersonsBinding.inflate(inflater, container, false);
+        binding = PersonsEditviewBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         initilize();
         return root;

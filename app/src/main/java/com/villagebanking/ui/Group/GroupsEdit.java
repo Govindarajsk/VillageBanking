@@ -6,8 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -16,28 +14,22 @@ import androidx.fragment.app.Fragment;
 import com.villagebanking.BOObjects.BOAutoComplete;
 import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOPeriod;
-import com.villagebanking.Controls.AutoCompleteBox;
-import com.villagebanking.Controls.DataGrid;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
-import com.villagebanking.R;
 import com.villagebanking.Utility.StaticUtility;
-import com.villagebanking.databinding.EditviewGroupsBinding;
-import com.villagebanking.ui.Period.PeriodsGrid;
+import com.villagebanking.databinding.GroupsEditviewBinding;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class GroupsEdit extends Fragment {
-    private EditviewGroupsBinding binding;
+    private GroupsEditviewBinding binding;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = EditviewGroupsBinding.inflate(inflater, container, false);
+        binding = GroupsEditviewBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         initialize();
         return root;

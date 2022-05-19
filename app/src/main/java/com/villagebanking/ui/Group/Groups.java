@@ -1,13 +1,11 @@
 package com.villagebanking.ui.Group;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -41,7 +39,7 @@ public class Groups extends Fragment {
     }
 
     void assignToGridView() {
-        GroupsGrid adapter = new GroupsGrid(this.getContext(), R.layout.listview_groups,
+        GroupsGrid adapter = new GroupsGrid(this.getContext(), R.layout.groups_gridview,
                 DBUtility.DTOGetAlls(DB1Tables.GROUPS));
         binding.gvDataView.setAdapter(adapter);
     }

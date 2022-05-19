@@ -18,7 +18,7 @@ import androidx.annotation.RequiresApi;
 import com.villagebanking.BOObjects.BOAutoComplete;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPersonTrans;
-import com.villagebanking.Controls.AutoCompleteBox;
+import com.villagebanking.Controls.CCAutoComplete;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -128,7 +128,7 @@ public class StaticUtility {
     //region AutoCompleteBox
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static void SetAutoCompleteBox(Context cnxt, ArrayList<BOAutoComplete> list, AutoCompleteTextView control, long... key) {
-        AutoCompleteBox autoComplete = new AutoCompleteBox(cnxt, list);
+        CCAutoComplete autoComplete = new CCAutoComplete(cnxt, list);
         control.setAdapter(autoComplete);
         autoComplete.SetDefault(control, key);
     }
@@ -164,7 +164,7 @@ public class StaticUtility {
 
         Map<Long, ArrayList<Long>> map = new HashMap<>();
         for (BOPersonTrans item : transDetails) {
-            Long value = item.getForien_key();
+            Long value = item.getTable_link_key();
             ArrayList<Long> list=new ArrayList<>();
             if (map.containsKey(value)) {
                 list = map.get(value);

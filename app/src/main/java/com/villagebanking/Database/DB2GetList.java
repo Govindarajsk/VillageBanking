@@ -2,6 +2,7 @@ package com.villagebanking.Database;
 
 import android.database.Cursor;
 
+import com.villagebanking.BOObjects.BOAutoComplete;
 import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOGroupPersonLink;
 import com.villagebanking.BOObjects.BOPeriod;
@@ -114,15 +115,34 @@ public class DB2GetList {
        "TABLE_LINK_KEY INTEGER,"+
        "REMARKS TEXT,"+
        "AMOUNT DECIMAL," +
-    */
+
+       "PTR.ID AS ID," +
+        "PTR.PARENT_KEY AS PARENTKEY,"+
+        "PERIOD_KEY," +
+        "'GROUP_PERSON_LINK' AS TABLE_NAME," +
+        "GPL.ID AS TABLE_LINK_KEY," +
+        "G.NAME AS REMARKS," +
+        "PTR.AMOUNT AS AMOUNT," +
+        "G.AMOUNT AS TRANSAMOUNT," +
+        "G.ID AS GROUP_KEY " +
+     */
     static BOPersonTrans getValue(Cursor res, BOPersonTrans test) {
         BOPersonTrans newData = new BOPersonTrans();
         newData.setPrimary_key(res.getLong(0));
         newData.setParentKey(res.getLong(1));
-
         newData.getPeriod_detail().setPrimary_key(res.getLong(2));
         newData.setTableName(res.getString(3));
         newData.setTable_link_key(res.getLong(4));
+
+        //if (newData.getTableName() == DB1Tables.GROUP_PERSON_LINK) {
+            ArrayList<BOGroupPersonLink> tableLinkDetail = DBUtility.DTOGetData(DB1Tables.GROUP_PERSON_LINK, newData.getTable_link_key());
+            if (tableLinkDetail.size() > 0) {
+                BOGroupPersonLink linkData = tableLinkDetail.get(0);
+                newData.setDetail1(new BOAutoComplete(linkData.getGroup_Detail().getPrimary_key(),linkData.getGroup_Detail().getName()));
+                newData.setDetail2(new BOAutoComplete(linkData.getPerson_Detail().getPrimary_key(),linkData.getPerson_Detail().getFullName()));
+            }
+       // }
+
         newData.setRemarks(res.getString(5));
         newData.setNewAmount(res.getDouble(6));
         if (res.getColumnCount() > 8)

@@ -13,7 +13,6 @@ import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 import com.villagebanking.databinding.AppGridviewBinding;
-import com.villagebanking.ui.Person.PersonsGrid;
 
 public class Trans extends Fragment {
     private AppGridviewBinding binding;
@@ -41,7 +40,7 @@ public class Trans extends Fragment {
     }
 
     void assignToGridView() {
-        TransGrid adapter = new TransGrid(this.getContext(), R.layout.listview_trans,
+        TransGrid adapter = new TransGrid(this.getContext(), R.layout.trans_gridview,
                 DBUtility.DTOGetAlls(DB1Tables.PERSON_TRANSACTION));
         binding.gvDataView.setAdapter(adapter);
     }

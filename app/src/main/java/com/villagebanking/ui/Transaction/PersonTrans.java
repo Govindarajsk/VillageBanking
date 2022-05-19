@@ -19,25 +19,52 @@ import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 import com.villagebanking.Utility.StaticUtility;
-import com.villagebanking.databinding.LinkviewPersonsTransBinding;
+import com.villagebanking.databinding.PersonsTransLinkviewBinding;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class PersonTrans extends Fragment {
-    private LinkviewPersonsTransBinding binding;
+    private PersonsTransLinkviewBinding binding;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = LinkviewPersonsTransBinding.inflate(inflater, container, false);
+        binding = PersonsTransLinkviewBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         initialize();
         return root;
+    }
+
+    BOPersonTrans selectedData = new BOPersonTrans();
+
+    AdapterView.OnItemClickListener personSelected() {
+        return new AdapterView.OnItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
+                long person_Key = StaticUtility.getAutoBoxKey(parent.getItemAtPosition(position));
+
+                selectedData.getDetail2().setPrimary_key(person_Key);
+
+                fill_Person_trans(person_Key, selectedData.getForien_key());
+            }
+        };
+    }
+
+    AdapterView.OnItemClickListener periodSelected() {
+        return new AdapterView.OnItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
+                long period_key = StaticUtility.getAutoBoxKey(parent.getItemAtPosition(position));
+                selectedData.getDetail2().setPrimary_key(period_key);
+                fill_Person_trans(selectedData.getDetail2().getPrimary_key(), selectedData.getForien_key());
+            }
+        };
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -50,7 +77,7 @@ public class PersonTrans extends Fragment {
             if (person_key > 0) {
                 ArrayList<BOPerson> persons = DBUtility.DTOGetData(DB1Tables.PERSONS, person_key);
                 if (persons.size() > 0) {
-                    selectedData.setPerson_detail(persons.get(0));
+                    selectedData.setDetail2(new BOAutoComplete(persons.get(0).getPrimary_key(),persons.get(0).getFullName()));
                 }
             }
             fillPerson(person_key);
@@ -95,34 +122,6 @@ public class PersonTrans extends Fragment {
 
     }
 
-    BOPersonTrans selectedData = new BOPersonTrans();
-
-    AdapterView.OnItemClickListener personSelected() {
-        return new AdapterView.OnItemClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-                long person_Key = StaticUtility.getAutoBoxKey(parent.getItemAtPosition(position));
-
-                selectedData.getPerson_detail().setPrimary_key(person_Key);
-
-                fill_Person_trans(person_Key, selectedData.getForien_key());
-            }
-        };
-    }
-
-    AdapterView.OnItemClickListener periodSelected() {
-        return new AdapterView.OnItemClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-                long period_key = StaticUtility.getAutoBoxKey(parent.getItemAtPosition(position));
-                selectedData.getPerson_detail().setPrimary_key(period_key);
-                fill_Person_trans(selectedData.getPerson_detail().getPrimary_key(), selectedData.getForien_key());
-            }
-        };
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_Person_trans(long person_key, long group_key) {
         ArrayList<BOPersonTrans> trans = DBUtility.DTOGetData(DB1Tables.PERSON_TRANSACTION, person_key);
@@ -135,7 +134,14 @@ public class PersonTrans extends Fragment {
 
         calculateAmount(trans);
 
-        PersonTransGrid adapter = new PersonTransGrid(this.getContext(), R.layout.listview_groups, trans);
+
+        //trans.sort((x,y)->String.valueOf(x.getTable_link_key()).compareToIgnoreCase);
+
+        Collections.sort(trans,(x,y)->String.valueOf(x.getTable_link_key()).compareToIgnoreCase(
+                String.valueOf(y.getTable_link_key())));
+
+
+        PersonTransGrid adapter = new PersonTransGrid(this.getContext(), R.layout.groups_gridview, trans);
         binding.gvGridView.setAdapter(adapter);
         binding.gvGridView.addOnLayoutChangeListener(layoutChanged(trans));
 
@@ -165,7 +171,7 @@ public class PersonTrans extends Fragment {
         balEach = 0.0;
 
         Stream<BOPersonTrans> groupListAmount =
-                fullList.stream().filter(x -> x.getForien_key() == key);
+                fullList.stream().filter(x -> x.getTable_link_key() == key);
 
         List<BOPersonTrans> okGk = groupListAmount.collect(Collectors.toList());
 
@@ -177,17 +183,16 @@ public class PersonTrans extends Fragment {
             balEach =  okGk.get(0).getActualAmount();
             okGk.forEach(x -> fillBalAmount(x));
 
-
             if (balEach != 0 && transData.getPrimary_key() > 0) {
                 BOPersonTrans newData = new BOPersonTrans();
                 newData.setParentKey(transData.getPrimary_key());
-
                 newData.setTableName(transData.getTableName());
-                newData.setPerson_detail(transData.getPerson_detail());
                 newData.setTableName(transData.getTableName());
                 newData.setTable_link_key(transData.getTable_link_key());
                 newData.setForien_key(transData.getForien_key());
                 newData.setPeriod_detail(transData.getPeriod_detail());
+                newData.setRemarks(transData.getRemarks());
+                newData.setDetail2(transData.getDetail2());
                 newData.setActualAmount(balEach);
                 newData.setNewAmount(0.00);
                 fullList.add(newData);
@@ -216,7 +221,7 @@ public class PersonTrans extends Fragment {
                     if (transaction.getNewAmount() != 0 || transaction.getPrimary_key() > 0)
                         DBUtility.DTOSaveUpdate(transaction, DB1Tables.PERSON_TRANSACTION);
                 }
-                fill_Person_trans(selectedData.getPerson_detail().getPrimary_key(), selectedData.getForien_key());
+                fill_Person_trans(selectedData.getDetail2().getPrimary_key(), selectedData.getForien_key());
             }
         };
     }

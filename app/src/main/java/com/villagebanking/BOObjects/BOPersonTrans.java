@@ -7,14 +7,8 @@ import java.util.Date;
 
 public class BOPersonTrans extends BOBase {
     private BOPeriod period_detail;
-    private BOPerson person_detail;
     private String tableName;
     private String remarks;
-
-    public BOPerson getPerson_detail() {
-        if (person_detail == null) person_detail = new BOPerson();
-        return person_detail;
-    }
 
     public BOPeriod getPeriod_detail() {
         if (period_detail == null) period_detail = new BOPeriod();
@@ -23,10 +17,6 @@ public class BOPersonTrans extends BOBase {
 
     public void setPeriod_detail(BOPeriod period_detail) {
         this.period_detail = period_detail;
-    }
-
-    public void setPerson_detail(BOPerson person_detail) {
-        this.person_detail = person_detail;
     }
 
     private long forien_key;
@@ -113,4 +103,26 @@ public class BOPersonTrans extends BOBase {
     public void setParentKey(long parentKey) {
         this.parentKey = parentKey;
     }
+
+    private BOAutoComplete detail1;
+
+    public BOAutoComplete getDetail1() {
+        if (detail1 == null) detail1 = new BOAutoComplete(0, "");
+        return detail1;
+    }
+
+    public void setDetail1(BOAutoComplete detail1) {
+        this.detail1 = detail1;
+    }
+
+    public BOAutoComplete getDetail2() {
+        if (detail2 == null) detail2 = new BOAutoComplete(0, "");
+        return detail2;
+    }
+
+    public void setDetail2(BOAutoComplete detail2) {
+        this.detail2 = detail2;
+    }
+
+    private BOAutoComplete detail2;
 }

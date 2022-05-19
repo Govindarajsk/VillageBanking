@@ -7,25 +7,22 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
-import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOPeriod;
-import com.villagebanking.Controls.DatePickerFragment;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.Utility.StaticUtility;
-import com.villagebanking.databinding.EditviewPeriodsBinding;
+import com.villagebanking.databinding.PeriodsEditviewBinding;
 
 import java.util.ArrayList;
 
 public class PeriodsEdit extends Fragment {
-    private EditviewPeriodsBinding binding;
+    private PeriodsEditviewBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = EditviewPeriodsBinding.inflate(inflater, container, false);
+        binding = PeriodsEditviewBinding.inflate(inflater, container, false);
 
         if (getArguments() != null) {
             long key = getArguments().getLong("primary_key");

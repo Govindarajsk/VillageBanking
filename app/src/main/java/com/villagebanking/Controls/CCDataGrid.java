@@ -11,8 +11,8 @@ import com.villagebanking.R;
 
 import java.util.ArrayList;
 
-public class DataGrid<T> extends ArrayAdapter {
-    public DataGrid(Context context, int textViewResourceId, ArrayList<T> objects) {
+public class CCDataGrid<T> extends ArrayAdapter {
+    public CCDataGrid(Context context, int textViewResourceId, ArrayList<T> objects) {
         super(context, textViewResourceId, objects);
     }
 
@@ -30,7 +30,7 @@ public class DataGrid<T> extends ArrayAdapter {
 
     private View customeView(int row, T data) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View convertView = inflater.inflate(R.layout.listview_dropdown,null);
+        View convertView = inflater.inflate(R.layout.app_dropview,null);
 
         String bindData = data!=null? data.toString():"";
         TextView column1 = ((TextView) convertView.findViewById(R.id.txtDropdownValue));

@@ -10,7 +10,7 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
 
-public class DatePickerFragment extends DialogFragment
+public class CCDatePicker extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
 
     @Override
@@ -30,7 +30,7 @@ public class DatePickerFragment extends DialogFragment
     }
 
     public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
+        DialogFragment newFragment = new CCDatePicker();
         //newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 }
