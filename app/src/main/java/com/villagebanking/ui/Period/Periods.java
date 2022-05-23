@@ -15,11 +15,9 @@ import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
-import com.villagebanking.Utility.StaticUtility;
 import com.villagebanking.databinding.AppGridviewBinding;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class Periods extends Fragment {
     private AppGridviewBinding binding;
@@ -35,7 +33,6 @@ public class Periods extends Fragment {
         assignToGridView();
         binding.btnAdd.setOnClickListener(clickMethod());
     }
-
     public View.OnClickListener clickMethod() {
         return new View.OnClickListener() {
             @Override
@@ -49,8 +46,7 @@ public class Periods extends Fragment {
     void assignToGridView() {
         ArrayList<BOPeriod> periods=DBUtility.DTOGetAlls(DB1Tables.PERIODS);
         periods.sort((t1, t2) ->Long.toString(t1.getPeriodValue()).compareTo(Long.toString(t2.getPeriodValue())));
-        PeriodsGrid adapter = new PeriodsGrid(this.getContext(), R.layout.app_gridview,
-                periods);
+        PeriodsGrid adapter = new PeriodsGrid(this.getContext(), R.layout.app_gridview,periods);
         binding.gvDataView.setAdapter(adapter);
     }
 }

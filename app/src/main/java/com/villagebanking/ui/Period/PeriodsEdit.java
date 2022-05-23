@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
-import com.villagebanking.Utility.StaticUtility;
+import com.villagebanking.Utility.UIUtility;
 import com.villagebanking.databinding.PeriodsEditviewBinding;
 
 import java.util.ArrayList;
@@ -60,8 +60,8 @@ public class PeriodsEdit extends Fragment {
         String str = binding.editType.getText().toString();
         newData.setPeriodType(Integer.valueOf(str));
         newData.setPeriodName(binding.editName.getText().toString());
-        newData.setActualDate(StaticUtility.getDateString(binding.editDate));
-        newData.setPeriodValue(StaticUtility.getDateInt(binding.editDate));
+        newData.setActualDate(UIUtility.getDateString(binding.editDate));
+        newData.setPeriodValue(UIUtility.getDateInt(binding.editDate));
         newData.setPeriodRemarks(binding.editDetail.getText().toString());
         return newData;
     }
@@ -75,7 +75,7 @@ public class PeriodsEdit extends Fragment {
             primary_key = editData.getPrimary_key();
             binding.editType.setText(String.valueOf(editData.getPeriodType()));
             binding.editName.setText(editData.getPeriodName());
-            StaticUtility.getDateFromString(editData.getActualDate(), binding.editDate);
+            UIUtility.getDateFromString(editData.getActualDate(), binding.editDate);
             binding.editDetail.setText(editData.getPeriodRemarks());
         }
     }

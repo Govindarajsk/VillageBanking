@@ -18,7 +18,7 @@ import com.villagebanking.BOObjects.BOPersonTrans;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
-import com.villagebanking.Utility.StaticUtility;
+import com.villagebanking.Utility.UIUtility;
 import com.villagebanking.databinding.PersonsTransLinkviewBinding;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PersonTrans extends Fragment {
+public class TransPerson extends Fragment {
     private PersonsTransLinkviewBinding binding;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -46,7 +46,7 @@ public class PersonTrans extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-                long person_Key = StaticUtility.getAutoBoxKey(parent.getItemAtPosition(position));
+                long person_Key = UIUtility.getAutoBoxKey(parent.getItemAtPosition(position));
 
                 selectedData.getDetail2().setPrimary_key(person_Key);
 
@@ -60,7 +60,7 @@ public class PersonTrans extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-                long period_key = StaticUtility.getAutoBoxKey(parent.getItemAtPosition(position));
+                long period_key = UIUtility.getAutoBoxKey(parent.getItemAtPosition(position));
                 selectedData.getDetail2().setPrimary_key(period_key);
                 fill_Person_trans(selectedData.getDetail2().getPrimary_key(), selectedData.getForien_key());
             }
@@ -108,7 +108,7 @@ public class PersonTrans extends Fragment {
         list.forEach(
                 x -> autoCompleteList.add(new BOAutoComplete(x.getPrimary_key(), x.getStrFName() + "-" + x.getStrLName()))
         );
-        StaticUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editPerson, person_key);
+        UIUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editPerson, person_key);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -118,32 +118,29 @@ public class PersonTrans extends Fragment {
         for (BOPeriod item : boPeriods) {
             autoCompleteList1.add(new BOAutoComplete(item.getPrimary_key(), item.getActualDate()));
         }
-        StaticUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList1, binding.editPeriod, period_key);
+        UIUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList1, binding.editPeriod, period_key);
 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_Person_trans(long person_key, long group_key) {
         ArrayList<BOPersonTrans> trans = DBUtility.DTOGetData(DB1Tables.PERSON_TRANSACTION, person_key);
+       /*
         ArrayList<BOPersonTrans> copyTrans = DBUtility.DTOGetData(DB1Tables.PERSON_TRANSACTION, person_key);
 
         if (group_key > 0) {
             trans.removeIf(x -> x.getForien_key() != group_key);
             copyTrans.removeIf(x -> x.getForien_key() != group_key);
         }
-
+        */
         calculateAmount(trans);
-
-
-        //trans.sort((x,y)->String.valueOf(x.getTable_link_key()).compareToIgnoreCase);
 
         Collections.sort(trans,(x,y)->String.valueOf(x.getTable_link_key()).compareToIgnoreCase(
                 String.valueOf(y.getTable_link_key())));
 
-
-        PersonTransGrid adapter = new PersonTransGrid(this.getContext(), R.layout.groups_gridview, trans);
-        binding.gvGridView.setAdapter(adapter);
-        binding.gvGridView.addOnLayoutChangeListener(layoutChanged(trans));
+        TransEditGrid adapter = new TransEditGrid(this.getContext(), R.layout.groups_gridview, trans);
+        binding.gvDataView.setAdapter(adapter);
+        binding.gvDataView.addOnLayoutChangeListener(layoutChanged(trans));
 
     }
 
@@ -155,7 +152,7 @@ public class PersonTrans extends Fragment {
     void calculateAmount(ArrayList<BOPersonTrans> fullList) {
         totalAmount = totalPaid = totalBal = 0.0;
 
-        Map<Long, ArrayList<Long>> uniqueList = StaticUtility.GetPersonAmount(fullList);
+        Map<Long, ArrayList<BOPersonTrans>> uniqueList = UIUtility.GetPersonAmount(fullList);
         uniqueList.forEach((x, y) -> applyVal(x, y, fullList));
 
         totalBal = totalAmount - totalPaid;
@@ -167,7 +164,7 @@ public class PersonTrans extends Fragment {
     Double balEach = 0.0;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    void applyVal(Long key, ArrayList<Long> value, ArrayList<BOPersonTrans> fullList) {
+    void applyVal(Long key, ArrayList<BOPersonTrans> value, ArrayList<BOPersonTrans> fullList) {
         balEach = 0.0;
 
         Stream<BOPersonTrans> groupListAmount =
@@ -216,8 +213,8 @@ public class PersonTrans extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                for (int i = 0; i < binding.gvGridView.getCount(); i++) {
-                    BOPersonTrans transaction = (BOPersonTrans) binding.gvGridView.getItemAtPosition(i);
+                for (int i = 0; i < binding.gvDataView.getCount(); i++) {
+                    BOPersonTrans transaction = (BOPersonTrans) binding.gvDataView.getItemAtPosition(i);
                     if (transaction.getNewAmount() != 0 || transaction.getPrimary_key() > 0)
                         DBUtility.DTOSaveUpdate(transaction, DB1Tables.PERSON_TRANSACTION);
                 }

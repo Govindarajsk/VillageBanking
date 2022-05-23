@@ -114,6 +114,9 @@
     <style name="styleBtnEdit" parent="stylBtn">
         <item name="android:src">@drawable/ic_edit</item>
     </style>
+    <style name="styleBtnClose" parent="stylBtn">
+        <item name="android:src">@drawable/ic_close</item>
+    </style>
 
     <style name="styleBtnSave" parent="stylBtn">
         <item name="android:layout_height">42dp</item>

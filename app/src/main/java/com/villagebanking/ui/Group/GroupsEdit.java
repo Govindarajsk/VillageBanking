@@ -16,7 +16,7 @@ import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
-import com.villagebanking.Utility.StaticUtility;
+import com.villagebanking.Utility.UIUtility;
 import com.villagebanking.databinding.GroupsEditviewBinding;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class GroupsEdit extends Fragment {
         binding.editPeridType.setOnItemClickListener(periodItemSelected());
         binding.editStartDate.setOnItemClickListener(periodTypeItemSelected());
 
-        StaticUtility.ApplyTextWatcher(this.getContext(), binding.editAmount, binding.editNoOfPerson, binding.lblTotalAmount);
+        UIUtility.ApplyTextWatcher(this.getContext(), binding.editAmount, binding.editNoOfPerson, binding.lblTotalAmount);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -69,12 +69,12 @@ public class GroupsEdit extends Fragment {
     }
 
     boolean checkFields() {
-        boolean ok1 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING, 0, 10, binding.editName);
-        boolean ok2 = StaticUtility.IsFieldEmpty(StaticUtility.V_NUMBER, 0, 100, binding.editNoOfPerson);
-        boolean ok3 = StaticUtility.IsFieldEmpty(StaticUtility.V_NUMBER, 0, 50000, binding.editAmount);
-        boolean ok4 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING, 0, 1000, binding.editBondCharge);
-        boolean ok5 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING, 0, 15, binding.editPeridType);
-        boolean ok6 = StaticUtility.IsFieldEmpty(StaticUtility.V_STRING, 0, 15, binding.editStartDate);
+        boolean ok1 = UIUtility.IsFieldEmpty(UIUtility.V_STRING, 0, 10, binding.editName);
+        boolean ok2 = UIUtility.IsFieldEmpty(UIUtility.V_NUMBER, 0, 100, binding.editNoOfPerson);
+        boolean ok3 = UIUtility.IsFieldEmpty(UIUtility.V_NUMBER, 0, 50000, binding.editAmount);
+        boolean ok4 = UIUtility.IsFieldEmpty(UIUtility.V_STRING, 0, 1000, binding.editBondCharge);
+        boolean ok5 = UIUtility.IsFieldEmpty(UIUtility.V_STRING, 0, 15, binding.editPeridType);
+        boolean ok6 = UIUtility.IsFieldEmpty(UIUtility.V_STRING, 0, 15, binding.editStartDate);
 
         return ok1 || ok2 || ok3 || ok4 || ok5 || ok6;
     }
@@ -82,7 +82,7 @@ public class GroupsEdit extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_periodType() {
         ArrayList<BOPeriod> actualList = DBUtility.DTOGetAlls(DB1Tables.PERIODS);
-        Map<String, List<BOPeriod>> okperiod = StaticUtility.GroupByPeriod(actualList);
+        Map<String, List<BOPeriod>> okperiod = UIUtility.GroupByPeriod(actualList);
         Set<String> list = okperiod.keySet();
 
         ArrayList<BOAutoComplete> autoCompleteList = new ArrayList<>();
@@ -91,7 +91,7 @@ public class GroupsEdit extends Fragment {
             if (strings.length > 1)
                 autoCompleteList.add(new BOAutoComplete(Integer.valueOf(strings[0]), item));
         }
-        StaticUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editPeridType);
+        UIUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editPeridType);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -103,7 +103,7 @@ public class GroupsEdit extends Fragment {
         for (BOPeriod item : boPeriods) {
             autoCompleteList.add(new BOAutoComplete(item.getPrimary_key(), item.getActualDate()));
         }
-        StaticUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editStartDate);
+        UIUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editStartDate);
     }
 
     AdapterView.OnItemClickListener periodItemSelected() {
@@ -111,7 +111,7 @@ public class GroupsEdit extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-                long key = StaticUtility.getAutoBoxKey(parent.getItemAtPosition(position));
+                long key = UIUtility.getAutoBoxKey(parent.getItemAtPosition(position));
                 selectedData.getPeriodDetail().setPeriodType(key);
                 fill_periodStart(key);
             }
@@ -122,7 +122,7 @@ public class GroupsEdit extends Fragment {
         return new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-                long key = StaticUtility.getAutoBoxKey(parent.getItemAtPosition(position));
+                long key = UIUtility.getAutoBoxKey(parent.getItemAtPosition(position));
                 selectedData.getPeriodDetail().setPrimary_key(key);
             }
         };
@@ -144,22 +144,22 @@ public class GroupsEdit extends Fragment {
         ArrayList<BOGroup> fList = DBUtility.DTOGetData(DB1Tables.GROUPS, primary_key);
         if (fList.size() > 0) {
             selectedData = fList.get(0);
-            StaticUtility.applyValue(binding.editName, selectedData.getName());
-            StaticUtility.applyValue(binding.editNoOfPerson, selectedData.getNoOfPerson());
-            StaticUtility.applyValue(binding.editAmount, selectedData.getAmount());
-            StaticUtility.applyValue(binding.editStartDate, selectedData.getPeriodDetail().getActualDate());
-            StaticUtility.applyValue(binding.editPeridType, selectedData.getPeriodDetail().getPeriodName());
-            StaticUtility.applyValue(binding.editBondCharge, selectedData.getBondCharge());
-            StaticUtility.applyValue(binding.lblTotalAmount, selectedData.getAmount() * selectedData.getNoOfPerson());
+            UIUtility.applyValue(binding.editName, selectedData.getName());
+            UIUtility.applyValue(binding.editNoOfPerson, selectedData.getNoOfPerson());
+            UIUtility.applyValue(binding.editAmount, selectedData.getAmount());
+            UIUtility.applyValue(binding.editStartDate, selectedData.getPeriodDetail().getActualDate());
+            UIUtility.applyValue(binding.editPeridType, selectedData.getPeriodDetail().getPeriodName());
+            UIUtility.applyValue(binding.editBondCharge, selectedData.getBondCharge());
+            UIUtility.applyValue(binding.lblTotalAmount, selectedData.getAmount() * selectedData.getNoOfPerson());
             //diableField();
         }
     }
 
     void diableField() {
-        StaticUtility.disableField(binding.editNoOfPerson);
-        StaticUtility.disableField(binding.editAmount);
-        StaticUtility.disableField(binding.editStartDate);
-        StaticUtility.disableField(binding.editPeridType);
-        StaticUtility.disableField(binding.editBondCharge);
+        UIUtility.disableField(binding.editNoOfPerson);
+        UIUtility.disableField(binding.editAmount);
+        UIUtility.disableField(binding.editStartDate);
+        UIUtility.disableField(binding.editPeridType);
+        UIUtility.disableField(binding.editBondCharge);
     }
 }

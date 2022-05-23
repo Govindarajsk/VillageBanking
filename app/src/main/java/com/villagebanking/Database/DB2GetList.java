@@ -168,6 +168,7 @@ public class DB2GetList {
         newData.setActualDate(res.getString(3));
         newData.setPeriodValue(res.getLong(4));
         newData.setPeriodRemarks(res.getString(5));
+        //newData.setPeriodStatus(res.getString(6));
         return newData;
     }
 }

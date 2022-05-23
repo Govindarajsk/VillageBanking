@@ -6,6 +6,7 @@ public class BOPeriod extends BOBase {
     private String actualDate;
     private String periodRemarks;
     private long periodValue;
+    private String periodStatus;
 
     public long getPeriodType() {
         return periodType;
@@ -45,5 +46,13 @@ public class BOPeriod extends BOBase {
 
     public void setPeriodValue(long periodValue) {
         this.periodValue = periodValue;
+    }
+
+    public String getPeriodStatus() {
+        return periodStatus;
+    }
+
+    public void setPeriodStatus(String periodStatus) {
+        this.periodStatus = periodStatus;
     }
 }

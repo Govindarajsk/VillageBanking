@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:columnCount="3"
-    tools:context=".ui.Person.PersonsEdit">
+    android:columnCount="3">
 
     <ImageView
         android:layout_width="100dp"

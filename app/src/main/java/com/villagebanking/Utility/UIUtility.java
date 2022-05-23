@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StaticUtility {
+public class UIUtility {
 
     //region Constants
     public static final String V_NUMBER = "NUMBER";
@@ -160,18 +160,18 @@ public class StaticUtility {
         return map;
     }
 
-    public static Map<Long, ArrayList<Long>> GetPersonAmount(ArrayList<BOPersonTrans> transDetails) {
+    public static Map<Long, ArrayList<BOPersonTrans>> GetPersonAmount(ArrayList<BOPersonTrans> transDetails) {
 
-        Map<Long, ArrayList<Long>> map = new HashMap<>();
+        Map<Long, ArrayList<BOPersonTrans>> map = new HashMap<>();
         for (BOPersonTrans item : transDetails) {
             Long value = item.getTable_link_key();
-            ArrayList<Long> list=new ArrayList<>();
+            ArrayList<BOPersonTrans> list = new ArrayList<>();
             if (map.containsKey(value)) {
                 list = map.get(value);
             } else {
                 list = new ArrayList<>();
             }
-            list.add(item.getPrimary_key());
+            list.add(item);
             map.put(value, list);
         }
         map.values(); // this will give Collection of values.
@@ -235,6 +235,12 @@ public class StaticUtility {
 
     public static void disableField(TextView txtView) {
         txtView.setEnabled(false);
+    }
+    //endregion
+
+    //region converters
+    public static String LongToString(long input) {
+        return input > 0 ? String.valueOf(input) : "";
     }
     //endregion
 }

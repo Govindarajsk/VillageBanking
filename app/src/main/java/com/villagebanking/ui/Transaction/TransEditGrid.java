@@ -22,8 +22,8 @@ import com.villagebanking.R;
 
 import java.util.ArrayList;
 
-public class PersonTransGrid<T> extends ArrayAdapter {
-    public PersonTransGrid(Context context, int textViewResourceId, ArrayList<T> objects) {
+public class TransEditGrid<T> extends ArrayAdapter {
+    public TransEditGrid(Context context, int textViewResourceId, ArrayList<T> objects) {
         super(context, textViewResourceId, objects);
     }
 
@@ -61,6 +61,11 @@ public class PersonTransGrid<T> extends ArrayAdapter {
         chkIsFull.setEnabled(!isAmountExisit);
         txtNewAmount.setEnabled(!isAmountExisit);
         chkIsFull.setOnClickListener(clickCheckBox(bindData, txtNewAmount));
+
+        if(bindData.getParentKey()>0) {
+            txtDetails.setVisibility(View.INVISIBLE);
+            ((TextView) convertView.findViewById(R.id.lineTop)).setVisibility(View.INVISIBLE);
+        }
 
         ImageButton btnDelete = ((ImageButton) convertView.findViewById(R.id.btnDelete));
         btnDelete.setOnClickListener(clickDelete(bindData));

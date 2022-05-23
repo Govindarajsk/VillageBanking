@@ -18,7 +18,7 @@ import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 import com.villagebanking.BOObjects.BOPerson;
-import com.villagebanking.Utility.StaticUtility;
+import com.villagebanking.Utility.UIUtility;
 import com.villagebanking.databinding.GroupsPersonLinkviewBinding;
 
 import java.util.ArrayList;
@@ -95,7 +95,7 @@ public class GroupPersons extends Fragment {
                         new BOAutoComplete(x.getPrimary_key(),
                                 x.getStrFName() + "-" + x.getStrLName()))
         );
-        StaticUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editPerson);
+        UIUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editPerson);
     }
 
     long personKey = 0;
