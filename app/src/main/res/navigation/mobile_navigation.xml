@@ -3,45 +3,68 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_person">
-
+    app:startDestination="@+id/nav_period_grid_view">
+    <!--Main -->
     <fragment
-        android:id="@+id/nav_person"
-        android:name="com.villagebanking.ui.Person.PersonsAdd"
-        android:label="Add Person"
-        tools:layout="@layout/persons_fragment" />
-    <fragment
-        android:id="@+id/nav_person_view"
-        android:name="com.villagebanking.ui.Person.PersonsDetail"
+        android:id="@+id/nav_person_grid_view"
+        android:name="com.villagebanking.ui.Person.Persons"
         android:label="Persons"
-        tools:layout="@layout/persons_view" />
+        tools:layout="@layout/app_gridview" />
 
     <fragment
-        android:id="@+id/nav_group"
-        android:name="com.villagebanking.ui.Group.GroupAdd"
-        android:label="Add Group"
-        tools:layout="@layout/group_fragment" />
+        android:id="@+id/nav_period_grid_view"
+        android:name="com.villagebanking.ui.Period.Periods"
+        android:label="Periods"
+        tools:layout="@layout/app_gridview" />
+
     <fragment
-        android:id="@+id/nav_group_view"
-        android:name="com.villagebanking.ui.Group.GroupDetail"
+        android:id="@+id/nav_group_grid_view"
+        android:name="com.villagebanking.ui.Group.Groups"
         android:label="Groups"
-        tools:layout="@layout/group_view" />
+        tools:layout="@layout/app_gridview" />
 
     <fragment
-        android:id="@+id/nav_period_view"
-        android:name="com.villagebanking.ui.Master.PeriodsAdd"
+        android:id="@+id/nav_trans_grid_view"
+        android:name="com.villagebanking.ui.Transaction.Trans"
+        android:label="Transaction"
+        tools:layout="@layout/app_gridview" />
+    <!--Sub-->
+    <fragment
+        android:id="@+id/nav_person_edit_view"
+        android:name="com.villagebanking.ui.Person.PersonsEdit"
+        android:label="Add Person"
+        tools:layout="@layout/persons_editview" />
+    <fragment
+        android:id="@+id/nav_group_edit_view"
+        android:name="com.villagebanking.ui.Group.GroupsEdit"
+        android:label="Add Group"
+        tools:layout="@layout/groups_editview" />
+    <fragment
+        android:id="@+id/nav_period_edit_view"
+        android:name="com.villagebanking.ui.Period.PeriodsEdit"
         android:label="Period"
-        tools:layout="@layout/periods_view" />
+        tools:layout="@layout/periods_editview" />
+    <fragment
+        android:id="@+id/nav_trans_edit_view"
+        android:name="com.villagebanking.ui.Transaction.TransEdit"
+        android:label="Transaction Edit"
+        tools:layout="@layout/trans_editview" />
 
-    <!--
-        <fragment
-            android:id="@+id/nav_group_detail"
-            android:name="com.villagebanking.ui.Links.GroupPersonLink"
-            android:label="@string/header_group_detail"
-            tools:layout="@layout/group_person_link" />
-        <fragment
-            android:id="@+id/nav_person_trans"
-            android:name="com.villagebanking.ui.Links.PersonTrans"
-            android:label="@string/header_group_trans"
-            tools:layout="@layout/person_transaction" /> -->
+    <!--Link-->
+    <fragment
+        android:id="@+id/nav_linkview_group_person"
+        android:name="com.villagebanking.ui.GroupPerson.GroupPersons"
+        android:label="Group Person"
+        tools:layout="@layout/groups_person_linkview" /> <!--Link-->
+    <fragment
+        android:id="@+id/nav_linkview_person_trans"
+        android:name="com.villagebanking.ui.Transaction.TransHeader"
+        android:label="Person Transaction"
+        tools:layout="@layout/persons_trans_linkview" />
+    <fragment
+        android:id="@+id/nav_linkview_period_trans"
+        android:name="com.villagebanking.ui.Transaction.TransHeader"
+        android:label="Period Transaction"
+        tools:layout="@layout/persons_trans_linkview" />
+
 </navigation>

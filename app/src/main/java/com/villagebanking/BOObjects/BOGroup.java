@@ -4,15 +4,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Date;
 
-public class BOGroup {
-
-    public int getKeyID() {
-        return keyID;
-    }
-
-    public void setKeyID(int keyID) {
-        this.keyID = keyID;
-    }
+public class BOGroup extends BOBase {
 
     public String getName() {
         return name;
@@ -40,14 +32,6 @@ public class BOGroup {
         this.amount =  amount;
     }
 
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
     public String getType() {
         return type;
     }
@@ -64,14 +48,6 @@ public class BOGroup {
         this.bondCharge = bondCharge;
     }
 
-    public String getOccurnece() {
-        return occurnece;
-    }
-
-    public void setOccurnece(String occurnece) {
-        this.occurnece = occurnece;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -80,13 +56,20 @@ public class BOGroup {
         this.status = status;
     }
 
-    private int keyID;
+    public BOPeriod getPeriodDetail() {
+        if(periodDetail==null)
+            periodDetail=new BOPeriod();
+        return periodDetail;
+    }
+
+    public void setPeriodDetail(BOPeriod periodDetail) {
+        this.periodDetail = periodDetail;
+    }
     private String name;
     private int noOfPerson;
     private double amount;
-    private Date startDate;
     private String type;
     private double bondCharge;
-    private String occurnece;
+    private BOPeriod periodDetail;
     private String status;
 }

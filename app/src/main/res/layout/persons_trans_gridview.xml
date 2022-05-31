@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/maingrid"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="5"
+    android:layoutDirection="locale"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txtDetails"
+        style="@style/stylDgTxt"
+        android:layout_row="1"
+        android:layout_column="0"
+        android:layout_columnWeight="@integer/config_navAnimTime"
+        android:text="Group1"
+        android:maxWidth="100dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/txtAmount"
+        style="@style/stylDgTxt"
+        android:layout_row="1"
+        android:layout_column="1"
+        android:text="4000"
+        android:minWidth="70dp"
+        android:textAlignment="viewEnd"
+        android:textStyle="bold" />
+
+    <CheckBox
+        android:id="@+id/chkIsFull"
+        android:layout_row="1"
+        android:layout_column="2"
+        android:minWidth="15dp"
+        android:layout_gravity="center_vertical"
+        android:checked="false" />
+
+    <EditText
+        android:id="@+id/txtNewAmount"
+        style="@style/stylDgTxt"
+        android:layout_row="1"
+        android:layout_column="3"
+        android:text="4000"
+        android:textStyle="bold"
+        android:minWidth="80dp"
+        android:textAlignment="viewEnd"
+        android:inputType="numberDecimal"/>
+
+    <ImageButton
+        android:id="@+id/btnDelete"
+        style="@style/styleBtnReset"
+        android:layout_row="1"
+        android:layout_column="4"/>
+
+    <TextView android:id="@+id/lineTop"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:layout_columnSpan="5"
+        android:layout_columnWeight="@integer/config_navAnimTime"
+        android:layout_gravity="top"
+        android:height="1dp"
+        android:background="#c2bfb6"
+        android:gravity="top" />
+    <!--
+    <TextView
+        android:layout_row="2"
+        android:layout_column="0"
+        android:layout_columnSpan="5"
+        android:layout_columnWeight="@integer/config_navAnimTime"
+        android:layout_gravity="top"
+        android:height="1dp"
+        android:background="#c2bfb6"
+        android:gravity="top" />
+     -->
+</GridLayout>

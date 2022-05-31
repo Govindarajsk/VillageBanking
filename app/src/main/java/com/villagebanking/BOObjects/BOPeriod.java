@@ -1,11 +1,20 @@
 package com.villagebanking.BOObjects;
 
-import java.util.Date;
-
 public class BOPeriod extends BOBase {
+    private long periodType;
     private String periodName;
-    private Date startDate;
-    private Date endDate;
+    private String actualDate;
+    private String periodRemarks;
+    private long periodValue;
+    private String periodStatus;
+
+    public long getPeriodType() {
+        return periodType;
+    }
+
+    public void setPeriodType(long periodType) {
+        this.periodType = periodType;
+    }
 
     public String getPeriodName() {
         return periodName;
@@ -15,19 +24,35 @@ public class BOPeriod extends BOBase {
         this.periodName = periodName;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public String getActualDate() {
+        return actualDate;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setActualDate(String actualDate) {
+        this.actualDate = actualDate;
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public String getPeriodRemarks() {
+        return periodRemarks;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setPeriodRemarks(String periodRemarks) {
+        this.periodRemarks = periodRemarks;
+    }
+
+    public long getPeriodValue() {
+        return periodValue;
+    }
+
+    public void setPeriodValue(long periodValue) {
+        this.periodValue = periodValue;
+    }
+
+    public String getPeriodStatus() {
+        return periodStatus;
+    }
+
+    public void setPeriodStatus(String periodStatus) {
+        this.periodStatus = periodStatus;
     }
 }
