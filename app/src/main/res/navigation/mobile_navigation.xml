@@ -58,12 +58,12 @@
         tools:layout="@layout/groups_person_linkview" /> <!--Link-->
     <fragment
         android:id="@+id/nav_linkview_person_trans"
-        android:name="com.villagebanking.ui.Transaction.TransPerson"
+        android:name="com.villagebanking.ui.Transaction.TransHeader"
         android:label="Person Transaction"
         tools:layout="@layout/persons_trans_linkview" />
     <fragment
         android:id="@+id/nav_linkview_period_trans"
-        android:name="com.villagebanking.ui.Transaction.TransPeriod"
+        android:name="com.villagebanking.ui.Transaction.TransHeader"
         android:label="Period Transaction"
         tools:layout="@layout/persons_trans_linkview" />
 

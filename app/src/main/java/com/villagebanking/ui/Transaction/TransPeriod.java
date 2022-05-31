@@ -92,10 +92,10 @@ public class TransPeriod extends Fragment {
     void fill_Person_trans(long personkey, long periodkey, long groupLinkKey) {
 
         ArrayList<BOPeriod> boPeriods = DBUtility.DBGetDataFilter(DB1Tables.PERIODS, "PERIOD_TYPE", UIUtility.LongToString(periodkey));
-        keys = "0";
+        keys = "";
 
         boPeriods.stream().forEach(x -> keys = (keys.length() > 0 ? (keys + ",") : "") + x.getPrimary_key());
-
+    /*
         ArrayList<BOPersonTrans> trans = DBUtility.DTOGetTransData(personkey, keys, groupLinkKey);
 
         calculateAmount(trans);
@@ -104,9 +104,11 @@ public class TransPeriod extends Fragment {
                 String.valueOf(y.getTable_link_key())));
 
 
-        TransEditGrid adapter = new TransEditGrid(this.getContext(), R.layout.groups_gridview, trans);
+        TransHeaderGrid adapter = new TransHeaderGrid(this.getContext(), R.layout.groups_gridview, trans);
         binding.gvDataView.setAdapter(adapter);
         binding.gvDataView.addOnLayoutChangeListener(layoutChanged(trans));
+
+ */
 
     }
 

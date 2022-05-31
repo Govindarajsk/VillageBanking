@@ -1,5 +1,8 @@
 package com.villagebanking.Database;
 
+import com.villagebanking.DBTables.tblTransDetail;
+import com.villagebanking.DBTables.tblTransHeader;
+
 import java.util.ArrayList;
 
 public class DB1Tables {
@@ -8,8 +11,6 @@ public class DB1Tables {
     public static final String PERIODS = "PERIODS";
     public static final String GROUP_PERSON_LINK = "GROUP_PERSON_LINK";
     public static final String PERSON_TRANSACTION = "PERSON_TRANSACTION";
-    public static final String TRANSACTION_HEADER = "TRANSACTION_HEADER";
-    public static final String TRANSACTION_DETAIL = "TRANSACTION_DETAIL";
 
 
     //region PERSONS
@@ -61,34 +62,29 @@ public class DB1Tables {
                     "PERIOD_TYPE INTEGER, " +
                     "PERIOD_NAME TEXT, " +
                     "ACTUAL_DATE TEXT," +
-                    "DATEVALUE INTEGER," +
-                    "PERIOD_REMARKS TEXT" +
+                    "DATE_VALUE INTEGER," +
+                    "PERIOD_REMARKS TEXT," +
                     "PERIOD_STATUS TEXT" +
                     ")";
     //endregion
 
-    //region TRANSACTION_HEADER
+    /*region TRANSACTION_HEADER
     public static final String CREATE_TRANSACTION_HEADER =
             TRANSACTION_HEADER + "(" +
                     "ID INTEGER PRIMARY KEY," +
                     "PARENT_KEY INTEGER, " +
+                    "CHILD_KEY INTEGER, " +
                     "PERIOD_KEY INTEGER, " +
                     "TABLE_NAME TEXT," +
                     "TABLE_LINK_KEY INTEGER," +
                     "REMARKS TEXT," +
-                    "TOTAL_AMOUNT DECIMAL" +
-                    "PAID_AMOUNT DECIMAL" +
+                    "TOTAL_AMOUNT DECIMAL," +
+                    "PAID_AMOUNT DECIMAL," +
                     "BALANCE_AMOUNT DECIMAL" +
                     ")";
-    //endregion
+    endregion*/
     //region TRANSACTION_DETAIL
-    public static final String CREATE_TRANSACTION_DETAIL =
-            TRANSACTION_DETAIL + "(" +
-                    "ID INTEGER PRIMARY KEY," +
-                    "HEADER_KEY INTEGER, " +
-                    "DATE TEXT, " +
-                    "REMARKS TEXT" +
-                    ")";
+
     //endregion
 
     //region TABLE LIST
@@ -101,8 +97,8 @@ public class DB1Tables {
         tablesList.add(PERIODS);
         tablesList.add(GROUP_PERSON_LINK);
         tablesList.add(PERSON_TRANSACTION);
-        tablesList.add(TRANSACTION_HEADER);
-        tablesList.add(TRANSACTION_DETAIL);
+        tablesList.add(tblTransHeader.Name);
+        tablesList.add(tblTransDetail.Name);
         return tablesList;
     }
     //endregion
@@ -117,8 +113,8 @@ public class DB1Tables {
         tableCreateList.add(CREATE_PERIODS);
         tableCreateList.add(CREATE_GROUP_PERSON_LINK);
         tableCreateList.add(CREATE_PERSON_TRANSACTION);
-        tableCreateList.add(CREATE_TRANSACTION_HEADER);
-        tableCreateList.add(CREATE_TRANSACTION_DETAIL);
+        tableCreateList.add(tblTransHeader.CreateTable);
+        tableCreateList.add(tblTransDetail.CreateTable);
         return tableCreateList;
     }
     //endregion

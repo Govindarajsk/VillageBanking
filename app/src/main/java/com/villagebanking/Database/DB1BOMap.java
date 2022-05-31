@@ -2,9 +2,9 @@ package com.villagebanking.Database;
 
 import android.content.ContentValues;
 
-public class BOMap {
+public class DB1BOMap {
 
-    public BOMap(long primary_key, ContentValues contentValues) {
+    public DB1BOMap(long primary_key, ContentValues contentValues) {
         this.primary_key = primary_key;
         this.contentValues = contentValues;
     }

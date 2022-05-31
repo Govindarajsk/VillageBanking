@@ -8,6 +8,10 @@ import com.villagebanking.BOObjects.BOGroupPersonLink;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.BOObjects.BOPersonTrans;
+import com.villagebanking.BOObjects.BOTransDetail;
+import com.villagebanking.BOObjects.BOTransHeader;
+import com.villagebanking.DBTables.tblTransHeader;
+import com.villagebanking.DBTables.tblTransDetail;
 
 import java.util.ArrayList;
 
@@ -32,6 +36,12 @@ public class DB2GetList {
                     break;
                 case DB1Tables.PERSON_TRANSACTION:
                     returnList.add((T) getValue(res, new BOPersonTrans()));
+                    break;
+                case tblTransHeader.Name:
+                    returnList.add((T) tblTransHeader.getValue(res));
+                    break;
+                case tblTransDetail.Name:
+                    returnList.add((T) tblTransDetail.getValue(res));
                     break;
             }
             res.moveToNext();
@@ -109,23 +119,12 @@ public class DB2GetList {
     }
 
     /*
-       "ID INTEGER PRIMARY KEY," +
-       "PERIOD_KEY INTEGER, " +
-       "TABLE_NAME TEXT,"+
-       "TABLE_LINK_KEY INTEGER,"+
-       "REMARKS TEXT,"+
-       "AMOUNT DECIMAL," +
-
-       "PTR.ID AS ID," +
-        "PTR.PARENT_KEY AS PARENTKEY,"+
-        "PERIOD_KEY," +
-        "'GROUP_PERSON_LINK' AS TABLE_NAME," +
-        "GPL.ID AS TABLE_LINK_KEY," +
-        "G.NAME AS REMARKS," +
-        "PTR.AMOUNT AS AMOUNT," +
-        "G.AMOUNT AS TRANSAMOUNT," +
-        "G.ID AS GROUP_KEY " +
-     */
+       "ID INTEGER PRIMARY KEY,PERIOD_KEY INTEGER,TABLE_NAME TEXT,
+       TABLE_LINK_KEY INTEGER,REMARKS TEXT,AMOUNT DECIMAL,
+       PTR.ID AS ID,PTR.PARENT_KEY AS PARENTKEY,PERIOD_KEY,
+       'GROUP_PERSON_LINK' AS TABLE_NAME,GPL.ID AS TABLE_LINK_KEY,G.NAME AS REMARKS,
+       PTR.AMOUNT AS AMOUNT,G.AMOUNT AS TRANSAMOUNT,G.ID AS GROUP_KEY
+    */
     static BOPersonTrans getValue(Cursor res, BOPersonTrans test) {
         BOPersonTrans newData = new BOPersonTrans();
         newData.setPrimary_key(res.getLong(0));
@@ -134,14 +133,12 @@ public class DB2GetList {
         newData.setTableName(res.getString(3));
         newData.setTable_link_key(res.getLong(4));
 
-        //if (newData.getTableName() == DB1Tables.GROUP_PERSON_LINK) {
-            ArrayList<BOGroupPersonLink> tableLinkDetail = DBUtility.DTOGetData(DB1Tables.GROUP_PERSON_LINK, newData.getTable_link_key());
-            if (tableLinkDetail.size() > 0) {
-                BOGroupPersonLink linkData = tableLinkDetail.get(0);
-                newData.setDetail1(new BOAutoComplete(linkData.getGroup_Detail().getPrimary_key(),linkData.getGroup_Detail().getName()));
-                newData.setDetail2(new BOAutoComplete(linkData.getPerson_Detail().getPrimary_key(),linkData.getPerson_Detail().getFullName()));
-            }
-       // }
+        ArrayList<BOGroupPersonLink> tableLinkDetail = DBUtility.DTOGetData(DB1Tables.GROUP_PERSON_LINK, newData.getTable_link_key());
+        if (tableLinkDetail.size() > 0) {
+            BOGroupPersonLink linkData = tableLinkDetail.get(0);
+            newData.setDetail1(new BOAutoComplete(linkData.getGroup_Detail().getPrimary_key(), linkData.getGroup_Detail().getName()));
+            newData.setDetail2(new BOAutoComplete(linkData.getPerson_Detail().getPrimary_key(), linkData.getPerson_Detail().getFullName()));
+        }
 
         newData.setRemarks(res.getString(5));
         newData.setNewAmount(res.getDouble(6));
@@ -168,7 +165,8 @@ public class DB2GetList {
         newData.setActualDate(res.getString(3));
         newData.setPeriodValue(res.getLong(4));
         newData.setPeriodRemarks(res.getString(5));
-        //newData.setPeriodStatus(res.getString(6));
+        newData.setPeriodStatus(res.getString(6));
         return newData;
     }
+
 }

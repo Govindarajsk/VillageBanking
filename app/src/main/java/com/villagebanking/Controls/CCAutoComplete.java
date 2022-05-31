@@ -97,13 +97,16 @@ public class CCAutoComplete extends ArrayAdapter<BOAutoComplete> {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void SetDefault(TextView txtView, long... keys) {
         long key = keys.length > 0 ? keys[0] : 0;
+       /*
         if(fullList!=null) {
             Stream<BOAutoComplete> fItem = fullList.stream().filter(x -> key == 0 || x.getPrimary_key() == key);
 
-            if (fItem != null) {
+            if (fItem != null && fItem.findFirst().isPresent()) {
                 Optional<BOAutoComplete> item = fItem.findFirst();
-                txtView.setText(item.get() != null ? item.get().getDisplayValue() : "");
+                txtView.setText(item.get() != null && item.isPresent() ? item.get().getDisplayValue() : "");
             }
+            fItem.close();
         }
+        */
     }
 }

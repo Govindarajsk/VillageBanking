@@ -48,6 +48,7 @@ public class PeriodsEdit extends Fragment {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //DBUtility.GetSequence();
                 DBUtility.DTOSaveUpdate(getPersonDataFromView(), DB1Tables.PERIODS);
                 //getActivity().onBackPressed();
             }

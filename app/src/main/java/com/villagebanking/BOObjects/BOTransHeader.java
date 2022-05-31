@@ -1,14 +1,38 @@
 package com.villagebanking.BOObjects;
 
+import java.util.ArrayList;
+
+/*
+TRANSACTION_HEADER
+    "ID INTEGER PRIMARY KEY," +
+    "PERIOD_KEY INTEGER, " +
+    "TABLE_NAME TEXT," +
+    "TABLE_LINK_KEY INTEGER," +
+    "REMARKS TEXT," +
+    "DATE TEXT," +
+    "TOTAL_AMOUNT DECIMAL," +
+    "PAID_AMOUNT DECIMAL," +
+    "BALANCE_AMOUNT DECIMAL"
+ */
 public class BOTransHeader extends BOBase {
+    private long periodKey;
     private String tableName;
     private long tableLinkKey;
-    private long periodKey;
-    private long forignKey;
+    private String remarks;
+    private String transDate;
     private double totalAmount;
     private double paidAmount;
     private double balanceAmount;
+    private BOGroupPersonLink groupPersonLink;
     private BOPeriod periodDetail;
+
+    public long getPeriodKey() {
+        return periodKey;
+    }
+
+    public void setPeriodKey(long periodKey) {
+        this.periodKey = periodKey;
+    }
 
     public String getTableName() {
         return tableName;
@@ -26,20 +50,20 @@ public class BOTransHeader extends BOBase {
         this.tableLinkKey = tableLinkKey;
     }
 
-    public long getPeriodKey() {
-        return periodKey;
+    public String getRemarks() {
+        return remarks;
     }
 
-    public void setPeriodKey(long periodKey) {
-        this.periodKey = periodKey;
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
-    public long getForignKey() {
-        return forignKey;
+    public String getTransDate() {
+        return transDate;
     }
 
-    public void setForignKey(long forignKey) {
-        this.forignKey = forignKey;
+    public void setTransDate(String transDate) {
+        this.transDate = transDate;
     }
 
     public double getTotalAmount() {
@@ -64,6 +88,15 @@ public class BOTransHeader extends BOBase {
 
     public void setBalanceAmount(double balanceAmount) {
         this.balanceAmount = balanceAmount;
+    }
+
+    public BOGroupPersonLink getGroupPersonLink() {
+        if (groupPersonLink == null) groupPersonLink = new BOGroupPersonLink();
+        return groupPersonLink;
+    }
+
+    public void setGroupPersonLink(BOGroupPersonLink groupPersonLink) {
+        this.groupPersonLink = groupPersonLink;
     }
 
     public BOPeriod getPeriodDetail() {

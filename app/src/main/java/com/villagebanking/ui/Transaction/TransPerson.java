@@ -138,7 +138,7 @@ public class TransPerson extends Fragment {
         Collections.sort(trans,(x,y)->String.valueOf(x.getTable_link_key()).compareToIgnoreCase(
                 String.valueOf(y.getTable_link_key())));
 
-        TransEditGrid adapter = new TransEditGrid(this.getContext(), R.layout.groups_gridview, trans);
+        TransHeaderGrid adapter = new TransHeaderGrid(this.getContext(), R.layout.groups_gridview, trans);
         binding.gvDataView.setAdapter(adapter);
         binding.gvDataView.addOnLayoutChangeListener(layoutChanged(trans));
 

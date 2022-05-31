@@ -13,15 +13,21 @@ import androidx.fragment.app.Fragment;
 
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPersonTrans;
+import com.villagebanking.BOObjects.BOTransDetail;
+import com.villagebanking.BOObjects.BOTransHeader;
+import com.villagebanking.DBTables.tblTransDetail;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 import com.villagebanking.Utility.UIUtility;
 import com.villagebanking.databinding.PersonsTransLinkviewBinding;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -77,9 +83,19 @@ public class TransHeader extends Fragment {
             @Override
             public void onClick(View view) {
                 for (int i = 0; i < binding.gvDataView.getCount(); i++) {
-                    BOPersonTrans transaction = (BOPersonTrans) binding.gvDataView.getItemAtPosition(i);
-                    if (transaction.getNewAmount() != 0 || transaction.getPrimary_key() > 0)
-                        DBUtility.DTOSaveUpdate(transaction, DB1Tables.PERSON_TRANSACTION);
+                    BOTransDetail transHeader = (BOTransDetail) binding.gvDataView.getItemAtPosition(i);
+                    //DBUtility.DTOSaveUpdate(transHeader, DB1Tables.TRANSACTION_HEADER);
+
+                    if (transHeader.getPaidAmount() != 0 || transHeader.getParentKey() > 0) {
+                        BOTransDetail transDetail = new BOTransDetail();
+                        transDetail.setPrimary_key(transHeader.getPrimary_key());
+                        transDetail.setParentKey(transHeader.getParentKey());
+                        String date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
+                        transDetail.setTransDate(date);
+                        transDetail.setPaidAmount(transHeader.getPaidAmount());
+                        transDetail.setRemarks("Ok Google");
+                        DBUtility.DTOSaveUpdate(transDetail, tblTransDetail.Name);
+                    }
                 }
                 fill_Person_trans(person_key, period_key, groupLink_Key);
             }
@@ -91,23 +107,16 @@ public class TransHeader extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_Person_trans(long personkey, long periodkey, long groupLinkKey) {
 
-        ArrayList<BOPeriod> boPeriods = DBUtility.DBGetDataFilter(DB1Tables.PERIODS, "PERIOD_TYPE", UIUtility.LongToString(periodkey));
-        keys = "0";
-
-        boPeriods.stream().forEach(x -> keys = (keys.length() > 0 ? (keys + ",") : "") + x.getPrimary_key());
-
-        ArrayList<BOPersonTrans> trans = DBUtility.DTOGetTransData(personkey, keys, groupLinkKey);
+        ArrayList<BOTransDetail> trans = DBUtility.DTOGetTransData("", String.valueOf(periodkey), "", "");
 
         calculateAmount(trans);
 
-        Collections.sort(trans, (x, y) -> String.valueOf(x.getTable_link_key()).compareToIgnoreCase(
-                String.valueOf(y.getTable_link_key())));
+        Collections.sort(trans, (x, y) -> String.valueOf(x.getTableLinkKey()).compareToIgnoreCase(
+                String.valueOf(y.getTableLinkKey())));
 
-
-        TransEditGrid adapter = new TransEditGrid(this.getContext(), R.layout.groups_gridview, trans);
+        TransHeaderGrid adapter = new TransHeaderGrid(this.getContext(), R.layout.groups_gridview, trans);
         binding.gvDataView.setAdapter(adapter);
         binding.gvDataView.addOnLayoutChangeListener(layoutChanged(trans));
-
     }
 
     //region Calculation part
@@ -116,10 +125,9 @@ public class TransHeader extends Fragment {
     Double totalBal = 0.0;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    void calculateAmount(ArrayList<BOPersonTrans> fullList) {
+    void calculateAmount(ArrayList<BOTransDetail> fullList) {
         totalAmount = totalPaid = totalBal = 0.0;
-
-        Map<Long, ArrayList<BOPersonTrans>> uniqueList = UIUtility.GetPersonAmount(fullList);
+        Map<Long, ArrayList<BOTransDetail>> uniqueList = UIUtility.GetTransAmount(fullList);
         uniqueList.forEach((x, y) -> applyVal(x, y, fullList));
 
         totalBal = totalAmount - totalPaid;
@@ -129,52 +137,54 @@ public class TransHeader extends Fragment {
     }
 
     Double balEach = 0.0;
+    long tableLinkKey = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    void applyVal(Long key, ArrayList<BOPersonTrans> value, ArrayList<BOPersonTrans> fullList) {
-        balEach = 0.0;
+    void applyVal(Long key, ArrayList<BOTransDetail> value, ArrayList<BOTransDetail> fullList) {
+        balEach = 0.0;tableLinkKey = 0;
 
-        Stream<BOPersonTrans> groupListAmount =
-                fullList.stream().filter(x -> x.getTable_link_key() == key);
+        Stream<BOTransDetail> groupListAmount =
+                fullList.stream().filter(x -> x.getTableLinkKey() == key);
 
-        List<BOPersonTrans> okGk = groupListAmount.collect(Collectors.toList());
+        List<BOTransDetail> okGk = groupListAmount.collect(Collectors.toList());
 
-        BOPersonTrans transData = null;
+        BOTransDetail transData = null;
         Integer fSize = okGk.size();
 
         if (fSize > 0) {
             transData = okGk.get(fSize - 1);
-            balEach = okGk.get(0).getActualAmount();
+            balEach = okGk.get(0).getBalanceAmount();
             okGk.forEach(x -> fillBalAmount(x));
 
             if (balEach != 0 && transData.getPrimary_key() > 0) {
-                BOPersonTrans newData = new BOPersonTrans();
+                BOTransDetail newData = new BOTransDetail();
                 newData.setParentKey(transData.getPrimary_key());
                 newData.setTableName(transData.getTableName());
-                newData.setTableName(transData.getTableName());
-                newData.setTable_link_key(transData.getTable_link_key());
-                newData.setForien_key(transData.getForien_key());
-                newData.setPeriod_detail(transData.getPeriod_detail());
+                newData.setTableLinkKey(transData.getTableLinkKey());
+                newData.setChildKey(transData.getChildKey());
+                //newData.setPeriod_detail(transData.getPeriod_detail());
                 newData.setRemarks(transData.getRemarks());
-                newData.setDetail2(transData.getDetail2());
-                newData.setActualAmount(balEach);
-                newData.setNewAmount(0.00);
+                newData.setBalanceAmount(balEach);
+                newData.setPaidAmount(0.00);
                 fullList.add(newData);
             }
         }
     }
 
-    void fillBalAmount(BOPersonTrans x) {
-        totalPaid = totalPaid + x.getNewAmount();
-        if (x.getParentKey() == 0) {
-            totalAmount = totalAmount + x.getActualAmount();
+    void fillBalAmount(BOTransDetail x) {
+        if (tableLinkKey != x.getTableLinkKey()) {
+            tableLinkKey = x.getTableLinkKey();
+            totalAmount = totalAmount + x.getTotalAmount();
         } else {
-            x.setActualAmount(balEach);
+            x.setTableLinkKey(tableLinkKey);
         }
-        balEach = balEach - x.getNewAmount();
+
+        totalPaid = totalPaid + x.getPaidAmount();
+        x.setBalanceAmount(balEach);
+        balEach = balEach - x.getPaidAmount();
     }
 
-    AdapterView.OnLayoutChangeListener layoutChanged(ArrayList<BOPersonTrans> newList) {
+    AdapterView.OnLayoutChangeListener layoutChanged(ArrayList<BOTransDetail> newList) {
         return new AdapterView.OnLayoutChangeListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override

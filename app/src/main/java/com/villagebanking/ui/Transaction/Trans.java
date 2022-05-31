@@ -9,7 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.villagebanking.Database.DB1Tables;
+import com.villagebanking.DBTables.tblTransDetail;
+import com.villagebanking.DBTables.tblTransHeader;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 import com.villagebanking.databinding.AppGridviewBinding;
@@ -40,8 +41,10 @@ public class Trans extends Fragment {
     }
 
     void assignToGridView() {
+//        TransGrid adapter = new TransGrid(this.getContext(), R.layout.trans_gridview,
+//                DBUtility.DTOGetAlls(tblTransHeader.Name));
         TransGrid adapter = new TransGrid(this.getContext(), R.layout.trans_gridview,
-                DBUtility.DTOGetAlls(DB1Tables.PERSON_TRANSACTION));
+                DBUtility.DTOGetAlls(tblTransDetail.Name));
         binding.gvDataView.setAdapter(adapter);
     }
 }

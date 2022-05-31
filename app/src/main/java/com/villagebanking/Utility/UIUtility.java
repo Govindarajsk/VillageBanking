@@ -18,13 +18,18 @@ import androidx.annotation.RequiresApi;
 import com.villagebanking.BOObjects.BOAutoComplete;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPersonTrans;
+import com.villagebanking.BOObjects.BOTransDetail;
+import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.Controls.CCAutoComplete;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class UIUtility {
@@ -32,7 +37,6 @@ public class UIUtility {
     //region Constants
     public static final String V_NUMBER = "NUMBER";
     public static final String V_STRING = "STRING";
-
 
     public static final String dateFormat = "dd/MM/yyyy";
     public static final String dateValue = "yyyyMMdd";
@@ -123,6 +127,11 @@ public class UIUtility {
         dp.updateDate(year, month, day);
         return dp;
     }
+
+    public static String getCurrentDate(){
+        String date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
+        return date;
+    }
     //endregion
 
     //region AutoCompleteBox
@@ -166,6 +175,24 @@ public class UIUtility {
         for (BOPersonTrans item : transDetails) {
             Long value = item.getTable_link_key();
             ArrayList<BOPersonTrans> list = new ArrayList<>();
+            if (map.containsKey(value)) {
+                list = map.get(value);
+            } else {
+                list = new ArrayList<>();
+            }
+            list.add(item);
+            map.put(value, list);
+        }
+        map.values(); // this will give Collection of values.
+        return map;
+    }
+
+    public static Map<Long, ArrayList<BOTransDetail>> GetTransAmount(ArrayList<BOTransDetail> transDetails) {
+
+        Map<Long, ArrayList<BOTransDetail>> map = new HashMap<>();
+        for (BOTransDetail item : transDetails) {
+            Long value = item.getTableLinkKey();
+            ArrayList<BOTransDetail> list = new ArrayList<>();
             if (map.containsKey(value)) {
                 list = map.get(value);
             } else {

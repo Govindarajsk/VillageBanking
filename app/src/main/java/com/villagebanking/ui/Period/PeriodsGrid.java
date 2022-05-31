@@ -1,6 +1,7 @@
 package com.villagebanking.ui.Period;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,13 +10,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.navigation.Navigation;
 
 import com.villagebanking.BOObjects.BOPeriod;
+import com.villagebanking.BOObjects.BOTransDetail;
+import com.villagebanking.BOObjects.BOTransHeader;
+import com.villagebanking.DBTables.tblTransDetail;
+import com.villagebanking.DBTables.tblTransHeader;
 import com.villagebanking.Database.DB1Tables;
-import com.villagebanking.Database.DBSQLQuery;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
+import com.villagebanking.Utility.UIUtility;
 
 import java.util.ArrayList;
 
@@ -95,7 +101,7 @@ public class PeriodsGrid<T> extends ArrayAdapter {
             public void onClick(View view) {
                 Bundle args = new Bundle();
                 args.putString("PAGE", DB1Tables.PERIODS);
-                args.putLong("ID", bindData.getPeriodType());
+                args.putLong("ID", bindData.getPrimary_key());
                 Navigation.findNavController(view).navigate(R.id.nav_linkview_period_trans, args);
             }
         };
@@ -103,14 +109,52 @@ public class PeriodsGrid<T> extends ArrayAdapter {
 
     View.OnClickListener closeMethod(BOPeriod bindData) {
         return new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                periodOpen(bindData);
+
+                periodOpen(bindData, view);
             }
         };
     }
 
-    void periodOpen(BOPeriod period) {
-        DBUtility.updateField(DB1Tables.PERIODS, "STATUS", "O", period.getPrimary_key());
+    String keys = "0";
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    void periodOpen(BOPeriod period, View view) {
+
+        ArrayList<BOPeriod> boPeriods = DBUtility.DBGetDataFilter(DB1Tables.PERIODS, "PERIOD_TYPE",
+                UIUtility.LongToString(period.getPeriodType()));
+        keys = "";
+
+        boPeriods.stream().forEach(x -> keys =
+                (
+                        x.getPeriodValue() <= period.getPeriodValue() ?
+                                (keys.length() > 0 ? (keys + ",") : "") + x.getPrimary_key()
+                                : keys
+                )
+        );
+
+        ArrayList<BOTransHeader> trans = DBUtility.FetchGroupLink(tblTransHeader.Name, keys);
+        String countStr = String.valueOf(trans.size());
+        trans.forEach(x -> generateTransaction(x));
+
+        DBUtility.updateField(DB1Tables.PERIODS, "PERIOD_STATUS", countStr, period.getPrimary_key());
+        Navigation.findNavController(view).navigate(R.id.nav_period_grid_view);
+    }
+
+    void generateTransaction(BOTransHeader x) {
+        x.setTransDate(UIUtility.getCurrentDate());
+        Long primaryKey = Long.valueOf(x.getPeriodKey() + "" + x.getTableLinkKey());
+        x.setPrimary_key(primaryKey);
+        DBUtility.DTOSaveUpdate("I",x, tblTransHeader.Name);
+
+        BOTransDetail transDetail = new BOTransDetail();
+        transDetail.setTransDate(UIUtility.getCurrentDate());
+        transDetail.setRemarks("TRANS_DETAIL");
+        transDetail.setParentKey(0);
+        transDetail.setHeaderKey(x.getPrimary_key());
+        transDetail.setChildKey(x.getTableLinkKey());
+        DBUtility.DTOSaveUpdate(transDetail, tblTransDetail.Name);
     }
 }

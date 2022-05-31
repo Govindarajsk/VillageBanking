@@ -41,6 +41,7 @@
         android:layout_column="3" />
 
     <ImageButton
+        android:visibility="gone"
         android:id="@+id/btnEdit"
         style="@style/styleBtnEdit"
         android:layout_row="0"
@@ -52,6 +53,7 @@
         android:layout_row="0"
         android:layout_column="5"
         android:layout_marginLeft="0dp" />
+
     <ImageButton
         android:id="@+id/btnClose"
         style="@style/styleBtnClose"

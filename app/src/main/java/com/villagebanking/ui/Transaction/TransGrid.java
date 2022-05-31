@@ -12,8 +12,12 @@ import android.widget.TextView;
 import androidx.navigation.Navigation;
 
 import com.villagebanking.BOObjects.BOPersonTrans;
+import com.villagebanking.BOObjects.BOTransDetail;
+import com.villagebanking.BOObjects.BOTransHeader;
+import com.villagebanking.DBTables.tblTransDetail;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
+import com.villagebanking.DBTables.tblTransHeader;
 import com.villagebanking.R;
 
 import java.util.ArrayList;
@@ -39,11 +43,12 @@ public class TransGrid <T> extends ArrayAdapter {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View convertView = inflater.inflate(R.layout.trans_gridview, null);
 
-        BOPersonTrans bindData = (BOPersonTrans) data;
+        //BOTransHeader bindData = (BOTransHeader) data;
+        BOTransDetail bindData = (BOTransDetail) data;
         String value1 = Integer.toString(row);
-        String value2 = bindData.getRemarks() + "-" + bindData.getPrimary_key();
-        String value3 = bindData.getTableName()+bindData.getForien_key();
-        String value4 = Double.toString(bindData.getNewAmount());
+        String value2 = bindData.getRemarks() + "-" + bindData.getPrimary_key()+ "-" + bindData.getHeaderKey();
+        String value3 = bindData.getTableName();
+        String value4 = Double.toString(bindData.getTotalAmount());
 
         TextView txtSNo = ((TextView) convertView.findViewById(R.id.txtSNo));
         TextView txtRemarks = ((TextView) convertView.findViewById(R.id.txtRemarks));
@@ -63,7 +68,8 @@ public class TransGrid <T> extends ArrayAdapter {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBUtility.DTOdelete(primaryKey, DB1Tables.PERSON_TRANSACTION);
+                //DBUtility.DTOdelete(primaryKey, tblTransHeader.Name);
+                DBUtility.DTOdelete(primaryKey, tblTransDetail.Name);
                 Navigation.findNavController(view).navigate(R.id.nav_trans_grid_view);
             }
         };

@@ -7,26 +7,36 @@ import com.villagebanking.BOObjects.BOGroupPersonLink;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.BOObjects.BOPersonTrans;
+import com.villagebanking.BOObjects.BOTransDetail;
+import com.villagebanking.BOObjects.BOTransHeader;
+import com.villagebanking.DBTables.tblTransDetail;
+import com.villagebanking.DBTables.tblTransHeader;
 
 public class DB2Save {
 
-    public static <T> BOMap DTOSaveUpdate(T data, String tableName) {
+    public static <T> DB1BOMap DTOSaveUpdate(T data, String tableName) {
         switch (tableName) {
             case DB1Tables.PERSONS:
                 BOPerson p = (BOPerson) data;
-                return new BOMap(p.getPrimary_key(), getContentValue(p));
+                return new DB1BOMap(p.getPrimary_key(), getContentValue(p));
             case DB1Tables.GROUPS:
                 BOGroup g = (BOGroup) data;
-                return new BOMap(g.getPrimary_key(), getContentValue(g));
+                return new DB1BOMap(g.getPrimary_key(), getContentValue(g));
             case DB1Tables.PERIODS:
                 BOPeriod pd = (BOPeriod) data;
-                return new BOMap(pd.getPrimary_key(), getContentValue(pd));
+                return new DB1BOMap(pd.getPrimary_key(), getContentValue(pd));
             case DB1Tables.GROUP_PERSON_LINK:
                 BOGroupPersonLink gp = (BOGroupPersonLink) data;
-                return new BOMap(gp.getPrimary_key(), getContentValue(gp));
+                return new DB1BOMap(gp.getPrimary_key(), getContentValue(gp));
             case DB1Tables.PERSON_TRANSACTION:
                 BOPersonTrans pt = (BOPersonTrans) data;
-                return new BOMap(pt.getPrimary_key(), getContentValue(pt));
+                return new DB1BOMap(pt.getPrimary_key(), getContentValue(pt));
+            case tblTransHeader.Name:
+                BOTransHeader th = (BOTransHeader) data;
+                return new DB1BOMap(th.getPrimary_key(), tblTransHeader.getContentValue(th));
+            case tblTransDetail.Name:
+                BOTransDetail td = (BOTransDetail) data;
+                return new DB1BOMap(td.getPrimary_key(), tblTransDetail.getContentValue(td));
         }
         return null;
     }
@@ -61,7 +71,6 @@ public class DB2Save {
         contentValues.put("TABLE_LINK_KEY", g.getTable_link_key());
         contentValues.put("REMARKS", g.getRemarks());
         contentValues.put("AMOUNT", g.getNewAmount());
-        //contentValues.put("AMOUNT", g.getForien_key());
         return contentValues;
     }
 
@@ -104,7 +113,7 @@ public class DB2Save {
         "PERIOD_TYPE INTEGER, " +
         "PERIOD_NAME TEXT, " +
         "ACTUAL_DATE TEXT," +
-        "DATEVALUE INTEGER," +
+        "DATE_VALUE INTEGER," +
         "PERIOD_REMARKS TEXT" +
      */
     static ContentValues getContentValue(BOPeriod g) {
@@ -113,11 +122,10 @@ public class DB2Save {
         contentValues.put("PERIOD_TYPE", g.getPeriodType());
         contentValues.put("PERIOD_NAME", g.getPeriodName());
 
-        contentValues.put("ACTUAL_DATE",  g.getActualDate());
-
-        contentValues.put("DATEVALUE", g.getPeriodValue());
-
+        contentValues.put("ACTUAL_DATE", g.getActualDate());
+        contentValues.put("DATE_VALUE", g.getPeriodValue());
         contentValues.put("PERIOD_REMARKS", g.getPeriodRemarks());
+        contentValues.put("PERIOD_STATUS", "");
         return contentValues;
     }
 }

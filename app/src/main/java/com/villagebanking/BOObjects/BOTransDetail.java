@@ -1,10 +1,10 @@
 package com.villagebanking.BOObjects;
 
-public class BOTransDetail extends BOBase{
+public class BOTransDetail extends BOTransHeader {
     private long headerKey;
+    private long parentKey;
+    private long childKey;
     private Double amount;
-    private String transDate;
-    private String narration;
 
     public long getHeaderKey() {
         return headerKey;
@@ -14,27 +14,27 @@ public class BOTransDetail extends BOBase{
         this.headerKey = headerKey;
     }
 
+    public long getParentKey() {
+        return parentKey;
+    }
+
+    public void setParentKey(long parentKey) {
+        this.parentKey = parentKey;
+    }
+
+    public long getChildKey() {
+        return childKey;
+    }
+
+    public void setChildKey(long childKey) {
+        this.childKey = childKey;
+    }
+
     public Double getAmount() {
         return amount;
     }
 
     public void setAmount(Double amount) {
         this.amount = amount;
-    }
-
-    public String getTransDate() {
-        return transDate;
-    }
-
-    public void setTransDate(String transDate) {
-        this.transDate = transDate;
-    }
-
-    public String getNarration() {
-        return narration;
-    }
-
-    public void setNarration(String narration) {
-        this.narration = narration;
     }
 }
