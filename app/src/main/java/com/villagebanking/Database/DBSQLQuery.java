@@ -7,11 +7,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.DBTables.tblTransDetail;
 import com.villagebanking.DBTables.tblTransHeader;
 
 public class DBSQLQuery extends SQLiteOpenHelper {
 
+    private static final String SUCCESS = "Success!";
     //region COMMON CREATE UPGRADE
     public static final String DATABASE_NAME = "MyDBName.db";
 
@@ -53,15 +55,25 @@ public class DBSQLQuery extends SQLiteOpenHelper {
         return true;
     }
 
+    public String DBDMLQuery(String sqlQry) {
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.execSQL(sqlQry);
+            return SUCCESS;
+        } catch (Exception ex) {
+            return ex.getMessage();
+        }
+    }
+
     public void updateField(String TBLNAME, String CLMNAME, String VALUE, long ID) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("UPDATE " + TBLNAME + " SET " + CLMNAME + "='" + VALUE + "' WHERE ID=" + ID);
 
     }
 
-    public boolean DBSaveUpdate(String flag,Long key, ContentValues data, String TBLNAME) {
+    public boolean DBSaveUpdate(String flag, Long key, ContentValues data, String TBLNAME) {
         SQLiteDatabase db = this.getWritableDatabase();
-        if (flag=="U")
+        if (flag == "U")
             db.update(TBLNAME, data, "id = ? ",
                     new String[]{Long.toString(key)});
         else
@@ -108,9 +120,15 @@ public class DBSQLQuery extends SQLiteOpenHelper {
         return res;
     }
 
-    public Cursor DBGetTransDetail(String parentKeys, String periodKeys, String childKeys, String linkKeys) {
+    public Cursor DBFetchTransHeader(String periodkeys) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = tblTransDetail.DBGetTransDetail(db, parentKeys, periodKeys, childKeys, linkKeys);
+        Cursor res = tblTransHeader.DBGetTransHeader(db, periodkeys, "");
+        return res;
+    }
+
+    public Cursor DBGetTransDetail(long headerKey) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = tblTransDetail.DBGetTransDetail(db, headerKey);
         return res;
     }
     //endregion

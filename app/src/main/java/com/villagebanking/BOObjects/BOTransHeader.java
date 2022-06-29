@@ -23,8 +23,7 @@ public class BOTransHeader extends BOBase {
     private double totalAmount;
     private double paidAmount;
     private double balanceAmount;
-    private BOGroupPersonLink groupPersonLink;
-    private BOPeriod periodDetail;
+    private ArrayList<BOTransDetail> transDetails;
 
     public long getPeriodKey() {
         return periodKey;
@@ -90,21 +89,12 @@ public class BOTransHeader extends BOBase {
         this.balanceAmount = balanceAmount;
     }
 
-    public BOGroupPersonLink getGroupPersonLink() {
-        if (groupPersonLink == null) groupPersonLink = new BOGroupPersonLink();
-        return groupPersonLink;
+    public ArrayList<BOTransDetail> getTransDetails() {
+        if(transDetails==null)transDetails=new ArrayList<>();
+        return transDetails;
     }
 
-    public void setGroupPersonLink(BOGroupPersonLink groupPersonLink) {
-        this.groupPersonLink = groupPersonLink;
-    }
-
-    public BOPeriod getPeriodDetail() {
-        if (periodDetail == null) periodDetail = new BOPeriod();
-        return periodDetail;
-    }
-
-    public void setPeriodDetail(BOPeriod periodDetail) {
-        this.periodDetail = periodDetail;
+    public void setTransDetails(ArrayList<BOTransDetail> transDetails) {
+        this.transDetails = transDetails;
     }
 }

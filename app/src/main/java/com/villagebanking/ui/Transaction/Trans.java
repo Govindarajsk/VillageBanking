@@ -9,11 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.villagebanking.BOObjects.BOTransDetail;
+import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.DBTables.tblTransDetail;
 import com.villagebanking.DBTables.tblTransHeader;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 import com.villagebanking.databinding.AppGridviewBinding;
+
+import java.util.ArrayList;
 
 public class Trans extends Fragment {
     private AppGridviewBinding binding;
@@ -41,10 +45,11 @@ public class Trans extends Fragment {
     }
 
     void assignToGridView() {
-//        TransGrid adapter = new TransGrid(this.getContext(), R.layout.trans_gridview,
-//                DBUtility.DTOGetAlls(tblTransHeader.Name));
+
+        ArrayList<BOTransHeader> transHeaders = DBUtility.DTOGetAlls(tblTransHeader.Name);
+        ArrayList<BOTransDetail> transDetails = DBUtility.DTOGetAlls(tblTransDetail.Name);
         TransGrid adapter = new TransGrid(this.getContext(), R.layout.trans_gridview,
-                DBUtility.DTOGetAlls(tblTransDetail.Name));
+                DBUtility.DTOGetAlls(tblTransHeader.Name));
         binding.gvDataView.setAdapter(adapter);
     }
 }

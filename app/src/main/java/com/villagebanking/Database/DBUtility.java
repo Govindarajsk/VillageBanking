@@ -2,8 +2,11 @@ package com.villagebanking.Database;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.villagebanking.BOObjects.BOTransDetail;
+import com.villagebanking.BOObjects.BOTransHeader;
+import com.villagebanking.DBTables.tblGroupPersonLink;
 import com.villagebanking.DBTables.tblTransDetail;
 import com.villagebanking.DBTables.tblTransHeader;
 
@@ -11,7 +14,7 @@ import java.util.ArrayList;
 
 public class DBUtility {
 
-    static int version = 25;
+    static int version = 1;
     //region Database Instance
     public static DBSQLQuery DBSQLQuery;
 
@@ -23,6 +26,11 @@ public class DBUtility {
         return DBSQLQuery;
     }
     //endregion
+
+    public static <T> String DTOInsertUpdate(T data) {
+        String insertQry = DB2IUD.DTOSaveUpdate(data);
+        return DBSQLQuery.DBDMLQuery(insertQry);
+    }
 
     //region Save update and delete
     public static void DTOdelete(long ID, String tableName) {
@@ -39,7 +47,7 @@ public class DBUtility {
     public static <T> String DTOSaveUpdate(String flag, T data, String tableName) {
         DB1BOMap map = DB2Save.DTOSaveUpdate(data, tableName);
         if (map != null) //SAVE TO TABLE
-            DBSQLQuery.DBSaveUpdate(flag,map.getPrimary_key(), map.getContentValues(), tableName);
+            DBSQLQuery.DBSaveUpdate(flag, map.getPrimary_key(), map.getContentValues(), tableName);
         return "";
     }
 
@@ -61,11 +69,14 @@ public class DBUtility {
     }
     //endregion
 
-    public static <T> ArrayList<T> FetchGroupLink(String tableName, String periodKeys) {
+    public static <T> ArrayList<T> FetchPeriodTrans(String tableName, String periodKeys) {
         ArrayList<T> retunList = new ArrayList<>();
-        if (tableName.equals(tblTransHeader.Name)) {
+        if (tableName.equals(tblGroupPersonLink.Name)) {
             Cursor res = DBSQLQuery.DBFetchGroupLink(periodKeys);
-            retunList = DB2GetList.DTOGetAlls(res, tableName);
+            retunList = DB2GetList.DTOGetAlls(res, tblTransHeader.Name);
+        } else if (tableName.equals(tblTransHeader.Name)) {
+            Cursor res = DBSQLQuery.DBFetchTransHeader(periodKeys);
+            retunList = DB2GetList.DTOGetAlls(res, tblTransHeader.Name);
         }
         return retunList;
     }
@@ -76,8 +87,8 @@ public class DBUtility {
         return DB2GetList.DTOGetAlls(res, tableName);
     }
 
-    public static ArrayList<BOTransDetail> DTOGetTransData(String parentKeys, String periodKeys, String childKeys, String linkKeys) {
-        Cursor res = DBSQLQuery.DBGetTransDetail(parentKeys, periodKeys, childKeys, linkKeys);
+    public static ArrayList<BOTransDetail> DTOGetTransData(long headerKey) {
+        Cursor res = DBSQLQuery.DBGetTransDetail(headerKey);
         return DB2GetList.DTOGetAlls(res, tblTransDetail.Name);
     }
     //endregion

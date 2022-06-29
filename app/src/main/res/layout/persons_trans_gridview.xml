@@ -28,7 +28,7 @@
         android:textAlignment="viewEnd"
         android:textStyle="bold" />
 
-    <CheckBox
+    <CheckBox android:visibility="gone"
         android:id="@+id/chkIsFull"
         android:layout_row="1"
         android:layout_column="2"
@@ -36,7 +36,7 @@
         android:layout_gravity="center_vertical"
         android:checked="false" />
 
-    <EditText
+    <TextView
         android:id="@+id/txtNewAmount"
         style="@style/stylDgTxt"
         android:layout_row="1"
@@ -47,30 +47,27 @@
         android:textAlignment="viewEnd"
         android:inputType="numberDecimal"/>
 
-    <ImageButton
+    <ImageButton android:visibility="gone"
         android:id="@+id/btnDelete"
         style="@style/styleBtnReset"
         android:layout_row="1"
         android:layout_column="4"/>
 
-    <TextView android:id="@+id/lineTop"
-        android:layout_row="0"
-        android:layout_column="0"
+    <GridView
         android:layout_columnSpan="5"
-        android:layout_columnWeight="@integer/config_navAnimTime"
-        android:layout_gravity="top"
-        android:height="1dp"
-        android:background="#c2bfb6"
-        android:gravity="top" />
-    <!--
-    <TextView
+        android:id="@+id/gvTransDetail"
         android:layout_row="2"
         android:layout_column="0"
-        android:layout_columnSpan="5"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="15dp" />
+
+    <TextView
+        android:layout_row="3"
+        android:layout_column="0"
+        android:layout_columnSpan="4"
         android:layout_columnWeight="@integer/config_navAnimTime"
         android:layout_gravity="top"
         android:height="1dp"
         android:background="#c2bfb6"
         android:gravity="top" />
-     -->
 </GridLayout>

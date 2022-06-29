@@ -16,6 +16,7 @@ import androidx.navigation.Navigation;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOTransDetail;
 import com.villagebanking.BOObjects.BOTransHeader;
+import com.villagebanking.DBTables.tblGroupPersonLink;
 import com.villagebanking.DBTables.tblTransDetail;
 import com.villagebanking.DBTables.tblTransHeader;
 import com.villagebanking.Database.DB1Tables;
@@ -69,7 +70,7 @@ public class PeriodsGrid<T> extends ArrayAdapter {
         btnDetail.setOnClickListener(transMethod(bindData));
 
         ImageButton btnClose = ((ImageButton) convertView.findViewById(R.id.btnClose));
-        btnClose.setOnClickListener(closeMethod(bindData));
+        btnClose.setOnClickListener(openPeriod(bindData));
 
         return convertView;
     }
@@ -107,12 +108,11 @@ public class PeriodsGrid<T> extends ArrayAdapter {
         };
     }
 
-    View.OnClickListener closeMethod(BOPeriod bindData) {
+    View.OnClickListener openPeriod(BOPeriod bindData) {
         return new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-
                 periodOpen(bindData, view);
             }
         };
@@ -135,26 +135,19 @@ public class PeriodsGrid<T> extends ArrayAdapter {
                 )
         );
 
-        ArrayList<BOTransHeader> trans = DBUtility.FetchGroupLink(tblTransHeader.Name, keys);
+        ArrayList<BOTransHeader> trans = DBUtility.FetchPeriodTrans(tblGroupPersonLink.Name, keys);
         String countStr = String.valueOf(trans.size());
-        trans.forEach(x -> generateTransaction(x));
+        trans.forEach(x -> generateTransaction(x, period.getPrimary_key()));
 
         DBUtility.updateField(DB1Tables.PERIODS, "PERIOD_STATUS", countStr, period.getPrimary_key());
         Navigation.findNavController(view).navigate(R.id.nav_period_grid_view);
     }
 
-    void generateTransaction(BOTransHeader x) {
+    void generateTransaction(BOTransHeader x, long periodKey) {
         x.setTransDate(UIUtility.getCurrentDate());
-        Long primaryKey = Long.valueOf(x.getPeriodKey() + "" + x.getTableLinkKey());
+        Long primaryKey = Long.valueOf(periodKey + "" + x.getTableLinkKey());
         x.setPrimary_key(primaryKey);
-        DBUtility.DTOSaveUpdate("I",x, tblTransHeader.Name);
-
-        BOTransDetail transDetail = new BOTransDetail();
-        transDetail.setTransDate(UIUtility.getCurrentDate());
-        transDetail.setRemarks("TRANS_DETAIL");
-        transDetail.setParentKey(0);
-        transDetail.setHeaderKey(x.getPrimary_key());
-        transDetail.setChildKey(x.getTableLinkKey());
-        DBUtility.DTOSaveUpdate(transDetail, tblTransDetail.Name);
+        x.setPeriodKey(periodKey);
+        DBUtility.DTOInsertUpdate(x);
     }
 }

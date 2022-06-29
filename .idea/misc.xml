@@ -92,6 +92,15 @@
         <entry key="..\:/Project/VillageBanking/app/src/main/res/mipmap-anydpi-v26/ic_add_button_image_round.xml" value="0.10625" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
         <entry key="..\:/Project/VillageBanking/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2203125" />
+        <entry key="..\:/SCIEX/40013821/VillageBanking/app/src/main/res/layout/groups_person_linkview.xml" value="0.20416666666666666" />
+        <entry key="..\:/SCIEX/40013821/VillageBanking/app/src/main/res/layout/periods_editview.xml" value="0.20416666666666666" />
+        <entry key="..\:/SCIEX/40013821/VillageBanking/app/src/main/res/layout/periods_gridview.xml" value="0.20416666666666666" />
+        <entry key="..\:/SCIEX/40013821/VillageBanking/app/src/main/res/layout/persons_editview.xml" value="0.20416666666666666" />
+        <entry key="..\:/SCIEX/40013821/VillageBanking/app/src/main/res/layout/persons_gridview.xml" value="0.20416666666666666" />
+        <entry key="..\:/SCIEX/40013821/VillageBanking/app/src/main/res/layout/persons_trans_gridview.xml" value="0.20416666666666666" />
+        <entry key="..\:/SCIEX/40013821/VillageBanking/app/src/main/res/layout/persons_trans_linkview.xml" value="0.20416666666666666" />
+        <entry key="..\:/SCIEX/40013821/VillageBanking/app/src/main/res/layout/trans_editview.xml" value="0.20416666666666666" />
+        <entry key="..\:/SCIEX/40013821/VillageBanking/app/src/main/res/layout/trans_gridview.xml" value="0.20416666666666666" />
       </map>
     </option>
   </component>

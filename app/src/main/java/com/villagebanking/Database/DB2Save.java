@@ -31,9 +31,6 @@ public class DB2Save {
             case DB1Tables.PERSON_TRANSACTION:
                 BOPersonTrans pt = (BOPersonTrans) data;
                 return new DB1BOMap(pt.getPrimary_key(), getContentValue(pt));
-            case tblTransHeader.Name:
-                BOTransHeader th = (BOTransHeader) data;
-                return new DB1BOMap(th.getPrimary_key(), tblTransHeader.getContentValue(th));
             case tblTransDetail.Name:
                 BOTransDetail td = (BOTransDetail) data;
                 return new DB1BOMap(td.getPrimary_key(), tblTransDetail.getContentValue(td));

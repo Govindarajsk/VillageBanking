@@ -7,76 +7,58 @@
     android:columnCount="5"
     android:layoutDirection="locale"
     android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/txtSNo"
-        style="@style/stylDgTxt"
-        android:layout_row="0"
-        android:layout_rowSpan="2"
-        android:layout_column="0"
-        android:layout_gravity="top"
-        android:text="1."
-        android:textStyle="bold" />
-
     <TextView
         android:id="@+id/txtRemarks"
         style="@style/stylDgTxt"
         android:layout_row="0"
-        android:layout_column="1"
-        android:layout_columnSpan="2"
-        android:layout_columnWeight="@integer/config_navAnimTime"
-        android:text="Group 1"
+        android:layout_column="0"
+        android:text="1"
         android:textStyle="bold" />
 
-    <TextView
+    <EditText
         android:id="@+id/txtAmount"
         style="@style/stylDgTxt"
         android:layout_row="0"
-        android:layout_column="2"
+        android:layout_column="1"
         android:layout_marginRight="20dp"
-        android:minWidth="120dp"
-        android:text="4000"
+        android:layout_width="100dp"
+        android:text="4000.00"
         android:textAlignment="viewEnd"
         android:textStyle="bold" />
 
+    <CheckBox android:visibility="gone"
+        android:id="@+id/chkIsFull"
+        android:layout_row="0"
+        android:layout_column="2"
+        android:minWidth="15dp"
+        android:layout_gravity="center_vertical"
+        android:checked="false" />
     <TextView
+        android:id="@+id/txtBalAmount"
+        style="@style/stylDgTxt"
+        android:layout_row="0"
+        android:layout_column="3"
+        android:layout_marginRight="20dp"
+        android:text="4000.00"
+        android:layout_width="100dp"
+        android:textAlignment="viewEnd"
+        android:textStyle="bold" />
+
+    <TextView android:visibility="gone"
         android:id="@+id/txtTableName"
         style="@style/stylDgTxt"
         android:layout_row="1"
         android:layout_column="0"
         android:layout_marginRight="20dp"
-        android:layout_columnSpan="5"
+        android:layout_columnSpan="4"
         android:layout_columnWeight="@integer/config_navAnimTime"
         android:text="Table Name + Key"
         android:textStyle="bold" />
 
-    <ImageButton
+    <ImageButton android:visibility="gone"
         android:id="@+id/btnDelete"
         style="@style/styleBtnDelete"
         android:layout_row="0"
-        android:layout_column="3"/>
-
-    <Button
-        android:id="@+id/btnEdit" android:layout_marginLeft="10dp"
-        style="@style/stylDgbtn"
-        android:layout_row="0"
-        android:layout_column="4"
-        android:layout_gravity="center_vertical"
-        android:background="@color/design_default_color_error"
-        app:backgroundTintMode="screen"
-        android:layout_width="30dp"
-        android:text="D"
-        android:visibility="gone"
-        />
-
-    <TextView
-        android:layout_row="2"
-        android:layout_column="0"
-        android:layout_columnSpan="5"
-        android:layout_columnWeight="@integer/config_navAnimTime"
-        android:layout_gravity="top"
-        android:height="1dp"
-        android:background="#c2bfb6"
-        android:gravity="top" />
+        android:layout_column="4"/>
 
 </GridLayout>

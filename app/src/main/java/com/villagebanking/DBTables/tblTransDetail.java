@@ -9,6 +9,12 @@ import com.villagebanking.BOObjects.BOTransDetail;
 public class tblTransDetail extends tblBase {
 
     public static final String Name = "TRANSACTION_DETAIL";
+
+    private static String column1 = "PARENT_KEY";
+    private static String column2 = "HEADER_KEY";
+    private static String column3 = "DATE";
+    private static String column4 = "AMOUNT";
+    private static String column5 = "REMARKS";
     public static final String CreateTable =
             Name + "(" +
                     "ID INTEGER PRIMARY KEY," +
@@ -27,6 +33,7 @@ public class tblTransDetail extends tblBase {
         newData.setHeaderKey(res.getLong(i++));
         newData.setTransDate(res.getString(i++));
         newData.setAmount(res.getDouble(i++));
+        newData.setRemarks(res.getString(i++));
         if (res.getColumnCount() > 6) {
             newData.setPeriodKey(res.getLong(i++));
             newData.setTableName(res.getString(i++));
@@ -41,6 +48,7 @@ public class tblTransDetail extends tblBase {
 
     public static ContentValues getContentValue(BOTransDetail g) {
         ContentValues contentValues = new ContentValues();
+        contentValues.put("PARENT_KEY", g.getParentKey());
         contentValues.put("HEADER_KEY", g.getHeaderKey());
         contentValues.put("DATE", g.getTransDate());
         contentValues.put("AMOUNT", g.getAmount());
@@ -48,7 +56,7 @@ public class tblTransDetail extends tblBase {
         return contentValues;
     }
 
-    public static Cursor DBGetTransDetail(SQLiteDatabase db, String parentKeys, String periodKeys, String childKeys, String linkKeys) {
+    public static Cursor DBGetTransDetail(SQLiteDatabase db, long headerKey) {
         return db.rawQuery(
                 "SELECT " +
                         "TD.ID AS ID," +
@@ -56,6 +64,7 @@ public class tblTransDetail extends tblBase {
                         "TD.HEADER_KEY," +
                         "TD.DATE," +
                         "TD.AMOUNT AS AMOUNT," +
+                        "TD.REMARKS," +
                         "TH.PERIOD_KEY," +
                         "TH.TABLE_NAME," +
                         "TH.TABLE_LINK_KEY," +
@@ -66,9 +75,7 @@ public class tblTransDetail extends tblBase {
                         "FROM " +
                         "TRANSACTION_HEADER TH JOIN " +
                         "TRANSACTION_DETAIL TD ON TD.HEADER_KEY=TH.ID " +
-                        (childKeys.length() > 0 ? " WHERE PARENT_KEY IN (" + childKeys + ")" : "") +
-                        (periodKeys.length() > 0 ? " WHERE PERIOD_KEY IN (" + periodKeys + ")" : "") +
-                        (linkKeys.length() > 0 ? " WHERE TABLE_LINK_KEY IN (" + linkKeys + ")" : "")
+                        " WHERE PARENT_KEY IN (" + headerKey + ")"
                 , null);
 
     }
