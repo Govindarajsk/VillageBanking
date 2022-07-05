@@ -84,18 +84,15 @@ public class TransHeader extends Fragment {
             @Override
             public void onClick(View view) {
                 for (int i = 0; i < binding.gvDataView.getCount(); i++) {
-                    BOTransDetail transHeader = (BOTransDetail) binding.gvDataView.getItemAtPosition(i);
-
-                    if (transHeader.getPaidAmount() != 0 || transHeader.getParentKey() > 0) {
-                        BOTransDetail transDetail = new BOTransDetail();
-                        transDetail.setPrimary_key(transHeader.getPrimary_key());
-                        transDetail.setParentKey(transHeader.getParentKey());
+                    BOTransHeader transHeader = (BOTransHeader) binding.gvDataView.getItemAtPosition(i);
+                    transHeader.getTransDetails().forEach(x -> {
+                        x.setHeaderKey(transHeader.getPrimary_key());
+                        x.setParentKey(transHeader.getPrimary_key());
                         String date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
-                        transDetail.setTransDate(date);
-                        transDetail.setPaidAmount(transHeader.getPaidAmount());
-                        transDetail.setRemarks("Ok Google");
-                        DBUtility.DTOSaveUpdate(transDetail, tblTransDetail.Name);
-                    }
+                        x.setTransDate(date);
+                        x.setRemarks("Ok Google");
+                        DBUtility.DTOSaveUpdate(x, tblTransDetail.Name);
+                    });
                 }
             }
         };
@@ -134,7 +131,7 @@ public class TransHeader extends Fragment {
             balEach = balEach - x.getAmount();
             lastamount = x.getAmount();
         });
-
+        transHeader.setBalanceAmount(balEach);
         if (balEach != 0 && (transDetails.size() == 0 || lastamount > 0)) {
             BOTransDetail newData = new BOTransDetail();
             newData.setHeaderKey(transHeader.getPrimary_key());

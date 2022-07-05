@@ -49,7 +49,7 @@ public class Trans extends Fragment {
         ArrayList<BOTransHeader> transHeaders = DBUtility.DTOGetAlls(tblTransHeader.Name);
         ArrayList<BOTransDetail> transDetails = DBUtility.DTOGetAlls(tblTransDetail.Name);
         TransGrid adapter = new TransGrid(this.getContext(), R.layout.trans_gridview,
-                DBUtility.DTOGetAlls(tblTransHeader.Name));
+                DBUtility.DTOGetAlls(tblTransDetail.Name));
         binding.gvDataView.setAdapter(adapter);
     }
 }

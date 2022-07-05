@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/maingrid"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="5"
+    android:layoutDirection="locale"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txtRemarks"
+        style="@style/stylDgTxt"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:layout_columnWeight="@integer/config_navAnimTime"
+        android:text="01.Detail"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/txtAmount"
+        style="@style/stylDgTxt"
+        android:layout_width="100dp"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:layout_marginRight="20dp"
+        android:text="4000.00"
+        android:textAlignment="viewEnd"
+        android:textStyle="bold" />
+
+    <CheckBox
+        android:id="@+id/chkIsFull"
+        android:layout_row="0"
+        android:layout_column="2"
+        android:layout_gravity="center_vertical"
+        android:checked="false"
+        android:minWidth="15dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/txtBalAmount"
+        style="@style/stylDgTxt"
+        android:layout_width="100dp"
+        android:layout_row="0"
+        android:layout_column="3"
+        android:layout_marginRight="20dp"
+        android:text="4000.00"
+        android:textAlignment="viewEnd"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txtTableName"
+        style="@style/stylDgTxt"
+        android:layout_row="1"
+        android:layout_column="0"
+        android:layout_columnSpan="4"
+        android:layout_columnWeight="@integer/config_navAnimTime"
+        android:layout_marginRight="20dp"
+        android:text="Table Name + Key"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/btnDelete"
+        style="@style/styleBtnDelete"
+        android:layout_row="0"
+        android:layout_column="4" />
+
+</GridLayout>

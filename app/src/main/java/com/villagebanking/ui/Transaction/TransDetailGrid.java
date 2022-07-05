@@ -1,7 +1,6 @@
 package com.villagebanking.ui.Transaction;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -13,20 +12,16 @@ import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 
-import com.villagebanking.BOObjects.BOPersonTrans;
 import com.villagebanking.BOObjects.BOTransDetail;
-import com.villagebanking.BOObjects.BOTransHeader;
-import com.villagebanking.DBTables.tblTransDetail;
-import com.villagebanking.Database.DB1Tables;
-import com.villagebanking.Database.DBUtility;
 import com.villagebanking.DBTables.tblTransHeader;
+import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 
 import java.util.ArrayList;
 
-public class TransGrid<T> extends ArrayAdapter {
+public class TransDetailGrid<T> extends ArrayAdapter {
 
-    public TransGrid(Context context, int textViewResourceId, ArrayList<T> objects) {
+    public TransDetailGrid(Context context, int textViewResourceId, ArrayList<T> objects) {
         super(context, textViewResourceId, objects);
     }
 

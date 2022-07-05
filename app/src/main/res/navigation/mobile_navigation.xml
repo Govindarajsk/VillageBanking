@@ -56,6 +56,12 @@
         android:name="com.villagebanking.ui.GroupPerson.GroupPersons"
         android:label="Group Person"
         tools:layout="@layout/groups_person_linkview" /> <!--Link-->
+
+    <fragment
+        android:id="@+id/nav_trans_detail_grid"
+        android:name="com.villagebanking.ui.Transaction.TransDetail"
+        android:label="Transactions"
+        tools:layout="@layout/app_gridview" />
     <fragment
         android:id="@+id/nav_linkview_person_trans"
         android:name="com.villagebanking.ui.Transaction.TransHeader"
@@ -66,5 +72,4 @@
         android:name="com.villagebanking.ui.Transaction.TransHeader"
         android:label="Period Transaction"
         tools:layout="@layout/persons_trans_linkview" />
-
 </navigation>

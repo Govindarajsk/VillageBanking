@@ -14,27 +14,31 @@ import java.util.ArrayList;
 
 public class DBUtility {
 
+    //region Basic
     static int version = 1;
-    //region Database Instance
     public static DBSQLQuery DBSQLQuery;
 
     public static void CreateDB(Context cntxt) {
         DBSQLQuery = new DBSQLQuery(cntxt, version);
     }
 
-    public static DBSQLQuery getDB() {
-        return DBSQLQuery;
+    public static void DTODropTable(String tableNames) {
+        ArrayList<String> tblNameList = new ArrayList<>();
+        for (String tblName : tableNames.split(",")) {
+            tblNameList.add(tblName);
+        }
+        DBSQLQuery.DBdropTable(tblNameList);
+    }
+
+    public static void DTOdelete(long ID, String tableName) {
+        DBSQLQuery.DBdelete(ID, tableName);
     }
     //endregion
 
+    //region Insert/update
     public static <T> String DTOInsertUpdate(T data) {
         String insertQry = DB2IUD.DTOSaveUpdate(data);
         return DBSQLQuery.DBDMLQuery(insertQry);
-    }
-
-    //region Save update and delete
-    public static void DTOdelete(long ID, String tableName) {
-        DBSQLQuery.DBdelete(ID, tableName);
     }
 
     public static <T> String DTOSaveUpdate(T data, String tableName) {
@@ -67,7 +71,6 @@ public class DBUtility {
         Cursor res = DBSQLQuery.DBGetData(tableName, primary_key);
         return DB2GetList.DTOGetAlls(res, tableName);
     }
-    //endregion
 
     public static <T> ArrayList<T> FetchPeriodTrans(String tableName, String periodKeys) {
         ArrayList<T> retunList = new ArrayList<>();
@@ -80,6 +83,8 @@ public class DBUtility {
         }
         return retunList;
     }
+
+    //endregion
 
     //region Trans List
     public static <T> ArrayList<T> DBGetDataFilter(String tableName, String columnName, String inputValue) {

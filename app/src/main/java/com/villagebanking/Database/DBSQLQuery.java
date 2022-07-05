@@ -11,6 +11,8 @@ import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.DBTables.tblTransDetail;
 import com.villagebanking.DBTables.tblTransHeader;
 
+import java.util.ArrayList;
+
 public class DBSQLQuery extends SQLiteOpenHelper {
 
     private static final String SUCCESS = "Success!";
@@ -35,9 +37,21 @@ public class DBSQLQuery extends SQLiteOpenHelper {
         }
         onCreate(db);
     }
-    //endregion
 
-    //region INSERT UPDATE DELETE
+    //Delete & DROP
+    public void DBdropTable(ArrayList<String> tblNames){
+        SQLiteDatabase db = this.getWritableDatabase();
+        for (String tableName : tblNames) {
+            db.execSQL("DROP TABLE IF EXISTS " + tableName);
+        }
+    }
+    public void DBdeleteTable(ArrayList<String> tblNames){
+        SQLiteDatabase db = this.getWritableDatabase();
+        for (String tableName : tblNames) {
+            db.execSQL("DELETE TABLE IF EXISTS " + tableName);
+        }
+    }
+
     public Integer DBdelete(long key, String TBLNAME) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TBLNAME,
@@ -45,6 +59,9 @@ public class DBSQLQuery extends SQLiteOpenHelper {
                 new String[]{Long.toString(key)});
     }
 
+    //endregion
+
+    //region INSERT UPDATE
     public boolean DBSaveUpdate(Long key, ContentValues data, String TBLNAME) {
         SQLiteDatabase db = this.getWritableDatabase();
         if (key > 0)
