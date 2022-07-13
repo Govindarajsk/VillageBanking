@@ -12,10 +12,14 @@ import com.villagebanking.DBTables.tblTransHeader;
 
 public class DB2IUD {
 
-    public static <T> String DTOSaveUpdate(T data) {
+    public static <T> String DTOSaveUpdate(String flag,T data) {
         if (data instanceof BOTransHeader) {
             BOTransHeader th = (BOTransHeader) data;
-            return tblTransHeader.getInsertQuery(th);
+            return tblTransHeader.getInsertQuery(flag,th);
+        }
+        if (data instanceof BOTransDetail) {
+            BOTransDetail th = (BOTransDetail) data;
+            //return BOTransDetail.getInsertQuery(th);
         }
         return null;
     }

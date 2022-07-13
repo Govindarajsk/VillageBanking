@@ -4,6 +4,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.villagebanking.BOObjects.BOGroup;
+import com.villagebanking.BOObjects.BOGroupPersonLink;
+import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.DBTables.tblUtility;
 
@@ -34,10 +37,11 @@ public class tblTransHeader extends tblBase {
             tblUtility.setDBDecimal(column7, true) +
             tblUtility.setDBDecimal(column8, false) +
             ")";
+
     //endregion
 
-    public static String getInsertQuery(BOTransHeader transHeader) {
-        //region
+    //region Columns Values Mapping
+    static ArrayList<String> columnValueMap() {
         ArrayList<String> columnList = new ArrayList<>();
         columnList.add(column0);
         columnList.add(column1);
@@ -48,7 +52,11 @@ public class tblTransHeader extends tblBase {
         columnList.add(column6);
         columnList.add(column7);
         columnList.add(column8);
+        return columnList;
+    }
 
+    //Column Value
+    static ArrayList<String> readValues(BOTransHeader transHeader) {
         ArrayList<String> valueList = new ArrayList<>();
         valueList.add(tblUtility.getDBInteger(transHeader.getPrimary_key()));
         valueList.add(tblUtility.getDBInteger(transHeader.getPeriodKey()));
@@ -59,50 +67,52 @@ public class tblTransHeader extends tblBase {
         valueList.add(tblUtility.getDBDecimal(transHeader.getTotalAmount()));
         valueList.add(tblUtility.getDBDecimal(transHeader.getPaidAmount()));
         valueList.add(tblUtility.getDBDecimal(transHeader.getBalanceAmount()));
-        //endregion
-        String insertQry = "INSERT INTO " + Name + "(" +
-                tblUtility.setDBColumns(columnList) +
-                ") VALUES (" +
-                tblUtility.setDBColumns(valueList) +
-                ")";
+        return valueList;
+    }
 
+    //endregion
+
+    public static String getInsertQuery(String flag, BOTransHeader transHeader) {
+
+        ArrayList<String> columnList = columnValueMap();
+        ArrayList<String> valueList = readValues(transHeader);
+        String insertQry = "";
+        if (flag == "I") {
+            insertQry = "INSERT INTO " + Name + "(" +
+                    tblUtility.getStrWithComma(columnList) +
+                    ") VALUES (" +
+                    tblUtility.getStrWithComma(valueList) +
+                    ")";
+        } else {
+            insertQry = "UPDATE " + Name + " SET " +
+                    tblUtility.getStrtblUpdate(columnList, valueList) +
+                    " WHERE " + columnList.get(0) + " = " + valueList.get(0);
+        }
         return insertQry;
     }
 
-    public static BOTransHeader getValue(Cursor res) {
+    public static BOTransHeader readValue(Cursor res) {
         BOTransHeader newData = new BOTransHeader();
         int i = 0;
         newData.setPrimary_key(res.getLong(i++));
         newData.setPeriodKey(res.getLong(i++));
         newData.setTableName(res.getString(i++));
         newData.setTableLinkKey(res.getLong(i++));
+        if (newData.getTableName().contentEquals(tblGroupPersonLink.Name)) {
+            BOGroupPersonLink linkData = tblGroupPersonLink.getData(newData.getTableLinkKey());
+            BOGroup boGroup = linkData.getGroup_Detail();
+            BOPerson boPerson = linkData.getPerson_Detail();
+            newData.link1Key = boGroup.getPrimary_key();
+            newData.link2Key=boPerson.getPrimary_key();
+            newData.link1Detail=boGroup.getName();
+            newData.link2Detail=boPerson.getFullName();
+        }
         newData.setRemarks(res.getString(i++));
         newData.setTransDate(res.getString(i++));
         newData.setTotalAmount(res.getDouble(i++));
         newData.setPaidAmount(res.getDouble(i++));
         newData.setBalanceAmount(res.getDouble(i++));
         return newData;
-    }
-
-    public static Cursor getQuery(SQLiteDatabase db, String periodkeys) {
-        Cursor res = db.rawQuery(
-                "SELECT " +
-                        "0 AS ID,"
-                        + "G.START_PERIOD_KEY AS PERIOD_KEY,"
-                        + "'GROUP_PERSON_LINK' AS TABLE_NAME,"
-                        + "GPL.ID AS TABLE_LINK_KEY,"
-                        + "G.NAME AS REMARKS,"
-                        + "'' AS TRANS_DATE,"
-                        + "G.AMOUNT AS TOTAL_AMOUNT,"
-                        + "0 AS PAID_AMOUNT,"
-                        + "G.AMOUNT AS BALANCE_AMOUNT "
-                        + "FROM "
-                        + "GROUPS G JOIN "
-                        + "GROUP_PERSON_LINK GPL ON G.ID=GPL.GROUP_KEY" +
-                        (periodkeys.length() > 0 ? " WHERE G.START_PERIOD_KEY IN (" + periodkeys + ")" : "")
-                ,
-                null);
-        return res;
     }
 
     public static Cursor DBGetTransHeader(SQLiteDatabase db, String periodKeys, String linkKeys) {
@@ -124,4 +134,26 @@ public class tblTransHeader extends tblBase {
                 , null);
 
     }
+
+    public static Cursor DBGenTransHeader(SQLiteDatabase db, String periodkeys) {
+        Cursor res = db.rawQuery(
+                "SELECT " +
+                        "0 AS ID,"
+                        + "G.START_PERIOD_KEY AS PERIOD_KEY,"
+                        + "'GROUP_PERSON_LINK' AS TABLE_NAME,"
+                        + "GPL.ID AS TABLE_LINK_KEY,"
+                        + "G.NAME AS REMARKS,"
+                        + "'' AS TRANS_DATE,"
+                        + "G.AMOUNT AS TOTAL_AMOUNT,"
+                        + "0 AS PAID_AMOUNT,"
+                        + "G.AMOUNT AS BALANCE_AMOUNT "
+                        + "FROM "
+                        + "GROUPS G JOIN "
+                        + "GROUP_PERSON_LINK GPL ON G.ID=GPL.GROUP_KEY" +
+                        (periodkeys.length() > 0 ? " WHERE G.START_PERIOD_KEY IN (" + periodkeys + ")" : "")
+                ,
+                null);
+        return res;
+    }
+
 }

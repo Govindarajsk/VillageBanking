@@ -4,66 +4,58 @@
     android:id="@+id/maingrid"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:columnCount="5"
+    android:columnCount="6"
     android:layoutDirection="locale"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/txtRemarks"
+        android:id="@+id/txtDetails"
         style="@style/stylDgTxt"
-        android:layout_row="0"
+        android:layout_row="1"
         android:layout_column="0"
+        android:text="Group1"
+        android:maxWidth="100dp"
         android:layout_columnWeight="@integer/config_navAnimTime"
-        android:text="01.Detail"
-        android:textStyle="bold" />
+        android:layout_gravity="center_vertical"
+        android:textStyle="bold"/>
 
-    <EditText
+    <TextView
         android:id="@+id/txtAmount"
         style="@style/stylDgTxt"
-        android:layout_width="100dp"
-        android:layout_row="0"
+        android:layout_row="1"
         android:layout_column="1"
-        android:layout_marginRight="20dp"
-        android:text="4000.00"
-        android:textAlignment="viewEnd"
+        android:text="400000.00"
+        android:layout_gravity="center_vertical|right"
         android:textStyle="bold" />
 
     <CheckBox
         android:id="@+id/chkIsFull"
-        android:layout_row="0"
+        android:layout_row="1"
         android:layout_column="2"
-        android:layout_gravity="center_vertical"
-        android:checked="false"
-        android:minWidth="15dp"
-        android:visibility="gone" />
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:width="10dp"
+        android:checked="false" />
 
     <TextView
-        android:id="@+id/txtBalAmount"
-        style="@style/stylDgTxt"
-        android:layout_width="100dp"
-        android:layout_row="0"
-        android:layout_column="3"
-        android:layout_marginRight="20dp"
-        android:text="4000.00"
-        android:textAlignment="viewEnd"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/txtTableName"
+        android:id="@+id/txtNewAmount"
         style="@style/stylDgTxt"
         android:layout_row="1"
-        android:layout_column="0"
-        android:layout_columnSpan="4"
-        android:layout_columnWeight="@integer/config_navAnimTime"
-        android:layout_marginRight="20dp"
-        android:text="Table Name + Key"
+        android:layout_column="3"
+        android:text="400000.00"
         android:textStyle="bold"
-        android:visibility="gone" />
+        android:layout_gravity="center_vertical|right"
+        android:inputType="numberDecimal"/>
 
     <ImageButton
         android:id="@+id/btnDelete"
-        style="@style/styleBtnDelete"
-        android:layout_row="0"
-        android:layout_column="4" />
+        style="@style/styleBtnReset"
+        android:layout_row="1"
+        android:layout_column="4"/>
+
+    <ImageButton android:visibility="gone"
+        android:id="@+id/btnDetail"
+        style="@style/styleBtnDetail"
+        android:layout_row="1"
+        android:layout_column="5"/>
 
 </GridLayout>

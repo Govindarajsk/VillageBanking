@@ -17,8 +17,19 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.villagebanking.BOObjects.BOGroupPersonLink;
+import com.villagebanking.BOObjects.BOPeriod;
+import com.villagebanking.BOObjects.BOTransDetail;
+import com.villagebanking.BOObjects.BOTransHeader;
+import com.villagebanking.DBTables.tblGroupPersonLink;
+import com.villagebanking.DBTables.tblTransDetail;
+import com.villagebanking.DBTables.tblTransHeader;
+import com.villagebanking.Database.DB1Tables;
+import com.villagebanking.Database.DB2IUD;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.databinding.AppActivityBinding;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        //resetTable();
+        getDetails();
     }
 
     @Override
@@ -65,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
     /*
         @Override
         protected void attachBaseContext(Context newBase) {
@@ -73,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
             super.attachBaseContext(localeUpdatedContext);
         }
     */
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -83,5 +97,17 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void resetTable() {
+       DBUtility.DTOdelete(0, tblGroupPersonLink.Name);
+//        DBUtility.DTOdelete(0, tblTransHeader.Name);
+
+    }
+    private void getDetails(){
+        ArrayList<BOGroupPersonLink> boGroupPersonLinks=DBUtility.DTOGetAlls(tblGroupPersonLink.Name);
+        ArrayList<BOTransHeader> boTransHeaders=DBUtility.DTOGetAlls(tblTransHeader.Name);
+        ArrayList<BOTransDetail> boTransDetails=DBUtility.DTOGetAlls(tblTransDetail.Name);
+        ArrayList<BOPeriod> boPeriods=DBUtility.DTOGetAlls(DB1Tables.PERIODS);
     }
 }

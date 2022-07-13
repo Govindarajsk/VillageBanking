@@ -27,7 +27,6 @@ public class tblUtility {
         return String.valueOf(input);
     }
 
-
     public static final String setDBPrimary(String input, boolean withComma) {
         return input + primaryKey + (withComma ? comma : "");
     }
@@ -44,11 +43,24 @@ public class tblUtility {
         return input + decimalType + (withComma ? comma : "");
     }
 
-    public static final String setDBColumns(ArrayList<String> columnsList) {
+    public static final String getStrWithComma(ArrayList<String> columnsList) {
         String columns = "";
         int n = columnsList.size();
         for (int i = 0; i < n; i++) {
             columns = columns + columnsList.get(i) + (i == n - 1 ? "" : ",");
+        }
+        return columns;
+    }
+
+    public static final String getStrtblUpdate(ArrayList<String> columnsList, ArrayList<String> valueList) {
+        String columns = "";
+        int n = columnsList.size();
+        for (int i = 1; i < n; i++) {
+            String str1 = columnsList.get(i);
+            String str2 = valueList.get(i);
+
+            String str4 = str1 + "=" + str2;
+            columns = columns + str4 + (i == n - 1 ? "": ",");
         }
         return columns;
     }

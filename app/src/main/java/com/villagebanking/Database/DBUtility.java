@@ -22,22 +22,16 @@ public class DBUtility {
         DBSQLQuery = new DBSQLQuery(cntxt, version);
     }
 
-    public static void DTODropTable(String tableNames) {
-        ArrayList<String> tblNameList = new ArrayList<>();
-        for (String tblName : tableNames.split(",")) {
-            tblNameList.add(tblName);
-        }
-        DBSQLQuery.DBdropTable(tblNameList);
-    }
-
     public static void DTOdelete(long ID, String tableName) {
-        DBSQLQuery.DBdelete(ID, tableName);
+        if (ID == 0) DBSQLQuery.DBDelete(tableName);
+        else
+            DBSQLQuery.DBDelete(ID, tableName);
     }
     //endregion
 
     //region Insert/update
-    public static <T> String DTOInsertUpdate(T data) {
-        String insertQry = DB2IUD.DTOSaveUpdate(data);
+    public static <T> String DTOInsertUpdate(String flag, T data) {
+        String insertQry = DB2IUD.DTOSaveUpdate(flag, data);
         return DBSQLQuery.DBDMLQuery(insertQry);
     }
 
@@ -45,13 +39,6 @@ public class DBUtility {
         DB1BOMap map = DB2Save.DTOSaveUpdate(data, tableName);
         if (map != null) //SAVE TO TABLE
             DBSQLQuery.DBSaveUpdate(map.getPrimary_key(), map.getContentValues(), tableName);
-        return "";
-    }
-
-    public static <T> String DTOSaveUpdate(String flag, T data, String tableName) {
-        DB1BOMap map = DB2Save.DTOSaveUpdate(data, tableName);
-        if (map != null) //SAVE TO TABLE
-            DBSQLQuery.DBSaveUpdate(flag, map.getPrimary_key(), map.getContentValues(), tableName);
         return "";
     }
 

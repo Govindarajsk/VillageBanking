@@ -41,7 +41,7 @@ public class PersonsGrid<T> extends ArrayAdapter {
 
         BOPerson bindData = (BOPerson) data;
         String value1 = Integer.toString(row);
-        String value2 = bindData.getStrFName() + "-" + bindData.getPrimary_key();
+        String value2 = bindData.getStrFName();// + "-" + bindData.getPrimary_key();
         String value3 = bindData.getStrLName();
         String value4 = Long.toString(bindData.getNumMobile());
 

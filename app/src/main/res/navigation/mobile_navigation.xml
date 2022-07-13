@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/nav_trans_grid_view"
-        android:name="com.villagebanking.ui.Transaction.Trans"
+        android:name="com.villagebanking.ui.Transaction.TransDetail"
         android:label="Transaction"
         tools:layout="@layout/app_gridview" />
     <!--Sub-->
@@ -46,9 +46,9 @@
         tools:layout="@layout/periods_editview" />
     <fragment
         android:id="@+id/nav_trans_edit_view"
-        android:name="com.villagebanking.ui.Transaction.TransEdit"
+        android:name="com.villagebanking.ui.Transaction.TransDetail"
         android:label="Transaction Edit"
-        tools:layout="@layout/trans_editview" />
+        tools:layout="@layout/trans_details_view" />
 
     <!--Link-->
     <fragment
@@ -66,10 +66,10 @@
         android:id="@+id/nav_linkview_person_trans"
         android:name="com.villagebanking.ui.Transaction.TransHeader"
         android:label="Person Transaction"
-        tools:layout="@layout/persons_trans_linkview" />
+        tools:layout="@layout/trans_header_view" />
     <fragment
         android:id="@+id/nav_linkview_period_trans"
         android:name="com.villagebanking.ui.Transaction.TransHeader"
         android:label="Period Transaction"
-        tools:layout="@layout/persons_trans_linkview" />
+        tools:layout="@layout/trans_header_view" />
 </navigation>

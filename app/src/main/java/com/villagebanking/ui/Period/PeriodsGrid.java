@@ -49,8 +49,12 @@ public class PeriodsGrid<T> extends ArrayAdapter {
 
         BOPeriod bindData = (BOPeriod) data;
         String value1 = Long.toString(row);
-        String value2 = bindData.getPeriodType() + "-" + bindData.getPeriodName() + "-" + bindData.getPrimary_key();
-        String value3 = bindData.getActualDate() + "-" + bindData.getPeriodStatus();
+        String value2 = bindData.getPeriodType() + "-" + bindData.getPeriodName();// + "-" + bindData.getPrimary_key();
+
+        ArrayList<BOTransHeader> transHeaders =
+                DBUtility.FetchPeriodTrans(tblTransHeader.Name, String.valueOf(bindData.getPrimary_key()));
+
+        String value3 = bindData.getActualDate() + "-" + transHeaders.size();
 
         TextView column1 = ((TextView) convertView.findViewById(R.id.txtSNo));
         TextView column2 = ((TextView) convertView.findViewById(R.id.txtPeriodType));
@@ -67,7 +71,7 @@ public class PeriodsGrid<T> extends ArrayAdapter {
         btnEdit.setOnClickListener(editMethod(bindData));
 
         ImageButton btnDetail = ((ImageButton) convertView.findViewById(R.id.btnDetail));
-        btnDetail.setOnClickListener(transMethod(bindData));
+        btnDetail.setOnClickListener(transMethod(bindData,transHeaders.size()>0));
 
         ImageButton btnClose = ((ImageButton) convertView.findViewById(R.id.btnClose));
         btnClose.setOnClickListener(openPeriod(bindData));
@@ -96,14 +100,16 @@ public class PeriodsGrid<T> extends ArrayAdapter {
         };
     }
 
-    View.OnClickListener transMethod(BOPeriod bindData) {
+    View.OnClickListener transMethod(BOPeriod bindData, boolean isHeader) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle args = new Bundle();
-                args.putString("PAGE", DB1Tables.PERIODS);
-                args.putLong("ID", bindData.getPrimary_key());
-                Navigation.findNavController(view).navigate(R.id.nav_linkview_period_trans, args);
+                if (isHeader) {
+                    Bundle args = new Bundle();
+                    args.putString("PAGE", DB1Tables.PERIODS);
+                    args.putLong("ID", bindData.getPrimary_key());
+                    Navigation.findNavController(view).navigate(R.id.nav_linkview_period_trans, args);
+                }
             }
         };
     }
@@ -148,6 +154,6 @@ public class PeriodsGrid<T> extends ArrayAdapter {
         Long primaryKey = Long.valueOf(periodKey + "" + x.getTableLinkKey());
         x.setPrimary_key(primaryKey);
         x.setPeriodKey(periodKey);
-        DBUtility.DTOInsertUpdate(x);
+        DBUtility.DTOInsertUpdate("I",x);
     }
 }

@@ -25,6 +25,12 @@ public class BOTransHeader extends BOBase {
     private double balanceAmount;
     private ArrayList<BOTransDetail> transDetails;
 
+    public boolean IsNew;
+    public long link1Key;
+    public String link1Detail;
+    public long link2Key;
+    public String link2Detail;
+
     public long getPeriodKey() {
         return periodKey;
     }

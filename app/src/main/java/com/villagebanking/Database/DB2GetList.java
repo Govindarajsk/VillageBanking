@@ -10,6 +10,7 @@ import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.BOObjects.BOPersonTrans;
 import com.villagebanking.BOObjects.BOTransDetail;
 import com.villagebanking.BOObjects.BOTransHeader;
+import com.villagebanking.DBTables.tblGroupPersonLink;
 import com.villagebanking.DBTables.tblTransHeader;
 import com.villagebanking.DBTables.tblTransDetail;
 
@@ -32,13 +33,14 @@ public class DB2GetList {
                     returnList.add((T) getValue(res, new BOPeriod()));
                     break;
                 case DB1Tables.GROUP_PERSON_LINK:
+                    //returnList.add((T) tblGroupPersonLink.readValue(res));
                     returnList.add((T) getValue(res, new BOGroupPersonLink()));
                     break;
                 case DB1Tables.PERSON_TRANSACTION:
                     returnList.add((T) getValue(res, new BOPersonTrans()));
                     break;
                 case tblTransHeader.Name:
-                    returnList.add((T) tblTransHeader.getValue(res));
+                    returnList.add((T) tblTransHeader.readValue(res));
                     break;
                 case tblTransDetail.Name:
                     returnList.add((T) tblTransDetail.getValue(res));

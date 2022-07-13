@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.villagebanking.BOObjects.BOTransHeader;
+import com.villagebanking.DBTables.tblGroupPersonLink;
 import com.villagebanking.DBTables.tblTransDetail;
 import com.villagebanking.DBTables.tblTransHeader;
 
@@ -39,24 +40,16 @@ public class DBSQLQuery extends SQLiteOpenHelper {
     }
 
     //Delete & DROP
-    public void DBdropTable(ArrayList<String> tblNames){
-        SQLiteDatabase db = this.getWritableDatabase();
-        for (String tableName : tblNames) {
-            db.execSQL("DROP TABLE IF EXISTS " + tableName);
-        }
-    }
-    public void DBdeleteTable(ArrayList<String> tblNames){
-        SQLiteDatabase db = this.getWritableDatabase();
-        for (String tableName : tblNames) {
-            db.execSQL("DELETE TABLE IF EXISTS " + tableName);
-        }
-    }
-
-    public Integer DBdelete(long key, String TBLNAME) {
+    public Integer DBDelete(long key, String TBLNAME) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TBLNAME,
                 "id = ? ",
                 new String[]{Long.toString(key)});
+    }
+
+    public void DBDelete(String TBLNAME) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TBLNAME);
     }
 
     //endregion
@@ -88,15 +81,6 @@ public class DBSQLQuery extends SQLiteOpenHelper {
 
     }
 
-    public boolean DBSaveUpdate(String flag, Long key, ContentValues data, String TBLNAME) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        if (flag == "U")
-            db.update(TBLNAME, data, "id = ? ",
-                    new String[]{Long.toString(key)});
-        else
-            db.insert(TBLNAME, null, data);
-        return true;
-    }
     //endregion
 
     //region OTHER GET LIST
@@ -133,7 +117,7 @@ public class DBSQLQuery extends SQLiteOpenHelper {
 
     public Cursor DBFetchGroupLink(String periodkeys) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = tblTransHeader.getQuery(db, periodkeys);
+        Cursor res = tblTransHeader.DBGenTransHeader(db, periodkeys);
         return res;
     }
 

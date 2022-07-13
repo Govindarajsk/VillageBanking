@@ -36,6 +36,7 @@
         android:layout_columnWeight="@integer/config_navAnimTime"
         android:text="Pavithra"
         android:textSize="15dp"
+        android:maxLength="8"
         android:textStyle="bold" />
 
     <TextView
