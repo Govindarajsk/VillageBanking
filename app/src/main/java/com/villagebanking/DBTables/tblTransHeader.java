@@ -9,6 +9,7 @@ import com.villagebanking.BOObjects.BOGroupPersonLink;
 import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.DBTables.tblUtility;
+import com.villagebanking.Database.DBUtility;
 
 import java.util.ArrayList;
 
@@ -56,7 +57,7 @@ public class tblTransHeader extends tblBase {
     }
 
     //Column Value
-    static ArrayList<String> readValues(BOTransHeader transHeader) {
+    static ArrayList<String> columnValues(BOTransHeader transHeader) {
         ArrayList<String> valueList = new ArrayList<>();
         valueList.add(tblUtility.getDBInteger(transHeader.getPrimary_key()));
         valueList.add(tblUtility.getDBInteger(transHeader.getPeriodKey()));
@@ -75,7 +76,7 @@ public class tblTransHeader extends tblBase {
     public static String getInsertQuery(String flag, BOTransHeader transHeader) {
 
         ArrayList<String> columnList = columnValueMap();
-        ArrayList<String> valueList = readValues(transHeader);
+        ArrayList<String> valueList = columnValues(transHeader);
         String insertQry = "";
         if (flag == "I") {
             insertQry = "INSERT INTO " + Name + "(" +
@@ -98,17 +99,18 @@ public class tblTransHeader extends tblBase {
         newData.setPeriodKey(res.getLong(i++));
         newData.setTableName(res.getString(i++));
         newData.setTableLinkKey(res.getLong(i++));
-        /*
+
         if (newData.getTableName().contentEquals(tblGroupPersonLink.Name)) {
-            BOGroupPersonLink linkData = tblGroupPersonLink.getData(newData.getTableLinkKey());
-            BOGroup boGroup = linkData.getGroup_Detail();
-            BOPerson boPerson = linkData.getPerson_Detail();
+            ArrayList<BOGroupPersonLink> groupPersonLinks = DBUtility.DTOGetData(tblGroupPersonLink.Name, newData.getTableLinkKey());
+            BOGroupPersonLink linkData = groupPersonLinks.get(0);
+            BOGroup boGroup = linkData.GroupDetail;
+            BOPerson boPerson = linkData.PersonDetail;
             newData.link1Key = boGroup.getPrimary_key();
-            newData.link2Key=boPerson.getPrimary_key();
-            newData.link1Detail=boGroup.getName();
-            newData.link2Detail=boPerson.getFullName();
+            newData.link2Key = boPerson.getPrimary_key();
+            newData.link1Detail = boGroup.getName();
+            newData.link2Detail = boPerson.getFullName();
         }
-         */
+
         newData.setRemarks(res.getString(i++));
         newData.setTransDate(res.getString(i++));
         newData.setTotalAmount(res.getDouble(i++));
@@ -157,5 +159,4 @@ public class tblTransHeader extends tblBase {
                 null);
         return res;
     }
-
 }

@@ -15,11 +15,10 @@ import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 
-import com.villagebanking.BOObjects.BOAutoComplete;
+import com.villagebanking.BOObjects.BOKeyValue;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPersonTrans;
 import com.villagebanking.BOObjects.BOTransDetail;
-import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.Controls.CCAutoComplete;
 
 import java.text.DecimalFormat;
@@ -159,15 +158,15 @@ public class UIUtility {
 
     //region AutoCompleteBox
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void SetAutoCompleteBox(Context cnxt, ArrayList<BOAutoComplete> list, AutoCompleteTextView control, long... key) {
+    public static void SetAutoCompleteBox(Context cnxt, ArrayList<BOKeyValue> list, AutoCompleteTextView control, long... key) {
         CCAutoComplete autoComplete = new CCAutoComplete(cnxt, list);
         control.setAdapter(autoComplete);
         autoComplete.SetDefault(control, key);
     }
 
     public static long getAutoBoxKey(Object item) {
-        if (item instanceof BOAutoComplete) {
-            BOAutoComplete itemSelected = (BOAutoComplete) item;
+        if (item instanceof BOKeyValue) {
+            BOKeyValue itemSelected = (BOKeyValue) item;
             return itemSelected.getPrimary_key();
         }
         return 0;

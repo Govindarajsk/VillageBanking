@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
-import com.villagebanking.BOObjects.BOAutoComplete;
 import com.villagebanking.BOObjects.BOGroup;
+import com.villagebanking.BOObjects.BOKeyValue;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
@@ -85,11 +85,11 @@ public class GroupsEdit extends Fragment {
         Map<String, List<BOPeriod>> okperiod = UIUtility.GroupByPeriod(actualList);
         Set<String> list = okperiod.keySet();
 
-        ArrayList<BOAutoComplete> autoCompleteList = new ArrayList<>();
+        ArrayList<BOKeyValue> autoCompleteList = new ArrayList<>();
         for (String item : list) {
             String[] strings = item.split(":");
             if (strings.length > 1)
-                autoCompleteList.add(new BOAutoComplete(Integer.valueOf(strings[0]), item));
+                autoCompleteList.add(new BOKeyValue(Integer.valueOf(strings[0]), item));
         }
         UIUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editPeridType);
     }
@@ -99,9 +99,9 @@ public class GroupsEdit extends Fragment {
         ArrayList<BOPeriod> boPeriods = DBUtility.DTOGetAlls(DB1Tables.PERIODS);
         boPeriods.removeIf(x -> x.getPeriodType() != periodType);
         boPeriods.sort((t1, t2) -> Long.toString(t1.getPeriodValue()).compareTo(Long.toString(t2.getPeriodValue())));
-        ArrayList<BOAutoComplete> autoCompleteList = new ArrayList<>();
+        ArrayList<BOKeyValue> autoCompleteList = new ArrayList<>();
         for (BOPeriod item : boPeriods) {
-            autoCompleteList.add(new BOAutoComplete(item.getPrimary_key(), item.getActualDate()));
+            autoCompleteList.add(new BOKeyValue(item.getPrimary_key(), item.getActualDate()));
         }
         UIUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editStartDate);
     }

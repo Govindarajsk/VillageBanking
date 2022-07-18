@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
-import com.villagebanking.BOObjects.BOAutoComplete;
+import com.villagebanking.BOObjects.BOKeyValue;
 import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOGroupPersonLink;
 import com.villagebanking.Database.DB1Tables;
@@ -91,10 +91,10 @@ public class GroupPersons extends Fragment {
     void fill_person() {
         ArrayList<BOPerson> actualList = DBUtility.DTOGetAlls(DB1Tables.PERSONS);
 
-        ArrayList<BOAutoComplete> autoCompleteList = new ArrayList<>();
+        ArrayList<BOKeyValue> autoCompleteList = new ArrayList<>();
         actualList.forEach(x -> autoCompleteList.add
                 (
-                        new BOAutoComplete(x.getPrimary_key(),
+                        new BOKeyValue(x.getPrimary_key(),
                                 x.getStrFName() + "-" + x.getStrLName()))
         );
         UIUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editPerson);
@@ -107,8 +107,8 @@ public class GroupPersons extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
                 Object item = parent.getItemAtPosition(position);
-                if (item instanceof BOAutoComplete) {
-                    BOAutoComplete itemSelected = (BOAutoComplete) item;
+                if (item instanceof BOKeyValue) {
+                    BOKeyValue itemSelected = (BOKeyValue) item;
                     personKey = itemSelected.getPrimary_key();
                 }
             }

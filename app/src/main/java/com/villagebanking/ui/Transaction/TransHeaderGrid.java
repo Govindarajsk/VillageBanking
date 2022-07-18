@@ -37,10 +37,10 @@ public class TransHeaderGrid<T> extends DataGridBase {
         View convertView = inflater.inflate(R.layout.trans_header_gridview, null);
 
         BOTransHeader bindData = (BOTransHeader) data;
-        String value1 = bindData.getTableName();
+        String value1 = bindData.link1Detail;
         String value2 = String.valueOf(bindData.getPaidAmount());
         String value3 = String.valueOf(bindData.getBalanceAmount());
-        String value4 = bindData.getRemarks();
+        String value4 = bindData.link2Detail;
 
         TextView txtDetails = ((TextView) convertView.findViewById(R.id.txtDetails));
         TextView txtAmount = ((TextView) convertView.findViewById(R.id.txtAmount));

@@ -100,15 +100,15 @@ public class PeriodsGrid<T> extends ArrayAdapter {
         };
     }
 
-    View.OnClickListener transMethod(BOPeriod bindData, boolean isHeader) {
+    View.OnClickListener transMethod(BOPeriod bindData, boolean isHavingDetails) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isHeader) {
+                if (isHavingDetails) {
                     Bundle args = new Bundle();
                     args.putString("PAGE", DB1Tables.PERIODS);
                     args.putLong("ID", bindData.getPrimary_key());
-                    Navigation.findNavController(view).navigate(R.id.nav_linkview_period_trans, args);
+                    Navigation.findNavController(view).navigate(R.id.nav_linkview_trans_header, args);
                 }
             }
         };

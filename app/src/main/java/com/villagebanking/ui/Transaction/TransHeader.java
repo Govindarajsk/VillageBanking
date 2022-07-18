@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 
 import com.villagebanking.BOObjects.BOTransDetail;
 import com.villagebanking.BOObjects.BOTransHeader;
+import com.villagebanking.DBTables.tblPeriod;
+import com.villagebanking.DBTables.tblPerson;
 import com.villagebanking.DBTables.tblTransDetail;
 import com.villagebanking.DBTables.tblTransHeader;
 import com.villagebanking.Database.DB1Tables;
@@ -39,12 +41,44 @@ public class TransHeader extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    void fill_trans_Header(long periodkey) {
-        ArrayList<BOTransHeader> transHeaders = DBUtility.FetchPeriodTrans(tblTransHeader.Name, String.valueOf(periodkey));
+    private void initialize() {
+        if (getArguments() != null) {
+            String fromPage = getArguments().getString("PAGE");
 
-        transHeaders.forEach(x ->{
-                    x.setTransDetails(fill_trans_Detail(x.getPrimary_key()));
-                });
+            switch (fromPage) {
+                case DB1Tables.PERIODS:
+                    long period_Key = getArguments().getLong("ID");
+                    fill_trans_Header(String.valueOf(period_Key), 0);
+                    break;
+                case tblPerson.Name:
+                    long person_Key = getArguments().getLong("ID");
+                    String periodKeys = "";
+                    tblPeriod.getPeriodKeys(person_Key);
+                    fill_trans_Header(periodKeys, person_Key);
+                    break;
+                default:
+                    break;
+            }
+        }
+        binding.btnSave.setOnClickListener(clickSave());
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    void fill_trans_Header(String periodkeys, long personKey) {
+        ArrayList<BOTransHeader> transHeaderFlist = DBUtility.FetchPeriodTrans(tblTransHeader.Name,
+                periodkeys);
+
+
+        ArrayList<BOTransHeader> transHeaders = new ArrayList<>();
+        transHeaderFlist.forEach(x -> {
+            x.setTransDetails(fill_trans_Detail(x.getPrimary_key()));
+            if (personKey > 0) {
+                if (x.link2Key == personKey)
+                    transHeaders.add(x);
+            } else
+                transHeaders.add(x);
+
+        });
 
         TransHeaderGrid adapter = new TransHeaderGrid(this.getContext(), R.layout.groups_gridview, transHeaders);
         binding.gvDataView.setAdapter(adapter);
@@ -57,22 +91,6 @@ public class TransHeader extends Fragment {
         return transDetails;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    private void initialize() {
-        if (getArguments() != null) {
-            String fromPage = getArguments().getString("PAGE");
-
-            switch (fromPage) {
-                case DB1Tables.PERIODS:
-                    long period_key = getArguments().getLong("ID");
-                    fill_trans_Header(period_key);
-                    break;
-                default:
-                    break;
-            }
-        }
-        binding.btnSave.setOnClickListener(clickSave());
-    }
 
     View.OnClickListener clickSave() {
         return new View.OnClickListener() {

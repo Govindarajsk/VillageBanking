@@ -1,13 +1,13 @@
 package com.villagebanking.BOObjects;
 
-public class BOAutoComplete extends BOBase {
+public class BOKeyValue extends BOBase {
     private String displayValue;
 
     public String getDisplayValue() {
         return displayValue;
     }
 
-    public BOAutoComplete(long key, String value) {
+    public BOKeyValue(long key, String value) {
         setPrimary_key(key);
         displayValue=value;
     }

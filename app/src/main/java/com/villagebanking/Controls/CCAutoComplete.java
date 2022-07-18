@@ -13,19 +13,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import com.villagebanking.BOObjects.BOAutoComplete;
+import com.villagebanking.BOObjects.BOKeyValue;
 import com.villagebanking.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
-public class CCAutoComplete extends ArrayAdapter<BOAutoComplete> {
-    private List<BOAutoComplete> fullList;
-    private List<BOAutoComplete> filteredList;
+public class CCAutoComplete extends ArrayAdapter<BOKeyValue> {
+    private List<BOKeyValue> fullList;
+    private List<BOKeyValue> filteredList;
 
-    public CCAutoComplete(@NonNull Context context, @NonNull List<BOAutoComplete> inputList) {
+    public CCAutoComplete(@NonNull Context context, @NonNull List<BOKeyValue> inputList) {
         super(context, 0, inputList);
 
         fullList = new ArrayList<>(inputList);
@@ -48,7 +46,7 @@ public class CCAutoComplete extends ArrayAdapter<BOAutoComplete> {
 
         TextView txtDropdownValue = convertView.findViewById(R.id.txtDropdownValue);
 
-        BOAutoComplete place = getItem(position);
+        BOKeyValue place = getItem(position);
         if (place != null) {
             txtDropdownValue.setText(place.getDisplayValue());
         }
@@ -68,7 +66,7 @@ public class CCAutoComplete extends ArrayAdapter<BOAutoComplete> {
                 filteredList.addAll(fullList);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
-                for (BOAutoComplete item: fullList) {
+                for (BOKeyValue item: fullList) {
                     if (item.getDisplayValue().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
@@ -90,7 +88,7 @@ public class CCAutoComplete extends ArrayAdapter<BOAutoComplete> {
 
         @Override
         public CharSequence convertResultToString(Object resultValue) {
-            return ((BOAutoComplete) resultValue).getDisplayValue();
+            return ((BOKeyValue) resultValue).getDisplayValue();
         }
     };
 

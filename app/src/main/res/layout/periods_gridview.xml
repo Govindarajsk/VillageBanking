@@ -20,17 +20,9 @@
 
     <TextView
         android:id="@+id/txtPeriodType"
-        style="@style/stylDgTxt"
+        style="@style/stylMLineText"
         android:layout_row="0"
         android:layout_column="1"
-        android:layout_height="wrap_content"
-        android:text="asada aadada asdad addad"
-        android:layout_width="0dp"
-        android:height="40dp"
-        android:inputType="textMultiLine"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:singleLine="false"
-        android:layout_gravity="fill_horizontal"
         android:textStyle="bold" />
 
     <TextView

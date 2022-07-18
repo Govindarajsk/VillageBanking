@@ -1,9 +1,6 @@
 package com.villagebanking.BOObjects;
 
-import android.text.format.DateUtils;
-
 import java.util.ArrayList;
-import java.util.Date;
 
 public class BOPersonTrans extends BOBase {
     private BOPeriod period_detail;
@@ -104,25 +101,25 @@ public class BOPersonTrans extends BOBase {
         this.parentKey = parentKey;
     }
 
-    private BOAutoComplete detail1;
+    private BOKeyValue detail1;
 
-    public BOAutoComplete getDetail1() {
-        if (detail1 == null) detail1 = new BOAutoComplete(0, "");
+    public BOKeyValue getDetail1() {
+        if (detail1 == null) detail1 = new BOKeyValue(0, "");
         return detail1;
     }
 
-    public void setDetail1(BOAutoComplete detail1) {
+    public void setDetail1(BOKeyValue detail1) {
         this.detail1 = detail1;
     }
 
-    public BOAutoComplete getDetail2() {
-        if (detail2 == null) detail2 = new BOAutoComplete(0, "");
+    public BOKeyValue getDetail2() {
+        if (detail2 == null) detail2 = new BOKeyValue(0, "");
         return detail2;
     }
 
-    public void setDetail2(BOAutoComplete detail2) {
+    public void setDetail2(BOKeyValue detail2) {
         this.detail2 = detail2;
     }
 
-    private BOAutoComplete detail2;
+    private BOKeyValue detail2;
 }

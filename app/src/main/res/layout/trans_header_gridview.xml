@@ -10,22 +10,20 @@
 
     <TextView
         android:id="@+id/txtDetails"
-        style="@style/stylDgTxt"
+        style="@style/stylMLineText"
         android:layout_row="0"
         android:layout_column="0"
         android:text="Group1"
         android:layout_columnWeight="@integer/config_navAnimTime"
-        android:layout_gravity="center_vertical"
         android:textStyle="bold"/>
     <TextView
         android:id="@+id/txtRemarks"
-        style="@style/stylDgTxt"
+        style="@style/stylMLineText"
         android:layout_row="1"
         android:layout_columnSpan="6"
         android:layout_column="0"
         android:text="Person Details"
         android:layout_columnWeight="@integer/config_navAnimTime"
-        android:layout_gravity="center_vertical"
         android:textStyle="bold"/>
 
     <TextView

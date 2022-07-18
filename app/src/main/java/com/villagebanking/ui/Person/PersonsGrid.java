@@ -15,6 +15,7 @@ import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
+import com.villagebanking.DBTables.tblPerson;
 
 import java.util.ArrayList;
 
@@ -60,6 +61,7 @@ public class PersonsGrid<T> extends ArrayAdapter {
         btnEdit.setOnClickListener(editMethod(bindData));
         return convertView;
     }
+
     View.OnClickListener deleteMethod(long primaryKey) {
         return new View.OnClickListener() {
             @Override
@@ -69,13 +71,15 @@ public class PersonsGrid<T> extends ArrayAdapter {
             }
         };
     }
+
     View.OnClickListener editMethod(BOPerson bindData) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle args=new Bundle();
-                args.putLong("person_key",bindData.getPrimary_key());
-                Navigation.findNavController(view).navigate(R.id.nav_linkview_person_trans,args);
+                Bundle args = new Bundle();
+                args.putString("PAGE", tblPerson.Name);
+                args.putLong("ID", bindData.getPrimary_key());
+                Navigation.findNavController(view).navigate(R.id.nav_linkview_trans_header, args);
             }
         };
     }
