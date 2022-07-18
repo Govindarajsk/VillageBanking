@@ -115,6 +115,12 @@ public class DBSQLQuery extends SQLiteOpenHelper {
         return res;
     }
 
+    public Cursor DBGroupPerson() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = tblGroupPersonLink.GetDetailQry(db);
+        return res;
+    }
+
     public Cursor DBFetchGroupLink(String periodkeys) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = tblTransHeader.DBGenTransHeader(db, periodkeys);

@@ -43,12 +43,12 @@ public class GroupPersonsGrid<T> extends ArrayAdapter {
 
         BOGroupPersonLink bindData = (BOGroupPersonLink) data;
         String value1 = Integer.toString(row);
-        String value2 = null;
-        String value3 = null;
-        String value4 = null;
+        String value2 = "";
+        String value3 = "";
+        String value4 = "";
         long person_key = 0;
         long group_key = 0;
-
+/*
         BOPerson person = bindData.getPerson_Detail();
         if (person != null) {
             value2 = person.getStrFName() + "-" + person.getPrimary_key();
@@ -60,7 +60,7 @@ public class GroupPersonsGrid<T> extends ArrayAdapter {
         if (group != null) {
             group_key = group.getPrimary_key();
         }
-
+*/
         TextView txtSNo = ((TextView) convertView.findViewById(R.id.txtSNo));
         TextView txtFirstName = ((TextView) convertView.findViewById(R.id.txtFirstName));
         TextView txtLastName = ((TextView) convertView.findViewById(R.id.txtLastName));
@@ -85,9 +85,9 @@ public class GroupPersonsGrid<T> extends ArrayAdapter {
             @Override
             public void onClick(View view) {
                 DBUtility.DTOdelete(boGroupPerson.getPrimary_key(), DB1Tables.GROUP_PERSON_LINK);
-                Bundle args=new Bundle();
-                args.putLong("group_key",boGroupPerson.getGroup_Detail().getPrimary_key());
-                Navigation.findNavController(view).navigate(R.id.nav_linkview_group_person,args);
+                Bundle args = new Bundle();
+                args.putLong("group_key", boGroupPerson.getGroup_Key());
+                Navigation.findNavController(view).navigate(R.id.nav_linkview_group_person, args);
             }
         };
     }

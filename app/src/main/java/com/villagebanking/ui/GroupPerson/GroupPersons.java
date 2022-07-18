@@ -60,8 +60,10 @@ public class GroupPersons extends Fragment {
         BOGroupPersonLink newData = null;
         if (group_Key > 0 && personKey > 0) {
             newData = new BOGroupPersonLink();
-            newData.getGroup_Detail().setPrimary_key(group_Key);
-            newData.getPerson_Detail().setPrimary_key(personKey);
+            newData.setGroup_Key(group_Key);
+            newData.setPerson_Key(personKey);
+            newData.setOrderBy(1);
+            newData.setPerson_role("");
         }
         return newData;
     }
@@ -69,7 +71,7 @@ public class GroupPersons extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_GridView(long groupKey) {
         ArrayList<BOGroupPersonLink> groupPersons = DBUtility.DTOGetAlls(DB1Tables.GROUP_PERSON_LINK);
-        groupPersons.removeIf(x -> x.getGroup_Detail().getPrimary_key() != groupKey);
+        groupPersons.removeIf(x -> x.getGroup_Key() != groupKey);
         GroupPersonsGrid adapter = new GroupPersonsGrid(this.getContext(), R.layout.app_gridview, groupPersons);
         binding.gvPersons.setAdapter(adapter);
 

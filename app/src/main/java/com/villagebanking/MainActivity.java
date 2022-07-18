@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void getDetails(){
-        ArrayList<BOGroupPersonLink> boGroupPersonLinks=DBUtility.DTOGetAlls(tblGroupPersonLink.Name);
+        ArrayList<BOGroupPersonLink> boGroupPersonLinks=DBUtility.DBGetGroupPerson(tblGroupPersonLink.Name);
         ArrayList<BOTransHeader> boTransHeaders=DBUtility.DTOGetAlls(tblTransHeader.Name);
         ArrayList<BOTransDetail> boTransDetails=DBUtility.DTOGetAlls(tblTransDetail.Name);
         ArrayList<BOPeriod> boPeriods=DBUtility.DTOGetAlls(DB1Tables.PERIODS);

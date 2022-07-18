@@ -98,6 +98,7 @@ public class tblTransHeader extends tblBase {
         newData.setPeriodKey(res.getLong(i++));
         newData.setTableName(res.getString(i++));
         newData.setTableLinkKey(res.getLong(i++));
+        /*
         if (newData.getTableName().contentEquals(tblGroupPersonLink.Name)) {
             BOGroupPersonLink linkData = tblGroupPersonLink.getData(newData.getTableLinkKey());
             BOGroup boGroup = linkData.getGroup_Detail();
@@ -107,6 +108,7 @@ public class tblTransHeader extends tblBase {
             newData.link1Detail=boGroup.getName();
             newData.link2Detail=boPerson.getFullName();
         }
+         */
         newData.setRemarks(res.getString(i++));
         newData.setTransDate(res.getString(i++));
         newData.setTotalAmount(res.getDouble(i++));

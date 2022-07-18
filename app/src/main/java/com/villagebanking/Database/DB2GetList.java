@@ -32,12 +32,8 @@ public class DB2GetList {
                 case DB1Tables.PERIODS:
                     returnList.add((T) getValue(res, new BOPeriod()));
                     break;
-                case DB1Tables.GROUP_PERSON_LINK:
-                    //returnList.add((T) tblGroupPersonLink.readValue(res));
-                    returnList.add((T) getValue(res, new BOGroupPersonLink()));
-                    break;
-                case DB1Tables.PERSON_TRANSACTION:
-                    returnList.add((T) getValue(res, new BOPersonTrans()));
+                case tblGroupPersonLink.Name:
+                    returnList.add((T) tblGroupPersonLink.readValue(res));
                     break;
                 case tblTransHeader.Name:
                     returnList.add((T) tblTransHeader.readValue(res));
@@ -65,7 +61,6 @@ public class DB2GetList {
         newData.setNumMobile(res.getLong(3));
         return newData;
     }
-
     /*
         "ID INTEGER PRIMARY KEY, " +
         "NAME TEXT," +
@@ -91,66 +86,6 @@ public class DB2GetList {
         newData.setBondCharge(res.getDouble(5));
         return newData;
     }
-
-    /*
-        "ID INTEGER PRIMARY KEY, " +
-        "GROUP_KEY INTEGER," +
-        "PERSON_KEY INTEGER," +
-        "ORDER_BY INTEGER," +
-        "PERSON_ROLE TEXT" +
-    */
-    static BOGroupPersonLink getValue(Cursor res, BOGroupPersonLink test) {
-        BOGroupPersonLink newData = new BOGroupPersonLink();
-        newData.setPrimary_key(res.getLong(0));
-        long group_key = res.getLong(1);
-        long person_key = res.getLong(2);
-        newData.setOrderBy(res.getInt(3));
-        newData.setPerson_role(res.getString(4));
-
-        ArrayList<Object> groupList = DBUtility.DTOGetData(DB1Tables.GROUPS, group_key);
-        if (groupList.size() > 0) {
-            BOGroup group = (BOGroup) groupList.get(0);
-            newData.setGroup_Detail(group);
-        }
-        ArrayList<Object> personList = DBUtility.DTOGetData(DB1Tables.PERSONS, person_key);
-        if (personList.size() > 0) {
-            BOPerson person = (BOPerson) personList.get(0);
-            newData.setPerson_Detail(person);
-        }
-        return newData;
-    }
-
-    /*
-       "ID INTEGER PRIMARY KEY,PERIOD_KEY INTEGER,TABLE_NAME TEXT,
-       TABLE_LINK_KEY INTEGER,REMARKS TEXT,AMOUNT DECIMAL,
-       PTR.ID AS ID,PTR.PARENT_KEY AS PARENTKEY,PERIOD_KEY,
-       'GROUP_PERSON_LINK' AS TABLE_NAME,GPL.ID AS TABLE_LINK_KEY,G.NAME AS REMARKS,
-       PTR.AMOUNT AS AMOUNT,G.AMOUNT AS TRANSAMOUNT,G.ID AS GROUP_KEY
-    */
-    static BOPersonTrans getValue(Cursor res, BOPersonTrans test) {
-        BOPersonTrans newData = new BOPersonTrans();
-        newData.setPrimary_key(res.getLong(0));
-        newData.setParentKey(res.getLong(1));
-        newData.getPeriod_detail().setPrimary_key(res.getLong(2));
-        newData.setTableName(res.getString(3));
-        newData.setTable_link_key(res.getLong(4));
-
-        ArrayList<BOGroupPersonLink> tableLinkDetail = DBUtility.DTOGetData(DB1Tables.GROUP_PERSON_LINK, newData.getTable_link_key());
-        if (tableLinkDetail.size() > 0) {
-            BOGroupPersonLink linkData = tableLinkDetail.get(0);
-            newData.setDetail1(new BOAutoComplete(linkData.getGroup_Detail().getPrimary_key(), linkData.getGroup_Detail().getName()));
-            newData.setDetail2(new BOAutoComplete(linkData.getPerson_Detail().getPrimary_key(), linkData.getPerson_Detail().getFullName()));
-        }
-
-        newData.setRemarks(res.getString(5));
-        newData.setNewAmount(res.getDouble(6));
-        if (res.getColumnCount() > 8)
-            newData.setActualAmount(res.getDouble(7));
-        if (res.getColumnCount() > 9)
-            newData.setForien_key(res.getLong(8));
-        return newData;
-    }
-
     /*
         "ID INTEGER PRIMARY KEY," +
         "PERIOD_TYPE INTEGER, " +

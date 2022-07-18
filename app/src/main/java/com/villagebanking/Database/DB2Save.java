@@ -80,9 +80,9 @@ public class DB2Save {
      */
     static ContentValues getContentValue(BOGroupPersonLink g) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("GROUP_KEY", g.getGroup_Detail().getPrimary_key());
-        contentValues.put("PERSON_KEY", g.getPerson_Detail().getPrimary_key());
-        contentValues.put("ORDER_BY", g.getOrderBy());
+        contentValues.put("GROUP_KEY", g.getGroup_Key());
+        contentValues.put("PERSON_KEY", g.getPerson_Key());
+        //contentValues.put("ORDER_BY", g.getOrderBy());
         contentValues.put("PERSON_ROLE", g.getPerson_role());
         return contentValues;
     }

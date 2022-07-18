@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class DBUtility {
 
     //region Basic
-    static int version = 1;
+    static int version = 3;
     public static DBSQLQuery DBSQLQuery;
 
     public static void CreateDB(Context cntxt) {
@@ -72,6 +72,11 @@ public class DBUtility {
     }
 
     //endregion
+
+    public static <T> ArrayList<T> DBGetGroupPerson(String tblName) {
+        Cursor res = DBSQLQuery.DBGroupPerson();
+        return DB2GetList.DTOGetAlls(res, tblName);
+    }
 
     //region Trans List
     public static <T> ArrayList<T> DBGetDataFilter(String tableName, String columnName, String inputValue) {
