@@ -10,9 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.villagebanking.BOObjects.BOPeriod;
-import com.villagebanking.Database.DB1Tables;
+import com.villagebanking.DBTables.tblPeriod;
 import com.villagebanking.Database.DBUtility;
-import com.villagebanking.Utility.UIUtility;
+import com.villagebanking.ui.UIUtility;
 import com.villagebanking.databinding.PeriodsEditviewBinding;
 
 import java.util.ArrayList;
@@ -48,9 +48,7 @@ public class PeriodsEdit extends Fragment {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //DBUtility.GetSequence();
-                DBUtility.DTOSaveUpdate(getPersonDataFromView(), DB1Tables.PERIODS);
-                //getActivity().onBackPressed();
+                DBUtility.DTOSaveUpdate(getPersonDataFromView(), tblPeriod.Name);
             }
         };
     }
@@ -70,7 +68,7 @@ public class PeriodsEdit extends Fragment {
     long primary_key = 0;
 
     void applyValue(long key) {
-        ArrayList<BOPeriod> datas = DBUtility.DTOGetData(DB1Tables.PERIODS, key);
+        ArrayList<BOPeriod> datas = DBUtility.DTOGetData(tblPeriod.Name, key);
         if (datas.size() > 0) {
             BOPeriod editData = datas.get(0);
             primary_key = editData.getPrimary_key();

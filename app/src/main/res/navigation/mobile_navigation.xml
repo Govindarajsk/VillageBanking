@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_period_grid_view">
+    app:startDestination="@+id/nav_person_grid_view">
     <!--Main -->
     <fragment
         android:id="@+id/nav_person_grid_view"
@@ -29,11 +29,6 @@
         android:label="Transaction"
         tools:layout="@layout/app_gridview" />
 
-    <fragment
-        android:id="@+id/nav_loan_header_view"
-        android:name="com.villagebanking.ui.Loan.LoanHeader"
-        android:label="Loan"
-        tools:layout="@layout/app_gridview" />
     <!--Sub-->
     <fragment
         android:id="@+id/nav_person_edit_view"
@@ -56,12 +51,18 @@
         android:label="Transaction Edit"
         tools:layout="@layout/trans_details_view" />
 
+    <fragment
+        android:id="@+id/nav_loan_header_view"
+        android:name="com.villagebanking.ui.Loan.LoanHeader"
+        android:label="Loan"
+        tools:layout="@layout/loan_header_view" />
     <!--Link-->
     <fragment
         android:id="@+id/nav_linkview_group_person"
         android:name="com.villagebanking.ui.GroupPerson.GroupPersons"
         android:label="Group Person"
-        tools:layout="@layout/groups_person_linkview" /> <!--Link-->
+        tools:layout="@layout/groups_person_linkview" />
+    <!--Link-->
 
     <fragment
         android:id="@+id/nav_trans_detail_grid"

@@ -11,13 +11,15 @@ import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.DBTables.tblGroupPersonLink;
 import com.villagebanking.DBTables.tblTransDetail;
 import com.villagebanking.DBTables.tblTransHeader;
+import com.villagebanking.DBTables.tblUtility;
 
 import java.util.ArrayList;
 
 public class DBSQLQuery extends SQLiteOpenHelper {
 
     private static final String SUCCESS = "Success!";
-    //region COMMON CREATE UPGRADE
+
+    //region UPGRADE
     public static final String DATABASE_NAME = "MyDBName.db";
 
     public DBSQLQuery(Context context, int version) {
@@ -26,32 +28,46 @@ public class DBSQLQuery extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        for (String tableCreateQuery : DB1Tables.getCreateTables()) {
+        for (String tableCreateQuery : tblUtility.getCreateTables()) {
             db.execSQL("CREATE TABLE " + tableCreateQuery);
         }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        for (String tableName : DB1Tables.getTables()) {
+        for (String tableName : tblUtility.getTables()) {
             db.execSQL("DROP TABLE IF EXISTS " + tableName);
         }
         onCreate(db);
     }
+    //endregion
 
-    //Delete & DROP
-    public Integer DBDelete(long key, String TBLNAME) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TBLNAME,
-                "id = ? ",
-                new String[]{Long.toString(key)});
+    //region Get DB Details
+    public SQLiteDatabase GetWritableDB() {
+        return this.getWritableDatabase();
     }
 
-    public void DBDelete(String TBLNAME) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM " + TBLNAME);
+    public SQLiteDatabase GetReadableDB() {
+        return this.getReadableDatabase();
+    }
+    //endregion
+
+    //region Basic Select and Delete
+    public Cursor DBGetData(String tblName, long primary_key) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM " + tblName + (primary_key > 0 ? " WHERE ID=" + primary_key : ""), null);
+        return res;
     }
 
+    public String DBDelete(String tblName, long primary_key) {
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.rawQuery("DELETE FROM " + tblName + (primary_key > 0 ? " WHERE ID=" + primary_key : ""), null);
+            return SUCCESS;
+        } catch (Exception ex) {
+            return ex.getMessage();
+        }
+    }
     //endregion
 
     //region INSERT UPDATE
@@ -83,32 +99,7 @@ public class DBSQLQuery extends SQLiteOpenHelper {
 
     //endregion
 
-    //region OTHER GET LIST
-    /*
-        GROUPS => "ID INTEGER PRIMARY KEY,NAME TEXT,NO_OF_PERSON INTEGER,AMOUNT DECIMAL,START_PERIOD_KEY INTEGER,
-                   BOND_CHARGE DECIMAL"
-
-        GROUP_PERSON_LINK =>"ID INTEGER PRIMARY KEY,GROUP_KEY INTEGER,PERSON_KEY INTEGER,ORDER_BY INTEGER,
-                    PERSON_ROLE TEXT"
-
-        PERSON_TRANSACTION =>ID INTEGER PRIMARY KEY,PARENT_KEY INTEGER,PERIOD_KEY INTEGER,TABLE_NAME TEXT,
-                            TABLE_LINK_KEY INTEGER,REMARKS TEXT,AMOUNT DECIMAL"
-
-        PERIODS => ID INTEGER PRIMARY KEY,PERIOD_TYPE INTEGER,PERIOD_NAME TEXT,ACTUAL_DATE TEXT,
-                   DATE_VALUE INTEGER,PERIOD_REMARKS TEXT" +
-     */
-    public Cursor DBGetAll(String TBLNAME) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM " + TBLNAME, null);
-        return res;
-    }
-
-    public Cursor DBGetData(String TBLNAME, long primary_key) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM " + TBLNAME + " WHERE ID=" + primary_key, null);
-        return res;
-    }
-
+    //region GETLIST
     public Cursor DBGetDataFilter(String TBLNAME, String CLMNAME, String INPUT) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("SELECT * FROM " + TBLNAME + " WHERE " + CLMNAME + "=" + INPUT, null);

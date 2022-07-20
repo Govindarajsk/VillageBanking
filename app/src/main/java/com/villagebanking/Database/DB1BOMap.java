@@ -10,12 +10,11 @@ public class DB1BOMap {
     }
 
     private long primary_key;
+    private ContentValues contentValues;
 
     public long getPrimary_key() {
         return primary_key;
     }
-
-    private ContentValues contentValues;
 
     public ContentValues getContentValues() {
         return contentValues;

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.navigation.Navigation;
 
 import com.villagebanking.BOObjects.BOGroup;
-import com.villagebanking.Database.DB1Tables;
+import com.villagebanking.DBTables.tblGroup;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 
@@ -76,7 +76,7 @@ public class GroupsGrid<T> extends ArrayAdapter {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBUtility.DTOdelete(primaryKey, DB1Tables.GROUPS);
+                DBUtility.DTOdelete(primaryKey, tblGroup.Name);
                 Navigation.findNavController(view).navigate(R.id.nav_group_grid_view);
             }
         };

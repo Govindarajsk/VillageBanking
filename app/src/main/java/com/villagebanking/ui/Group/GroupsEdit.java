@@ -14,9 +14,10 @@ import androidx.fragment.app.Fragment;
 import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOKeyValue;
 import com.villagebanking.BOObjects.BOPeriod;
-import com.villagebanking.Database.DB1Tables;
+import com.villagebanking.DBTables.tblGroup;
+import com.villagebanking.DBTables.tblPeriod;
 import com.villagebanking.Database.DBUtility;
-import com.villagebanking.Utility.UIUtility;
+import com.villagebanking.ui.UIUtility;
 import com.villagebanking.databinding.GroupsEditviewBinding;
 
 import java.util.ArrayList;
@@ -61,7 +62,7 @@ public class GroupsEdit extends Fragment {
             @Override
             public void onClick(View view) {
                 if (!checkFields()) {
-                    DBUtility.DTOSaveUpdate(readView(), DB1Tables.GROUPS);
+                    DBUtility.DTOSaveUpdate(readView(), tblGroup.Name);
                     getActivity().onBackPressed();
                 }
             }
@@ -81,7 +82,7 @@ public class GroupsEdit extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_periodType() {
-        ArrayList<BOPeriod> actualList = DBUtility.DTOGetAlls(DB1Tables.PERIODS);
+        ArrayList<BOPeriod> actualList = DBUtility.DTOGetAlls(tblPeriod.Name);
         Map<String, List<BOPeriod>> okperiod = UIUtility.GroupByPeriod(actualList);
         Set<String> list = okperiod.keySet();
 
@@ -91,19 +92,19 @@ public class GroupsEdit extends Fragment {
             if (strings.length > 1)
                 autoCompleteList.add(new BOKeyValue(Integer.valueOf(strings[0]), item));
         }
-        UIUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editPeridType);
+        UIUtility.LoadAutoBox(this.getContext(), autoCompleteList, binding.editPeridType);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_periodStart(long periodType) {
-        ArrayList<BOPeriod> boPeriods = DBUtility.DTOGetAlls(DB1Tables.PERIODS);
+        ArrayList<BOPeriod> boPeriods = DBUtility.DTOGetAlls(tblPeriod.Name);
         boPeriods.removeIf(x -> x.getPeriodType() != periodType);
         boPeriods.sort((t1, t2) -> Long.toString(t1.getPeriodValue()).compareTo(Long.toString(t2.getPeriodValue())));
         ArrayList<BOKeyValue> autoCompleteList = new ArrayList<>();
         for (BOPeriod item : boPeriods) {
             autoCompleteList.add(new BOKeyValue(item.getPrimary_key(), item.getActualDate()));
         }
-        UIUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editStartDate);
+        UIUtility.LoadAutoBox(this.getContext(), autoCompleteList, binding.editStartDate);
     }
 
     AdapterView.OnItemClickListener periodItemSelected() {
@@ -141,7 +142,7 @@ public class GroupsEdit extends Fragment {
     }
 
     void writeView(long primary_key) {
-        ArrayList<BOGroup> fList = DBUtility.DTOGetData(DB1Tables.GROUPS, primary_key);
+        ArrayList<BOGroup> fList = DBUtility.DTOGetData(tblGroup.Name, primary_key);
         if (fList.size() > 0) {
             selectedData = fList.get(0);
             UIUtility.applyValue(binding.editName, selectedData.getName());

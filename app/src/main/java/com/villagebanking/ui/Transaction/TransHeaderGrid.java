@@ -1,26 +1,18 @@
 package com.villagebanking.ui.Transaction;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
 import androidx.navigation.Navigation;
 
-import com.villagebanking.BOObjects.BOTransDetail;
 import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.Controls.DataGridBase;
 import com.villagebanking.DBTables.tblTransHeader;
-import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 

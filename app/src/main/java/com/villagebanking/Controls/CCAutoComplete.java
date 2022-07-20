@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
 import android.widget.TextView;
 
@@ -18,6 +19,8 @@ import com.villagebanking.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public class CCAutoComplete extends ArrayAdapter<BOKeyValue> {
     private List<BOKeyValue> fullList;
@@ -25,7 +28,6 @@ public class CCAutoComplete extends ArrayAdapter<BOKeyValue> {
 
     public CCAutoComplete(@NonNull Context context, @NonNull List<BOKeyValue> inputList) {
         super(context, 0, inputList);
-
         fullList = new ArrayList<>(inputList);
     }
 
@@ -50,7 +52,6 @@ public class CCAutoComplete extends ArrayAdapter<BOKeyValue> {
         if (place != null) {
             txtDropdownValue.setText(place.getDisplayValue());
         }
-
         return convertView;
     }
 
@@ -66,7 +67,7 @@ public class CCAutoComplete extends ArrayAdapter<BOKeyValue> {
                 filteredList.addAll(fullList);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
-                for (BOKeyValue item: fullList) {
+                for (BOKeyValue item : fullList) {
                     if (item.getDisplayValue().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
@@ -93,18 +94,13 @@ public class CCAutoComplete extends ArrayAdapter<BOKeyValue> {
     };
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void SetDefault(TextView txtView, long... keys) {
+    public BOKeyValue SetSelected(AutoCompleteTextView control, long... keys) {
         long key = keys.length > 0 ? keys[0] : 0;
-       /*
-        if(fullList!=null) {
-            Stream<BOAutoComplete> fItem = fullList.stream().filter(x -> key == 0 || x.getPrimary_key() == key);
-
-            if (fItem != null && fItem.findFirst().isPresent()) {
-                Optional<BOAutoComplete> item = fItem.findFirst();
-                txtView.setText(item.get() != null && item.isPresent() ? item.get().getDisplayValue() : "");
-            }
-            fItem.close();
-        }
-        */
+        Optional<BOKeyValue> fItem = fullList.stream().filter(x -> x.getPrimary_key() == key).findFirst();
+        BOKeyValue item = fullList.size() > 0 ? fullList.get(0) : new BOKeyValue(0, "Empty");
+        if (fItem.isPresent())
+            item = fItem.get();
+        control.setText(item.getDisplayValue(), false);
+        return item;
     }
 }

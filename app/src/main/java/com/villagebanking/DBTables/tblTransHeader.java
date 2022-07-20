@@ -70,7 +70,6 @@ public class tblTransHeader extends tblBase {
         valueList.add(tblUtility.getDBDecimal(transHeader.getBalanceAmount()));
         return valueList;
     }
-
     //endregion
 
     public static String getInsertQuery(String flag, BOTransHeader transHeader) {
@@ -86,7 +85,7 @@ public class tblTransHeader extends tblBase {
                     ")";
         } else {
             insertQry = "UPDATE " + Name + " SET " +
-                    tblUtility.getStrtblUpdate(columnList, valueList) +
+                    tblUtility.getTblUpdate(columnList, valueList) +
                     " WHERE " + columnList.get(0) + " = " + valueList.get(0);
         }
         return insertQry;

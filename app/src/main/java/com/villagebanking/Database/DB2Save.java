@@ -9,6 +9,10 @@ import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.BOObjects.BOPersonTrans;
 import com.villagebanking.BOObjects.BOTransDetail;
 import com.villagebanking.BOObjects.BOTransHeader;
+import com.villagebanking.DBTables.tblGroup;
+import com.villagebanking.DBTables.tblGroupPersonLink;
+import com.villagebanking.DBTables.tblPeriod;
+import com.villagebanking.DBTables.tblPerson;
 import com.villagebanking.DBTables.tblTransDetail;
 import com.villagebanking.DBTables.tblTransHeader;
 
@@ -16,21 +20,18 @@ public class DB2Save {
 
     public static <T> DB1BOMap DTOSaveUpdate(T data, String tableName) {
         switch (tableName) {
-            case DB1Tables.PERSONS:
+            case tblPerson.Name:
                 BOPerson p = (BOPerson) data;
                 return new DB1BOMap(p.getPrimary_key(), getContentValue(p));
-            case DB1Tables.GROUPS:
+            case tblGroup.Name:
                 BOGroup g = (BOGroup) data;
                 return new DB1BOMap(g.getPrimary_key(), getContentValue(g));
-            case DB1Tables.PERIODS:
+            case tblPeriod.Name:
                 BOPeriod pd = (BOPeriod) data;
                 return new DB1BOMap(pd.getPrimary_key(), getContentValue(pd));
-            case DB1Tables.GROUP_PERSON_LINK:
+            case tblGroupPersonLink.Name:
                 BOGroupPersonLink gp = (BOGroupPersonLink) data;
                 return new DB1BOMap(gp.getPrimary_key(), getContentValue(gp));
-            case DB1Tables.PERSON_TRANSACTION:
-                BOPersonTrans pt = (BOPersonTrans) data;
-                return new DB1BOMap(pt.getPrimary_key(), getContentValue(pt));
             case tblTransDetail.Name:
                 BOTransDetail td = (BOTransDetail) data;
                 return new DB1BOMap(td.getPrimary_key(), tblTransDetail.getContentValue(td));

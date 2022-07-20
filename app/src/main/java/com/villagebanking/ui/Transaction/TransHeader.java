@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -17,17 +16,14 @@ import com.villagebanking.DBTables.tblPeriod;
 import com.villagebanking.DBTables.tblPerson;
 import com.villagebanking.DBTables.tblTransDetail;
 import com.villagebanking.DBTables.tblTransHeader;
-import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
-import com.villagebanking.Utility.UIUtility;
 import com.villagebanking.databinding.TransHeaderViewBinding;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class TransHeader extends Fragment {
     private TransHeaderViewBinding binding;
@@ -46,7 +42,7 @@ public class TransHeader extends Fragment {
             String fromPage = getArguments().getString("PAGE");
 
             switch (fromPage) {
-                case DB1Tables.PERIODS:
+                case tblPeriod.Name:
                     long period_Key = getArguments().getLong("ID");
                     fill_trans_Header(String.valueOf(period_Key), 0);
                     break;

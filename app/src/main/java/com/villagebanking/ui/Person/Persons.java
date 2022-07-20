@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.villagebanking.Database.DB1Tables;
+import com.villagebanking.DBTables.tblPerson;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 import com.villagebanking.databinding.AppGridviewBinding;
@@ -42,7 +42,7 @@ public class Persons extends Fragment {
 
     void assignToGridView() {
         PersonsGrid adapter = new PersonsGrid(this.getContext(), R.layout.persons_gridview,
-                DBUtility.DTOGetAlls(DB1Tables.PERSONS));
+                DBUtility.DTOGetAlls(tblPerson.Name));
         binding.gvDataView.setAdapter(adapter);
     }
 }

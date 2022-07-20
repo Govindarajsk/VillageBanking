@@ -1,4 +1,4 @@
-package com.villagebanking.Utility;
+package com.villagebanking.ui;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -19,6 +19,7 @@ import com.villagebanking.BOObjects.BOKeyValue;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPersonTrans;
 import com.villagebanking.BOObjects.BOTransDetail;
+import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.Controls.CCAutoComplete;
 
 import java.text.DecimalFormat;
@@ -36,32 +37,6 @@ public class UIUtility {
     //region Constants
     public static final String V_NUMBER = "NUMBER";
     public static final String V_STRING = "STRING";
-
-    public static final String dateFormat = "dd/MM/yyyy";
-    public static final String dateValue = "yyyyMMdd";
-    //endregion
-
-    //region common
-    //endregion
-
-    //region value
-    public static Map<Long, ArrayList<BOTransDetail>> GetTransAmount(ArrayList<BOTransDetail> transDetails) {
-
-        Map<Long, ArrayList<BOTransDetail>> map = new HashMap<>();
-        for (BOTransDetail item : transDetails) {
-            Long value = item.getTableLinkKey();
-            ArrayList<BOTransDetail> list = new ArrayList<>();
-            if (map.containsKey(value)) {
-                list = map.get(value);
-            } else {
-                list = new ArrayList<>();
-            }
-            list.add(item);
-            map.put(value, list);
-        }
-        map.values(); // this will give Collection of values.
-        return map;
-    }
     //endregion
 
     //region Validation
@@ -88,44 +63,6 @@ public class UIUtility {
     //endregion
 
     //region Datepicker Selecter
-    public static View.OnClickListener DisplayDate(Context context, DatePicker dpDispField) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // calender class's instance and get current date , month and year from calender
-                final Calendar c = Calendar.getInstance();
-                int mYear = c.get(Calendar.YEAR); // current year
-                int mMonth = c.get(Calendar.MONTH); // current month
-                int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
-                // date picker dialog
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(context,
-                        new DatePickerDialog.OnDateSetListener() {
-
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-                                dpDispField.updateDate(year, monthOfYear, dayOfMonth);
-                            }
-                        }, mYear, mMonth, mDay);
-                datePickerDialog.show();
-            }
-        };
-    }
-
-    public static DatePicker.OnDateChangedListener DisplayDate1(Context context, DatePicker dpDispField) {
-        return new DatePicker.OnDateChangedListener() {
-            @Override
-            public void onDateChanged(DatePicker datePicker, int i, int i1, int i2) {
-                // calender class's instance and get current date , month and year from calender
-                final Calendar c = Calendar.getInstance();
-                int mYear = c.get(Calendar.YEAR); // current year
-                int mMonth = c.get(Calendar.MONTH); // current month
-                int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
-            }
-        };
-    }
-
     public static String getDateString(DatePicker strDate) {
         int day = strDate.getDayOfMonth();
         int month = strDate.getMonth() + 1;
@@ -158,10 +95,10 @@ public class UIUtility {
 
     //region AutoCompleteBox
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void SetAutoCompleteBox(Context cnxt, ArrayList<BOKeyValue> list, AutoCompleteTextView control, long... key) {
+    public static BOKeyValue LoadAutoBox(Context cnxt, ArrayList<BOKeyValue> list, AutoCompleteTextView control, long... keys) {
         CCAutoComplete autoComplete = new CCAutoComplete(cnxt, list);
         control.setAdapter(autoComplete);
-        autoComplete.SetDefault(control, key);
+        return autoComplete.SetSelected(control, keys);
     }
 
     public static long getAutoBoxKey(Object item) {
@@ -190,25 +127,6 @@ public class UIUtility {
         map.values(); // this will give Collection of values.
         return map;
     }
-
-    public static Map<Long, ArrayList<BOPersonTrans>> GetPersonAmount(ArrayList<BOPersonTrans> transDetails) {
-
-        Map<Long, ArrayList<BOPersonTrans>> map = new HashMap<>();
-        for (BOPersonTrans item : transDetails) {
-            Long value = item.getTable_link_key();
-            ArrayList<BOPersonTrans> list = new ArrayList<>();
-            if (map.containsKey(value)) {
-                list = map.get(value);
-            } else {
-                list = new ArrayList<>();
-            }
-            list.add(item);
-            map.put(value, list);
-        }
-        map.values(); // this will give Collection of values.
-        return map;
-    }
-
     public static void ApplyTextWatcher(Context context, EditText editText1, EditText editText2, TextView txtView) {
         TextWatcher fieldValidatorTextWatcher = new TextWatcher() {
             @Override
@@ -234,23 +152,6 @@ public class UIUtility {
         editText2.addTextChangedListener(fieldValidatorTextWatcher);
 
     }
-
-    public static void ShowMessage(Context cntxt, String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(cntxt);
-        builder.setMessage(message);
-        builder.setTitle("Alert !");
-        builder.setCancelable(false);
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog,
-                                int which) {
-                dialog.cancel();
-            }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
     //endregion
 
     //region Get/Apply
@@ -269,9 +170,15 @@ public class UIUtility {
     }
     //endregion
 
-    //region converters
-    public static String LongToString(long input) {
+    //region Converters
+    public static String ToString(long input) {
         return input > 0 ? String.valueOf(input) : "";
+    }
+    public static String ToString(Double input) {
+        return input > 0 ? String.valueOf(input) : "";
+    }
+    public static Double ToDouble(String input) {
+        return input.length()>0 ? Double.parseDouble(input) : 0;
     }
     //endregion
 }

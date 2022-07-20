@@ -14,11 +14,13 @@ import androidx.fragment.app.Fragment;
 import com.villagebanking.BOObjects.BOKeyValue;
 import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOGroupPersonLink;
-import com.villagebanking.Database.DB1Tables;
+import com.villagebanking.DBTables.tblGroup;
+import com.villagebanking.DBTables.tblGroupPersonLink;
+import com.villagebanking.DBTables.tblPerson;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 import com.villagebanking.BOObjects.BOPerson;
-import com.villagebanking.Utility.UIUtility;
+import com.villagebanking.ui.UIUtility;
 import com.villagebanking.databinding.GroupsPersonLinkviewBinding;
 
 import java.util.ArrayList;
@@ -50,7 +52,7 @@ public class GroupPersons extends Fragment {
             public void onClick(View view) {
                 BOGroupPersonLink saveData = getDataFromView(groupKey);
                 if (saveData != null)
-                    DBUtility.DTOSaveUpdate(saveData, DB1Tables.GROUP_PERSON_LINK);
+                    DBUtility.DTOSaveUpdate(saveData, tblGroupPersonLink.Name);
                 fill_GridView(groupKey);
             }
         };
@@ -70,12 +72,12 @@ public class GroupPersons extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_GridView(long groupKey) {
-        ArrayList<BOGroupPersonLink> groupPersons = DBUtility.DTOGetAlls(DB1Tables.GROUP_PERSON_LINK);
+        ArrayList<BOGroupPersonLink> groupPersons = DBUtility.DTOGetAlls(tblGroupPersonLink.Name);
         groupPersons.removeIf(x -> x.getGroup_Key() != groupKey);
         GroupPersonsGrid adapter = new GroupPersonsGrid(this.getContext(), R.layout.app_gridview, groupPersons);
         binding.gvPersons.setAdapter(adapter);
 
-        ArrayList<BOGroup> groups = DBUtility.DTOGetData(DB1Tables.GROUPS, groupKey);
+        ArrayList<BOGroup> groups = DBUtility.DTOGetData(tblGroup.Name, groupKey);
         if (groups.size() > 0) {
             BOGroup group = groups.get(0);
             binding.editGroup.setText(group.getName());
@@ -89,7 +91,7 @@ public class GroupPersons extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_person() {
-        ArrayList<BOPerson> actualList = DBUtility.DTOGetAlls(DB1Tables.PERSONS);
+        ArrayList<BOPerson> actualList = DBUtility.DTOGetAlls(tblPerson.Name);
 
         ArrayList<BOKeyValue> autoCompleteList = new ArrayList<>();
         actualList.forEach(x -> autoCompleteList.add
@@ -97,7 +99,7 @@ public class GroupPersons extends Fragment {
                         new BOKeyValue(x.getPrimary_key(),
                                 x.getStrFName() + "-" + x.getStrLName()))
         );
-        UIUtility.SetAutoCompleteBox(this.getContext(), autoCompleteList, binding.editPerson);
+        UIUtility.LoadAutoBox(this.getContext(), autoCompleteList, binding.editPerson);
     }
 
     long personKey = 0;

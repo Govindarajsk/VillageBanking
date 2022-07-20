@@ -16,6 +16,14 @@ import java.util.ArrayList;
 public class tblGroupPersonLink extends tblBase {
 
     public static final String Name = "GROUP_PERSON_LINK";
+    public static final String CREATE_GROUP_PERSON_LINK =
+            Name + "(" +
+                    "ID INTEGER PRIMARY KEY, " +
+                    "GROUP_KEY INTEGER," +
+                    "PERSON_KEY INTEGER," +
+                    "ORDER_BY INTEGER," +
+                    "PERSON_ROLE TEXT" +
+                    ")";
 
     /*
         "ID INTEGER PRIMARY KEY, " +

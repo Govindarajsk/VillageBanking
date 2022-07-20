@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.villagebanking.BOObjects.BOPerson;
-import com.villagebanking.Database.DB1Tables;
+import com.villagebanking.DBTables.tblPerson;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.databinding.PersonsEditviewBinding;
 
@@ -37,7 +37,7 @@ public class PersonsEdit extends Fragment {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBUtility.DTOSaveUpdate(getPersonDataFromView(), DB1Tables.PERSONS);
+                DBUtility.DTOSaveUpdate(getPersonDataFromView(), tblPerson.Name);
                 getActivity().onBackPressed();
             }
         };

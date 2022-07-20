@@ -11,10 +11,8 @@ import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 
-import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOGroupPersonLink;
-import com.villagebanking.BOObjects.BOPerson;
-import com.villagebanking.Database.DB1Tables;
+import com.villagebanking.DBTables.tblGroupPersonLink;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 
@@ -84,7 +82,7 @@ public class GroupPersonsGrid<T> extends ArrayAdapter {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBUtility.DTOdelete(boGroupPerson.getPrimary_key(), DB1Tables.GROUP_PERSON_LINK);
+                DBUtility.DTOdelete(boGroupPerson.getPrimary_key(), tblGroupPersonLink.Name);
                 Bundle args = new Bundle();
                 args.putLong("group_key", boGroupPerson.getGroup_Key());
                 Navigation.findNavController(view).navigate(R.id.nav_linkview_group_person, args);

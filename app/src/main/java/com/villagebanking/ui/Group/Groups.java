@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.villagebanking.Database.DB1Tables;
+import com.villagebanking.DBTables.tblGroup;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 import com.villagebanking.databinding.AppGridviewBinding;
@@ -40,7 +40,7 @@ public class Groups extends Fragment {
 
     void assignToGridView() {
         GroupsGrid adapter = new GroupsGrid(this.getContext(), R.layout.groups_gridview,
-                DBUtility.DTOGetAlls(DB1Tables.GROUPS));
+                DBUtility.DTOGetAlls(tblGroup.Name));
         binding.gvDataView.setAdapter(adapter);
     }
 }

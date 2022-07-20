@@ -104,7 +104,7 @@ public class BOPersonTrans extends BOBase {
     private BOKeyValue detail1;
 
     public BOKeyValue getDetail1() {
-        if (detail1 == null) detail1 = new BOKeyValue(0, "");
+        if (detail1 == null) detail1 = new BOKeyValue(0, "Empty");
         return detail1;
     }
 
@@ -113,7 +113,7 @@ public class BOPersonTrans extends BOBase {
     }
 
     public BOKeyValue getDetail2() {
-        if (detail2 == null) detail2 = new BOKeyValue(0, "");
+        if (detail2 == null) detail2 = new BOKeyValue(0, "Empty");
         return detail2;
     }
 

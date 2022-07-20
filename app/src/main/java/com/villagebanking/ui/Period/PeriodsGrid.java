@@ -14,15 +14,13 @@ import androidx.annotation.RequiresApi;
 import androidx.navigation.Navigation;
 
 import com.villagebanking.BOObjects.BOPeriod;
-import com.villagebanking.BOObjects.BOTransDetail;
 import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.DBTables.tblGroupPersonLink;
-import com.villagebanking.DBTables.tblTransDetail;
+import com.villagebanking.DBTables.tblPeriod;
 import com.villagebanking.DBTables.tblTransHeader;
-import com.villagebanking.Database.DB1Tables;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
-import com.villagebanking.Utility.UIUtility;
+import com.villagebanking.ui.UIUtility;
 
 import java.util.ArrayList;
 
@@ -83,7 +81,7 @@ public class PeriodsGrid<T> extends ArrayAdapter {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBUtility.DTOdelete(primaryKey, DB1Tables.PERIODS);
+                DBUtility.DTOdelete(primaryKey, tblPeriod.Name);
                 Navigation.findNavController(view).navigate(R.id.nav_period_grid_view);
             }
         };
@@ -106,7 +104,7 @@ public class PeriodsGrid<T> extends ArrayAdapter {
             public void onClick(View view) {
                 if (isHavingDetails) {
                     Bundle args = new Bundle();
-                    args.putString("PAGE", DB1Tables.PERIODS);
+                    args.putString("PAGE", tblPeriod.Name);
                     args.putLong("ID", bindData.getPrimary_key());
                     Navigation.findNavController(view).navigate(R.id.nav_linkview_trans_header, args);
                 }
@@ -129,8 +127,8 @@ public class PeriodsGrid<T> extends ArrayAdapter {
     @RequiresApi(api = Build.VERSION_CODES.N)
     void periodOpen(BOPeriod period, View view) {
 
-        ArrayList<BOPeriod> boPeriods = DBUtility.DBGetDataFilter(DB1Tables.PERIODS, "PERIOD_TYPE",
-                UIUtility.LongToString(period.getPeriodType()));
+        ArrayList<BOPeriod> boPeriods = DBUtility.DBGetDataFilter(tblPeriod.Name, "PERIOD_TYPE",
+                UIUtility.ToString(period.getPeriodType()));
         keys = "";
 
         boPeriods.stream().forEach(x -> keys =
@@ -145,7 +143,7 @@ public class PeriodsGrid<T> extends ArrayAdapter {
         String countStr = String.valueOf(trans.size());
         trans.forEach(x -> generateTransaction(x, period.getPrimary_key()));
 
-        DBUtility.updateField(DB1Tables.PERIODS, "PERIOD_STATUS", countStr, period.getPrimary_key());
+        DBUtility.updateField(tblPeriod.Name, "PERIOD_STATUS", countStr, period.getPrimary_key());
         Navigation.findNavController(view).navigate(R.id.nav_period_grid_view);
     }
 

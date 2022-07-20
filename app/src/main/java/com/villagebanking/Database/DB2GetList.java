@@ -5,7 +5,10 @@ import android.database.Cursor;
 import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPerson;
+import com.villagebanking.DBTables.tblGroup;
 import com.villagebanking.DBTables.tblGroupPersonLink;
+import com.villagebanking.DBTables.tblPeriod;
+import com.villagebanking.DBTables.tblPerson;
 import com.villagebanking.DBTables.tblTransHeader;
 import com.villagebanking.DBTables.tblTransDetail;
 
@@ -18,13 +21,13 @@ public class DB2GetList {
         res.moveToFirst();
         while (!res.isAfterLast()) {
             switch (tableName) {
-                case DB1Tables.PERSONS:
+                case tblPerson.Name:
                     returnList.add((T) getValue(res, new BOPerson()));
                     break;
-                case DB1Tables.GROUPS:
+                case tblGroup.Name:
                     returnList.add((T) getValue(res, new BOGroup()));
                     break;
-                case DB1Tables.PERIODS:
+                case tblPeriod.Name:
                     returnList.add((T) getValue(res, new BOPeriod()));
                     break;
                 case tblGroupPersonLink.Name:
@@ -72,7 +75,7 @@ public class DB2GetList {
         newData.setAmount(res.getDouble(3));
 
         long period_key = res.getLong(4);
-        ArrayList<Object> periodList = DBUtility.DTOGetData(DB1Tables.PERIODS, period_key);
+        ArrayList<Object> periodList = DBUtility.DTOGetData(tblPeriod.Name, period_key);
         if (periodList.size() > 0) {
             BOPeriod item = (BOPeriod) periodList.get(0);
             newData.setPeriodDetail(item);
