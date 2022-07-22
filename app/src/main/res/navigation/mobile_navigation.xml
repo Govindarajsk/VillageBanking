@@ -29,6 +29,12 @@
         android:label="Transaction"
         tools:layout="@layout/app_gridview" />
 
+    <fragment
+        android:id="@+id/nav_loan_grid_view"
+        android:name="com.villagebanking.ui.Loan.LoanHeader"
+        android:label="Loan"
+        tools:layout="@layout/app_gridview" />
+
     <!--Sub-->
     <fragment
         android:id="@+id/nav_person_edit_view"

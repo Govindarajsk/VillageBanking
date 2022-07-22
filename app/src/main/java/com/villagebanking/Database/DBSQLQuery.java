@@ -117,6 +117,11 @@ public class DBSQLQuery extends SQLiteOpenHelper {
         Cursor res = tblTransHeader.DBGenTransHeader(db, periodkeys);
         return res;
     }
+    public Cursor DBFetchLoanTransHeader(String periodkeys) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = tblTransHeader.DBGenLoanTransHeader(db, periodkeys);
+        return res;
+    }
 
     public Cursor DBFetchTransHeader(String periodkeys) {
         SQLiteDatabase db = this.getReadableDatabase();

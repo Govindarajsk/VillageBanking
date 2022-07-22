@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 public class Periods extends Fragment {
     private AppGridviewBinding binding;
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = AppGridviewBinding.inflate(inflater, container, false);
@@ -28,11 +29,13 @@ public class Periods extends Fragment {
         initilize();
         return root;
     }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     void initilize() {
         assignToGridView();
         binding.btnAdd.setOnClickListener(clickMethod());
     }
+
     public View.OnClickListener clickMethod() {
         return new View.OnClickListener() {
             @Override
@@ -44,9 +47,10 @@ public class Periods extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void assignToGridView() {
-        ArrayList<BOPeriod> periods=DBUtility.DTOGetAlls(tblPeriod.Name);
-        periods.sort((t1, t2) ->Long.toString(t1.getPeriodValue()).compareTo(Long.toString(t2.getPeriodValue())));
-        PeriodsGrid adapter = new PeriodsGrid(this.getContext(), R.layout.app_gridview,periods);
+        //ArrayList<BOPeriod> periods=DBUtility.DTOGetAlls(tblPeriod.Name);
+        ArrayList<BOPeriod> periods = tblPeriod.GetList(0);
+        periods.sort((t1, t2) -> Long.toString(t1.getPeriodValue()).compareTo(Long.toString(t2.getPeriodValue())));
+        PeriodsGrid adapter = new PeriodsGrid(this.getContext(), R.layout.app_gridview, periods);
         binding.gvDataView.setAdapter(adapter);
     }
 }

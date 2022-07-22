@@ -3,36 +3,41 @@ package com.villagebanking.BOObjects;
 import java.util.ArrayList;
 
 public class BOLoanHeader extends BOBase {
-    private long personKey;
-    private long groupKey;
-    private long loanType;
+    private BOKeyValue personKey;
+    private BOKeyValue groupKey;
+    private BOKeyValue loanType;
     private double loanAmount;
     private double otherAmount;
     private double charges;
     private String transDate;
     private String remarks;
+    private BOKeyValue reference1;
+    private double repayAmount;
 
-    public long getPersonKey() {
+    public BOKeyValue getPersonKey() {
+        if (personKey == null) personKey = new BOKeyValue();
         return personKey;
     }
 
-    public void setPersonKey(long personKey) {
+    public void setPersonKey(BOKeyValue personKey) {
         this.personKey = personKey;
     }
 
-    public long getGroupKey() {
+    public BOKeyValue getGroupKey() {
+        if (groupKey == null) groupKey = new BOKeyValue();
         return groupKey;
     }
 
-    public void setGroupKey(long groupKey) {
+    public void setGroupKey(BOKeyValue groupKey) {
         this.groupKey = groupKey;
     }
 
-    public long getLoanType() {
+    public BOKeyValue getLoanType() {
+        if (loanType == null) loanType = new BOKeyValue();
         return loanType;
     }
 
-    public void setLoanType(long loanType) {
+    public void setLoanType(BOKeyValue loanType) {
         this.loanType = loanType;
     }
 
@@ -74,6 +79,25 @@ public class BOLoanHeader extends BOBase {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+
+    public BOKeyValue getReference1() {
+        if (reference1 == null)
+            reference1 = new BOKeyValue();
+        return reference1;
+    }
+
+    public void setReference1(BOKeyValue reference1) {
+        this.reference1 = reference1;
+    }
+
+    public double getRepayAmount() {
+        return repayAmount;
+    }
+
+    public void setRepayAmount(double repayAmount) {
+        this.repayAmount = repayAmount;
     }
 
 

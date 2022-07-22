@@ -13,10 +13,12 @@
         <item
             android:id="@+id/nav_group_grid_view"
             android:title="Groups" />
-
         <item
             android:id="@+id/nav_trans_grid_view"
             android:title="Transactions" />
+        <item
+            android:id="@+id/nav_loan_grid_view"
+            android:title="Loan" />
 
     </group>
 </menu>

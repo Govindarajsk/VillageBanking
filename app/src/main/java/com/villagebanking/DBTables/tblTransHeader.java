@@ -158,4 +158,25 @@ public class tblTransHeader extends tblBase {
                 null);
         return res;
     }
+
+    public static Cursor DBGenLoanTransHeader(SQLiteDatabase db, String periodkeys) {
+        Cursor res = db.rawQuery(
+                "SELECT " +
+                        "0 AS ID,"
+                        + "G.START_PERIOD_KEY AS PERIOD_KEY,"
+                        + "'" + tblLoanHeader.Name + "' AS TABLE_NAME,"
+                        + "LH.ID AS TABLE_LINK_KEY,"
+                        + "G.NAME AS REMARKS,"
+                        + "'' AS TRANS_DATE,"
+                        + "LH.AMOUNT AS TOTAL_AMOUNT,"
+                        + "0 AS PAID_AMOUNT,"
+                        + "LH.AMOUNT AS BALANCE_AMOUNT "
+                        + "FROM "
+                        + "GROUPS G JOIN "
+                        + tblLoanHeader.Name + " LH ON G.ID=LH.GROUP_KEY" +
+                        (periodkeys.length() > 0 ? " WHERE G.START_PERIOD_KEY IN (" + periodkeys + ")" : "")
+                ,
+                null);
+        return res;
+    }
 }

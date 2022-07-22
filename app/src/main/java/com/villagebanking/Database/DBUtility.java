@@ -5,9 +5,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.villagebanking.BOObjects.BOLoanHeader;
+import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOTransDetail;
 import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.DBTables.tblGroupPersonLink;
+import com.villagebanking.DBTables.tblLoanHeader;
 import com.villagebanking.DBTables.tblTransDetail;
 import com.villagebanking.DBTables.tblTransHeader;
 
@@ -15,7 +17,7 @@ import java.util.ArrayList;
 
 public class DBUtility<T> {
 
-    static int version = 3;
+    static int version = 5;
     public static DBSQLQuery DBSQLQuery;
     //region Basic
 
@@ -25,9 +27,9 @@ public class DBUtility<T> {
 
     public static void DTOdelete(long ID, String tableName) {
         if (ID == 0)
-            DBSQLQuery.DBDelete(tableName,ID);
+            DBSQLQuery.DBDelete(tableName, ID);
         else
-            DBSQLQuery.DBDelete(tableName,ID);
+            DBSQLQuery.DBDelete(tableName, ID);
     }
     //endregion
 
@@ -51,7 +53,7 @@ public class DBUtility<T> {
 
     //region Getlist
     public static <T> ArrayList<T> DTOGetAlls(String tableName) {
-        Cursor res = DBSQLQuery.DBGetData(tableName,0);
+        Cursor res = DBSQLQuery.DBGetData(tableName, 0);
         ArrayList<T> getList = DB2GetList.DTOGetAlls(res, tableName);
         return getList;
     }
@@ -65,6 +67,9 @@ public class DBUtility<T> {
         ArrayList<T> retunList = new ArrayList<>();
         if (tableName.equals(tblGroupPersonLink.Name)) {
             Cursor res = DBSQLQuery.DBFetchGroupLink(periodKeys);
+            retunList = DB2GetList.DTOGetAlls(res, tblTransHeader.Name);
+        } else if (tableName.equals(tblLoanHeader.Name)) {
+            Cursor res = DBSQLQuery.DBFetchLoanTransHeader(periodKeys);
             retunList = DB2GetList.DTOGetAlls(res, tblTransHeader.Name);
         } else if (tableName.equals(tblTransHeader.Name)) {
             Cursor res = DBSQLQuery.DBFetchTransHeader(periodKeys);
@@ -98,18 +103,27 @@ public class DBUtility<T> {
         DBSQLQuery.GetWritableDB().execSQL("DROP TABLE IF EXISTS " + tblName);
         DBSQLQuery.GetWritableDB().execSQL("CREATE TABLE " + creteTableQry);
     }
-    public static void DeleteTableData(String tblName, String creteTableQry) {
-        DBSQLQuery.GetWritableDB().execSQL("DELETE FROM " + tblName);
-    }
 
     public static String DBSave(String sqlQuery) {
         try {
             DBSQLQuery.GetWritableDB().execSQL(sqlQuery);
-            return "";
-        }
-        catch (Exception ex){
+            return "Success!";
+        } catch (Exception ex) {
             return ex.getMessage();
         }
+    }
+
+    public static Cursor GetDBList(String sqlQuery) {
+        return DBSQLQuery.GetReadableDB().rawQuery(sqlQuery, null);
+    }
+
+    public static <T> T GetData(String tableName, long primary_key) {
+        Cursor res = DBSQLQuery.DBGetData(tableName, primary_key);
+        ArrayList<T> list = DB2GetList.DTOGetAlls(res, tableName);
+        if (list.size() > 0) {
+            return list.get(0);
+        }
+        return null;
     }
     //endregion
 }

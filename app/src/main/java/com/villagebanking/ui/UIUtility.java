@@ -1,13 +1,10 @@
 package com.villagebanking.ui;
 
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.media.metrics.Event;
 import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -17,15 +14,12 @@ import androidx.annotation.RequiresApi;
 
 import com.villagebanking.BOObjects.BOKeyValue;
 import com.villagebanking.BOObjects.BOPeriod;
-import com.villagebanking.BOObjects.BOPersonTrans;
-import com.villagebanking.BOObjects.BOTransDetail;
-import com.villagebanking.BOObjects.BOTransHeader;
-import com.villagebanking.Controls.CCAutoComplete;
+import com.villagebanking.Controls.AutoBox;
 
+import java.security.PublicKey;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -95,10 +89,21 @@ public class UIUtility {
 
     //region AutoCompleteBox
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static BOKeyValue LoadAutoBox(Context cnxt, ArrayList<BOKeyValue> list, AutoCompleteTextView control, long... keys) {
-        CCAutoComplete autoComplete = new CCAutoComplete(cnxt, list);
+    public static void LoadAutoBox(Context cnxt, ArrayList<BOKeyValue> list, AutoCompleteTextView control, long... keys) {
+        AutoBox autoComplete = new AutoBox(cnxt, list);
         control.setAdapter(autoComplete);
-        return autoComplete.SetSelected(control, keys);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static AutoBox getAutoBox(Context cnxt, ArrayList<BOKeyValue> list, AutoCompleteTextView control, long... keys) {
+        AutoBox autoBox = new AutoBox(cnxt, list);
+        autoBox.LoadAutoBox(control, keys);
+        return autoBox;
+    }
+
+    public static BOKeyValue GetAutoBoxSelected(AutoCompleteTextView control) {
+        BOKeyValue selectedValue = ((AutoBox) control.getAdapter()).getSelectedItem();
+        return selectedValue;
     }
 
     public static long getAutoBoxKey(Object item) {
@@ -127,6 +132,7 @@ public class UIUtility {
         map.values(); // this will give Collection of values.
         return map;
     }
+
     public static void ApplyTextWatcher(Context context, EditText editText1, EditText editText2, TextView txtView) {
         TextWatcher fieldValidatorTextWatcher = new TextWatcher() {
             @Override
@@ -174,11 +180,46 @@ public class UIUtility {
     public static String ToString(long input) {
         return input > 0 ? String.valueOf(input) : "";
     }
+
     public static String ToString(Double input) {
         return input > 0 ? String.valueOf(input) : "";
     }
+
     public static Double ToDouble(String input) {
-        return input.length()>0 ? Double.parseDouble(input) : 0;
+        return input.length() > 0 ? Double.parseDouble(input) : 0;
+    }
+
+    public static Double ToDouble(TextView input) {
+        return input != null && input.getText().length() > 0 ? Double.parseDouble(input.getText().toString()) : 0;
+    }
+    //endregion
+
+    //region Events
+
+    TextWatcher textChangedEvnt(Event events) {
+        TextWatcher fieldValidatorTextWatcher = new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                Double value = s != null && s.length() > 0 ? Double.parseDouble(s.toString()) : 0.00;
+                //events=method();
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //ShowMessage(context, "beforeTextChanged");
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Double value = s != null && s.length() > 0 ? Double.parseDouble(s.toString()) : 0.00;
+
+            }
+        };
+        return fieldValidatorTextWatcher;
+    }
+
+    void method() {
+
     }
     //endregion
 }

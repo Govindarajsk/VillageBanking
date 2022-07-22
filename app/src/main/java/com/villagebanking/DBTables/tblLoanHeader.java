@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOGroupPersonLink;
+import com.villagebanking.BOObjects.BOKeyValue;
 import com.villagebanking.BOObjects.BOLoanHeader;
 import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.BOObjects.BOTransHeader;
@@ -24,6 +25,9 @@ public class tblLoanHeader extends tblBase {
     private static String column6 = "CHARGES";
     private static String column7 = "TRANS_DATE";
     private static String column8 = "REMARKS";
+    private static String column9 = "REFERENCE1";
+    private static String column10 = "REPAY_AMOUNT";
+
     //endregion
 
     //region Columns Type Set => CreateTableQRY
@@ -36,14 +40,16 @@ public class tblLoanHeader extends tblBase {
             tblUtility.setDBDecimal(column5, true) +
             tblUtility.setDBDecimal(column6, true) +
             tblUtility.setDBStrings(column7, true) +
-            tblUtility.setDBStrings(column8, false) +
+            tblUtility.setDBStrings(column8, true) +
+            tblUtility.setDBInteger(column9, true) +
+            tblUtility.setDBInteger(column10, false) +
             ")";
     //endregion
 
     //region Columns List => getColumns
     static ArrayList<String> getColumns() {
         ArrayList<String> columnList = new ArrayList<>();
-        columnList.add(column0);
+        //columnList.add(column0);
         columnList.add(column1);
         columnList.add(column2);
         columnList.add(column3);
@@ -52,6 +58,8 @@ public class tblLoanHeader extends tblBase {
         columnList.add(column6);
         columnList.add(column7);
         columnList.add(column8);
+        columnList.add(column9);
+        columnList.add(column10);
         return columnList;
     }
     //endregion
@@ -59,26 +67,41 @@ public class tblLoanHeader extends tblBase {
     //region Columns Value => getMapValues
     static ArrayList<String> getMapValues(BOLoanHeader loanHeader) {
         ArrayList<String> valueList = new ArrayList<>();
-        valueList.add(tblUtility.getDBInteger(loanHeader.getPrimary_key()));
-        valueList.add(tblUtility.getDBInteger(loanHeader.getPersonKey()));
-        valueList.add(tblUtility.getDBInteger(loanHeader.getGroupKey()));
-        valueList.add(tblUtility.getDBInteger(loanHeader.getLoanType()));
+        valueList.add(tblUtility.getDBInteger(loanHeader.getPersonKey().getPrimary_key()));
+        valueList.add(tblUtility.getDBInteger(loanHeader.getGroupKey().getPrimary_key()));
+        valueList.add(tblUtility.getDBInteger(loanHeader.getLoanType().getPrimary_key()));
         valueList.add(tblUtility.getDBDecimal(loanHeader.getLoanAmount()));
         valueList.add(tblUtility.getDBDecimal(loanHeader.getOtherAmount()));
         valueList.add(tblUtility.getDBDecimal(loanHeader.getCharges()));
         valueList.add(tblUtility.getDBStrings(loanHeader.getTransDate()));
         valueList.add(tblUtility.getDBStrings(loanHeader.getRemarks()));
+        valueList.add(tblUtility.getDBInteger(loanHeader.getReference1().getPrimary_key()));
+        valueList.add(tblUtility.getDBDecimal(loanHeader.getRepayAmount()));
         return valueList;
     }
     //endregion
 
+    //region Save
     public static String Save(String flag, BOLoanHeader loanHeader) {
-        String sqlQuery=insertUpdateQuery(flag, Name, getColumns(), getMapValues(loanHeader));
+        String sqlQuery = insertUpdateQuery(flag, Name, getColumns(), getMapValues(loanHeader));
         return DBUtility.DBSave(sqlQuery);
     }
+    //endregion
 
-    public static Cursor geDBListData(SQLiteDatabase db, long primaryKey) {
-        return db.rawQuery(
+    //region GetList
+    public static ArrayList<BOLoanHeader> GetList(long primaryKey) {
+        ArrayList<BOLoanHeader> returnList = new ArrayList<>();
+        Cursor res = DBUtility.GetDBList(getListQuery(primaryKey));
+        res.moveToFirst();
+        while (!res.isAfterLast()) {
+            returnList.add(readValue(res));
+            res.moveToNext();
+        }
+        return returnList;
+    }
+
+    static String getListQuery(long primaryKey) {
+        return
                 "SELECT " +
                         column0 + "," +
                         column1 + "," +
@@ -88,26 +111,42 @@ public class tblLoanHeader extends tblBase {
                         column5 + "," +
                         column6 + "," +
                         column7 + "," +
-                        column8 +
-                        " FROM " + Name+
-                        (primaryKey > 0 ? " WHERE ID = "+ primaryKey : "")
-                , null);
-
+                        column8 + "," +
+                        column9 + "," +
+                        column10 +
+                        " FROM " + Name +
+                        (primaryKey > 0 ? " WHERE ID = " + primaryKey : "");
     }
 
-    public static BOLoanHeader readValue(Cursor res) {
+    static BOLoanHeader readValue(Cursor res) {
         BOLoanHeader newData = new BOLoanHeader();
         int i = 0;
         newData.setPrimary_key(res.getLong(i++));
-        newData.setPersonKey(res.getLong(i++));
-        newData.setGroupKey(res.getLong(i++));
-        newData.setLoanType(res.getLong(i++));
+        //newData.getPersonKey().setPrimary_key(res.getLong(i++));
+        long personKey = res.getLong(i++);
+        BOPerson person = (BOPerson) DBUtility.GetData(tblPerson.Name, personKey);
+        if (person != null)
+            newData.setPersonKey(new BOKeyValue(person.getPrimary_key(), person.getFullName()));
+
+        long grpKey = res.getLong(i++);
+        BOGroup group = (BOGroup) DBUtility.GetData(tblGroup.Name, grpKey);
+        if (person != null)
+            newData.setGroupKey(new BOKeyValue(group.getPrimary_key(), group.getName()));
+
+        newData.getLoanType().setPrimary_key(res.getLong(i++));
         newData.setLoanAmount(res.getDouble(i++));
         newData.setOtherAmount(res.getDouble(i++));
         newData.setCharges(res.getDouble(i++));
         newData.setTransDate(res.getString(i++));
         newData.setRemarks(res.getString(i++));
+
+        long refKey = res.getLong(i++);
+        BOPerson ref1 = DBUtility.GetData(tblPerson.Name, refKey);
+        if (ref1 != null)
+            newData.setPersonKey(new BOKeyValue(ref1.getPrimary_key(), ref1.getFullName()));
+        newData.setRepayAmount(res.getDouble(i++));
         return newData;
     }
+    //endregion
 
 }

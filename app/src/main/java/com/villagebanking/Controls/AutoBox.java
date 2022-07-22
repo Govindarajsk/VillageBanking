@@ -5,6 +5,7 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Filter;
@@ -16,17 +17,18 @@ import androidx.annotation.RequiresApi;
 
 import com.villagebanking.BOObjects.BOKeyValue;
 import com.villagebanking.R;
+import com.villagebanking.ui.UIUtility;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class CCAutoComplete extends ArrayAdapter<BOKeyValue> {
+public class AutoBox extends ArrayAdapter<BOKeyValue> {
     private List<BOKeyValue> fullList;
     private List<BOKeyValue> filteredList;
 
-    public CCAutoComplete(@NonNull Context context, @NonNull List<BOKeyValue> inputList) {
+    public AutoBox(@NonNull Context context, @NonNull List<BOKeyValue> inputList) {
         super(context, 0, inputList);
         fullList = new ArrayList<>(inputList);
     }
@@ -94,13 +96,36 @@ public class CCAutoComplete extends ArrayAdapter<BOKeyValue> {
     };
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public BOKeyValue SetSelected(AutoCompleteTextView control, long... keys) {
+    private void SetSelected(AutoCompleteTextView control, long... keys) {
         long key = keys.length > 0 ? keys[0] : 0;
         Optional<BOKeyValue> fItem = fullList.stream().filter(x -> x.getPrimary_key() == key).findFirst();
         BOKeyValue item = fullList.size() > 0 ? fullList.get(0) : new BOKeyValue(0, "Empty");
         if (fItem.isPresent())
             item = fItem.get();
         control.setText(item.getDisplayValue(), false);
-        return item;
+        selectedItem = item;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void LoadAutoBox(AutoCompleteTextView control, long... keys) {
+        control.setAdapter(this);
+        this.SetSelected(control, keys);
+        control.setOnItemClickListener(itemSelected());
+    }
+
+    AdapterView.OnItemClickListener itemSelected() {
+        return new AdapterView.OnItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
+                selectedItem = (BOKeyValue) parent.getItemAtPosition(position);
+            }
+        };
+    }
+
+    private BOKeyValue selectedItem;
+
+    public BOKeyValue getSelectedItem() {
+        return selectedItem;
     }
 }

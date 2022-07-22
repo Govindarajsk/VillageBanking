@@ -16,6 +16,7 @@ import androidx.navigation.Navigation;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.DBTables.tblGroupPersonLink;
+import com.villagebanking.DBTables.tblLoanHeader;
 import com.villagebanking.DBTables.tblPeriod;
 import com.villagebanking.DBTables.tblTransHeader;
 import com.villagebanking.Database.DBUtility;
@@ -69,7 +70,7 @@ public class PeriodsGrid<T> extends ArrayAdapter {
         btnEdit.setOnClickListener(editMethod(bindData));
 
         ImageButton btnDetail = ((ImageButton) convertView.findViewById(R.id.btnDetail));
-        btnDetail.setOnClickListener(transMethod(bindData,transHeaders.size()>0));
+        btnDetail.setOnClickListener(transMethod(bindData, transHeaders.size() > 0));
 
         ImageButton btnClose = ((ImageButton) convertView.findViewById(R.id.btnClose));
         btnClose.setOnClickListener(openPeriod(bindData));
@@ -140,6 +141,10 @@ public class PeriodsGrid<T> extends ArrayAdapter {
         );
 
         ArrayList<BOTransHeader> trans = DBUtility.FetchPeriodTrans(tblGroupPersonLink.Name, keys);
+        ArrayList<BOTransHeader> trans1 = DBUtility.FetchPeriodTrans(tblLoanHeader.Name, keys);
+
+        trans.addAll(trans1);
+
         String countStr = String.valueOf(trans.size());
         trans.forEach(x -> generateTransaction(x, period.getPrimary_key()));
 
@@ -149,9 +154,10 @@ public class PeriodsGrid<T> extends ArrayAdapter {
 
     void generateTransaction(BOTransHeader x, long periodKey) {
         x.setTransDate(UIUtility.getCurrentDate());
-        Long primaryKey = Long.valueOf(periodKey + "" + x.getTableLinkKey());
+        Long primaryKey = Long.valueOf(periodKey + (x.getTableName().equals(tblGroupPersonLink.Name) ? "0" : "1" )+
+                x.getTableLinkKey());
         x.setPrimary_key(primaryKey);
         x.setPeriodKey(periodKey);
-        DBUtility.DTOInsertUpdate("I",x);
+        DBUtility.DTOInsertUpdate("I", x);
     }
 }

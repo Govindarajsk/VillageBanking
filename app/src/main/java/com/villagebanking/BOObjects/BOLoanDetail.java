@@ -1,16 +1,25 @@
 package com.villagebanking.BOObjects;
 
-public class BOLoanDetail extends BOBase{
-    private long periodKey;
+public class BOLoanDetail extends BOBase {
+    private BOKeyValue periodInfo;
     private double amount;
-    private double charges;
+    private long installment;
 
-    public long getPeriodKey() {
-        return periodKey;
+    public long getInstallment() {
+        return installment;
     }
 
-    public void setPeriodKey(long periodKey) {
-        this.periodKey = periodKey;
+    public void setInstallment(long installment) {
+        this.installment = installment;
+    }
+
+    public BOKeyValue getPeriodInfo() {
+        if (periodInfo == null) periodInfo = new BOKeyValue();
+        return periodInfo;
+    }
+
+    public void setPeriodInfo(BOKeyValue periodInfo) {
+        this.periodInfo = periodInfo;
     }
 
     public double getAmount() {
@@ -19,14 +28,6 @@ public class BOLoanDetail extends BOBase{
 
     public void setAmount(double amount) {
         this.amount = amount;
-    }
-
-    public double getCharges() {
-        return charges;
-    }
-
-    public void setCharges(double charges) {
-        this.charges = charges;
     }
 
 }

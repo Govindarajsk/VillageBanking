@@ -19,6 +19,7 @@ import com.villagebanking.DBTables.tblTransHeader;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 import com.villagebanking.databinding.TransHeaderViewBinding;
+import com.villagebanking.ui.UIUtility;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,7 +50,6 @@ public class TransHeader extends Fragment {
                 case tblPerson.Name:
                     long person_Key = getArguments().getLong("ID");
                     String periodKeys = "";
-                    tblPeriod.getPeriodKeys(person_Key);
                     fill_trans_Header(periodKeys, person_Key);
                     break;
                 default:
@@ -99,8 +99,7 @@ public class TransHeader extends Fragment {
                     transDetail.setHeaderKey(transHeader.getPrimary_key());
                     transDetail.setParentKey(transHeader.getPrimary_key());
                     transDetail.setAmount(transHeader.getPaidAmount());
-                    String date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
-                    transDetail.setTransDate(date);
+                    transDetail.setTransDate(UIUtility.getCurrentDate());
                     transDetail.setRemarks("SKG");
                     if (transHeader.IsNew) {
                         DBUtility.DTOSaveUpdate(transDetail, tblTransDetail.Name);
