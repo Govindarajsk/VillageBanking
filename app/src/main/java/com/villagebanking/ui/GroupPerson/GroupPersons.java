@@ -40,9 +40,8 @@ public class GroupPersons extends Fragment {
     void initilize() {
         long group_Key = getArguments().getLong("group_key");
         binding.btnSave.setOnClickListener(clickMethod(group_Key));
-        binding.editPerson.setOnItemClickListener(personSelected());
         fill_GridView(group_Key);
-        fill_person();
+        fill_person(0);
     }
 
     public View.OnClickListener clickMethod(long groupKey) {
@@ -59,14 +58,12 @@ public class GroupPersons extends Fragment {
     }
 
     BOGroupPersonLink getDataFromView(long group_Key) {
-        BOGroupPersonLink newData = null;
-        if (group_Key > 0 && personKey > 0) {
-            newData = new BOGroupPersonLink();
-            newData.setGroup_Key(group_Key);
-            newData.setPerson_Key(personKey);
-            newData.setOrderBy(1);
-            newData.setPerson_role("");
-        }
+        BOGroupPersonLink newData = new BOGroupPersonLink();
+        newData.setGroup_Key(group_Key);
+        BOKeyValue person = UIUtility.GetAutoBoxSelected(binding.editPerson);
+        newData.setPerson_Key(person.getPrimary_key());
+        newData.setOrderBy(1);
+        newData.setPerson_role("");
         return newData;
     }
 
@@ -90,30 +87,11 @@ public class GroupPersons extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    void fill_person() {
-        ArrayList<BOPerson> actualList = DBUtility.DTOGetAlls(tblPerson.Name);
+    void fill_person(long personKey) {
+        ArrayList<BOPerson> people = DBUtility.DTOGetData(tblPerson.Name, 0);
+        ArrayList<BOKeyValue> keyValues = new ArrayList<>();
+        people.stream().forEach(x -> keyValues.add(new BOKeyValue(x.getPrimary_key(), x.getFullName())));
 
-        ArrayList<BOKeyValue> autoCompleteList = new ArrayList<>();
-        actualList.forEach(x -> autoCompleteList.add
-                (
-                        new BOKeyValue(x.getPrimary_key(),
-                                x.getStrFName() + "-" + x.getStrLName()))
-        );
-        UIUtility.LoadAutoBox(this.getContext(), autoCompleteList, binding.editPerson);
-    }
-
-    long personKey = 0;
-
-    AdapterView.OnItemClickListener personSelected() {
-        return new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-                Object item = parent.getItemAtPosition(position);
-                if (item instanceof BOKeyValue) {
-                    BOKeyValue itemSelected = (BOKeyValue) item;
-                    personKey = itemSelected.getPrimary_key();
-                }
-            }
-        };
+        UIUtility.getAutoBox(this.getContext(), keyValues, binding.editPerson, personKey);
     }
 }

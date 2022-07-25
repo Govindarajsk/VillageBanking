@@ -88,17 +88,17 @@ public class UIUtility {
     //endregion
 
     //region AutoCompleteBox
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void LoadAutoBox(Context cnxt, ArrayList<BOKeyValue> list, AutoCompleteTextView control, long... keys) {
-        AutoBox autoComplete = new AutoBox(cnxt, list);
-        control.setAdapter(autoComplete);
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static AutoBox getAutoBox(Context cnxt, ArrayList<BOKeyValue> list, AutoCompleteTextView control, long... keys) {
         AutoBox autoBox = new AutoBox(cnxt, list);
         autoBox.LoadAutoBox(control, keys);
         return autoBox;
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static void LoadAutoBox(Context cnxt, ArrayList<BOKeyValue> list, AutoCompleteTextView control, long... keys) {
+        AutoBox autoComplete = new AutoBox(cnxt, list);
+        control.setAdapter(autoComplete);
     }
 
     public static BOKeyValue GetAutoBoxSelected(AutoCompleteTextView control) {

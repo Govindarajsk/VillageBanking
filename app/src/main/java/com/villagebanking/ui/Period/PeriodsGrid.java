@@ -48,7 +48,7 @@ public class PeriodsGrid<T> extends ArrayAdapter {
 
         BOPeriod bindData = (BOPeriod) data;
         String value1 = Long.toString(row);
-        String value2 = bindData.getPeriodType() + "-" + bindData.getPeriodName();// + "-" + bindData.getPrimary_key();
+        String value2 = bindData.getPeriodName();
 
         ArrayList<BOTransHeader> transHeaders =
                 DBUtility.FetchPeriodTrans(tblTransHeader.Name, String.valueOf(bindData.getPrimary_key()));
@@ -64,31 +64,30 @@ public class PeriodsGrid<T> extends ArrayAdapter {
         column3.setText(value3);
 
         ImageButton btnDelete = ((ImageButton) convertView.findViewById(R.id.btnDelete));
-        btnDelete.setOnClickListener(deleteMethod(bindData.getPrimary_key()));
+        btnDelete.setOnClickListener(deleteGroup(bindData.getPrimary_key(), transHeaders.size()));
 
         ImageButton btnEdit = ((ImageButton) convertView.findViewById(R.id.btnEdit));
-        btnEdit.setOnClickListener(editMethod(bindData));
+        btnEdit.setOnClickListener(editGroup(bindData));
 
         ImageButton btnDetail = ((ImageButton) convertView.findViewById(R.id.btnDetail));
-        btnDetail.setOnClickListener(transMethod(bindData, transHeaders.size() > 0));
-
-        ImageButton btnClose = ((ImageButton) convertView.findViewById(R.id.btnClose));
-        btnClose.setOnClickListener(openPeriod(bindData));
+        btnDetail.setOnClickListener(openTransHeader(bindData, transHeaders.size()));
 
         return convertView;
     }
 
-    View.OnClickListener deleteMethod(long primaryKey) {
+    View.OnClickListener deleteGroup(long primaryKey, long transHeaderCount) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBUtility.DTOdelete(primaryKey, tblPeriod.Name);
-                Navigation.findNavController(view).navigate(R.id.nav_period_grid_view);
+                if (transHeaderCount == 0) {
+                    DBUtility.DTOdelete(primaryKey, tblPeriod.Name);
+                    Navigation.findNavController(view).navigate(R.id.nav_period_grid_view);
+                }
             }
         };
     }
 
-    View.OnClickListener editMethod(BOPeriod bindData) {
+    View.OnClickListener editGroup(BOPeriod bindData) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,11 +98,11 @@ public class PeriodsGrid<T> extends ArrayAdapter {
         };
     }
 
-    View.OnClickListener transMethod(BOPeriod bindData, boolean isHavingDetails) {
+    View.OnClickListener openTransHeader(BOPeriod bindData, long transHeaderCount) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isHavingDetails) {
+                if (transHeaderCount > 0) {
                     Bundle args = new Bundle();
                     args.putString("PAGE", tblPeriod.Name);
                     args.putLong("ID", bindData.getPrimary_key());
@@ -140,13 +139,13 @@ public class PeriodsGrid<T> extends ArrayAdapter {
                 )
         );
 
-        ArrayList<BOTransHeader> trans = DBUtility.FetchPeriodTrans(tblGroupPersonLink.Name, keys);
-        ArrayList<BOTransHeader> trans1 = DBUtility.FetchPeriodTrans(tblLoanHeader.Name, keys);
+        ArrayList<BOTransHeader> transPerson = DBUtility.FetchPeriodTrans(tblGroupPersonLink.Name, keys);
+        ArrayList<BOTransHeader> transLoan = DBUtility.FetchPeriodTrans(tblLoanHeader.Name, keys);
 
-        trans.addAll(trans1);
+        transPerson.addAll(transLoan);
 
-        String countStr = String.valueOf(trans.size());
-        trans.forEach(x -> generateTransaction(x, period.getPrimary_key()));
+        String countStr = String.valueOf(transPerson.size());
+        transPerson.forEach(x -> generateTransaction(x, period.getPrimary_key()));
 
         DBUtility.updateField(tblPeriod.Name, "PERIOD_STATUS", countStr, period.getPrimary_key());
         Navigation.findNavController(view).navigate(R.id.nav_period_grid_view);
@@ -154,7 +153,7 @@ public class PeriodsGrid<T> extends ArrayAdapter {
 
     void generateTransaction(BOTransHeader x, long periodKey) {
         x.setTransDate(UIUtility.getCurrentDate());
-        Long primaryKey = Long.valueOf(periodKey + (x.getTableName().equals(tblGroupPersonLink.Name) ? "0" : "1" )+
+        Long primaryKey = Long.valueOf(periodKey + (x.getTableName().equals(tblGroupPersonLink.Name) ? "0" : "1") +
                 x.getTableLinkKey());
         x.setPrimary_key(primaryKey);
         x.setPeriodKey(periodKey);

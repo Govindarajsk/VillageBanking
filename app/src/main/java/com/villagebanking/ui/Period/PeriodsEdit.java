@@ -1,25 +1,32 @@
 package com.villagebanking.ui.Period;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.villagebanking.BOObjects.BOKeyValue;
 import com.villagebanking.BOObjects.BOPeriod;
+import com.villagebanking.Controls.AutoBox;
 import com.villagebanking.DBTables.tblPeriod;
 import com.villagebanking.Database.DBUtility;
-import com.villagebanking.ui.UIUtility;
 import com.villagebanking.databinding.PeriodsEditviewBinding;
+import com.villagebanking.ui.UIUtility;
 
 import java.util.ArrayList;
 
 public class PeriodsEdit extends Fragment {
     private PeriodsEditviewBinding binding;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = PeriodsEditviewBinding.inflate(inflater, container, false);
@@ -38,27 +45,31 @@ public class PeriodsEdit extends Fragment {
         binding = null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     void initilize() {
         binding.btnSave.setOnClickListener(clickMethod());
         DatePicker simpleDatePicker = (DatePicker) binding.editDate; // initiate a date picker
         simpleDatePicker.setSpinnersShown(true);
+        fill_Type(1);
     }
 
     public View.OnClickListener clickMethod() {
         return new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                DBUtility.DTOSaveUpdate(getPersonDataFromView(), tblPeriod.Name);
+                //tblPeriod.Save("I",getViewData());
+                DBUtility.DTOSaveUpdate(getViewData(), tblPeriod.Name);
             }
         };
     }
 
-    BOPeriod getPersonDataFromView() {
+    BOPeriod getViewData() {
         BOPeriod newData = new BOPeriod();
         newData.setPrimary_key((primary_key));
-        String str = binding.editType.getText().toString();
-        newData.setPeriodType(Integer.valueOf(str));
-        newData.setPeriodName(binding.editName.getText().toString());
+        BOKeyValue selected = UIUtility.GetAutoBoxSelected(binding.editType);
+        newData.setPeriodType(selected.getPrimary_key());
+        newData.setPeriodName(selected.getDisplayValue());
         newData.setActualDate(UIUtility.getDateString(binding.editDate));
         newData.setPeriodValue(UIUtility.getDateInt(binding.editDate));
         newData.setPeriodRemarks(binding.editDetail.getText().toString());
@@ -77,6 +88,26 @@ public class PeriodsEdit extends Fragment {
             UIUtility.getDateFromString(editData.getActualDate(), binding.editDate);
             binding.editDetail.setText(editData.getPeriodRemarks());
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    void fill_Type(long type) {
+        ArrayList<BOKeyValue> keyValues = new ArrayList<>();
+        keyValues.add(new BOKeyValue(1, "1.Amavasai"));
+        keyValues.add(new BOKeyValue(2, "2.Every 5th"));
+        UIUtility.getAutoBox(this.getContext(), keyValues, binding.editType, type);
+        binding.editType.setOnItemClickListener(selectedEvent(binding.editType));
+    }
+
+    AdapterView.OnItemClickListener selectedEvent(AutoCompleteTextView control) {
+        return new AdapterView.OnItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
+                BOKeyValue value = UIUtility.GetAutoBoxSelected(control);
+                binding.editName.setText(value.getDisplayValue());
+            }
+        };
     }
 }
 

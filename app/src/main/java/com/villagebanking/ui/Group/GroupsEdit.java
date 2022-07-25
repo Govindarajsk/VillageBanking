@@ -14,8 +14,10 @@ import androidx.fragment.app.Fragment;
 import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOKeyValue;
 import com.villagebanking.BOObjects.BOPeriod;
+import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.DBTables.tblGroup;
 import com.villagebanking.DBTables.tblPeriod;
+import com.villagebanking.DBTables.tblPerson;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.ui.UIUtility;
 import com.villagebanking.databinding.GroupsEditviewBinding;
@@ -62,6 +64,7 @@ public class GroupsEdit extends Fragment {
             @Override
             public void onClick(View view) {
                 if (!checkFields()) {
+                    //tblGroup.Save("I",readView());
                     DBUtility.DTOSaveUpdate(readView(), tblGroup.Name);
                     getActivity().onBackPressed();
                 }
@@ -78,6 +81,15 @@ public class GroupsEdit extends Fragment {
         boolean ok6 = UIUtility.IsFieldEmpty(UIUtility.V_STRING, 0, 15, binding.editStartDate);
 
         return ok1 || ok2 || ok3 || ok4 || ok5 || ok6;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    void fill_person(long periodKey) {
+        ArrayList<BOPeriod> list = DBUtility.DTOGetData(tblPerson.Name, 0);
+        ArrayList<BOKeyValue> keyValues = new ArrayList<>();
+        list.stream().forEach(x -> keyValues.add(new BOKeyValue(x.getPrimary_key(), x.getPeriodName())));
+
+        UIUtility.getAutoBox(this.getContext(), keyValues, binding.editPeridType, periodKey);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -154,13 +166,5 @@ public class GroupsEdit extends Fragment {
             UIUtility.applyValue(binding.lblTotalAmount, selectedData.getAmount() * selectedData.getNoOfPerson());
             //diableField();
         }
-    }
-
-    void diableField() {
-        UIUtility.disableField(binding.editNoOfPerson);
-        UIUtility.disableField(binding.editAmount);
-        UIUtility.disableField(binding.editStartDate);
-        UIUtility.disableField(binding.editPeridType);
-        UIUtility.disableField(binding.editBondCharge);
     }
 }

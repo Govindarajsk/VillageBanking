@@ -7,6 +7,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -81,11 +83,21 @@ public class LoanHeader extends Fragment {
 
         ArrayList<BOKeyValue> keyValues = new ArrayList<>();
         groups.stream().forEach(x -> keyValues.add(new BOKeyValue(x.getPrimary_key(), x.getName(), x)));
+        UIUtility.getAutoBox(this.getContext(), keyValues, binding.editGroup);
 
-        AutoBox autoBox = UIUtility.getAutoBox(this.getContext(), keyValues, binding.editGroup);
+        binding.editGroup.setOnItemClickListener(selectedEvent(binding.editGroup));
 
-        BOGroup selectedValue = (BOGroup) autoBox.getSelectedItem().getActualObject();
-        binding.lblBondCharge.setText(String.valueOf(selectedValue.getBondCharge()));
+    }
+
+    AdapterView.OnItemClickListener selectedEvent(AutoCompleteTextView control) {
+        return new AdapterView.OnItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
+                BOGroup selectedValue = (BOGroup) UIUtility.GetAutoBoxSelected(control).getActualObject();
+                binding.lblBondCharge.setText(String.valueOf(selectedValue.getBondCharge()));
+            }
+        };
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

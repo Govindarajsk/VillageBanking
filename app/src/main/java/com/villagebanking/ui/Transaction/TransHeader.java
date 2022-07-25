@@ -87,7 +87,6 @@ public class TransHeader extends Fragment {
         return transDetails;
     }
 
-
     View.OnClickListener clickSave() {
         return new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)

@@ -10,14 +10,6 @@ public class BOColumn<T> {
     private T columnValue;
 
     public BOColumn(tblBase.DBCLMTYPE type, String clmName, boolean... isPrimaryKey) {
-        /*
-        if (columnValue instanceof Long) {
-            this.clmType = tblBase.DBCLMTYPE.TXT;
-        } else if (columnValue instanceof String) {
-            this.clmType = tblBase.DBCLMTYPE.TXT;
-        } else if (columnValue instanceof Double) {
-            this.clmType = tblBase.DBCLMTYPE.DBL;
-        }*/
         this.clmType = type;
         this.clmName = clmName;
         if (isPrimaryKey.length > 0)
@@ -52,8 +44,6 @@ public class BOColumn<T> {
         String output = "";
         switch (clmType) {
             case DBL:
-                output = "  ";
-                break;
             case INT:
                 output = " INTEGER ";
                 break;

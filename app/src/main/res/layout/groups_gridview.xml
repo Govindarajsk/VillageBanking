@@ -114,11 +114,6 @@
             style="@style/styleBtnEdit"
             android:layout_row="0"
             android:layout_column="2"/>
-        <ImageButton
-            android:id="@+id/btnLoan"
-            style="@style/styleBtnEdit"
-            android:layout_row="0"
-            android:layout_column="3"/>
     </GridLayout>
 
     <TextView
