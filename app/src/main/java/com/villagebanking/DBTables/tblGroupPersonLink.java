@@ -38,12 +38,13 @@ public class tblGroupPersonLink extends tblBase {
         newData.setGroup_Key(res.getLong(1));
         newData.setPerson_Key(res.getLong(2));
 
-        ArrayList<BOPerson> boPeople = DBUtility.DTOGetData(tblPerson.Name, newData.getPerson_Key());
-        if (boPeople.size() > 0)
-            newData.PersonDetail = boPeople.get(0);
-        ArrayList<BOGroup> groups = DBUtility.DTOGetData(tblGroup.Name, newData.getGroup_Key());
-        if (groups.size() > 0)
-            newData.GroupDetail = groups.get(0);
+        BOGroup group = (BOGroup) DBUtility.GetData(tblGroup.Name, newData.getGroup_Key());
+        if (group != null)
+            newData.GroupDetail = new BOKeyValue(group.getPrimary_key(), group.getName());
+
+        BOPerson person = (BOPerson) DBUtility.GetData(tblPerson.Name, newData.getPerson_Key());
+        if (person != null)
+            newData.PersonDetail = new BOKeyValue(person.getPrimary_key(), person.getFullName());
 
         newData.setPerson_role(res.getString(3));
         return newData;

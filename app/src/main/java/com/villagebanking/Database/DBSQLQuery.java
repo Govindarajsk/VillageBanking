@@ -59,14 +59,11 @@ public class DBSQLQuery extends SQLiteOpenHelper {
         return res;
     }
 
-    public String DBDelete(String tblName, long primary_key) {
-        try {
-            SQLiteDatabase db = this.getWritableDatabase();
-            db.rawQuery("DELETE FROM " + tblName + (primary_key > 0 ? " WHERE ID=" + primary_key : ""), null);
-            return SUCCESS;
-        } catch (Exception ex) {
-            return ex.getMessage();
-        }
+    public Integer DBDelete(long key, String TBLNAME) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(TBLNAME,
+                "id = ? ",
+                new String[]{Long.toString(key)});
     }
     //endregion
 
@@ -117,6 +114,7 @@ public class DBSQLQuery extends SQLiteOpenHelper {
         Cursor res = tblTransHeader.DBGenTransHeader(db, periodkeys);
         return res;
     }
+
     public Cursor DBFetchLoanTransHeader(String periodkeys) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = tblTransHeader.DBGenLoanTransHeader(db, periodkeys);

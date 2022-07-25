@@ -27,9 +27,9 @@ public class DBUtility<T> {
 
     public static void DTOdelete(long ID, String tableName) {
         if (ID == 0)
-            DBSQLQuery.DBDelete(tableName, ID);
+            DBSQLQuery.DBDelete(ID, tableName);
         else
-            DBSQLQuery.DBDelete(tableName, ID);
+            DBSQLQuery.DBDelete(ID,tableName);
     }
     //endregion
 

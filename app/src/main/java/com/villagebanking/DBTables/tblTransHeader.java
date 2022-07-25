@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOGroupPersonLink;
+import com.villagebanking.BOObjects.BOKeyValue;
+import com.villagebanking.BOObjects.BOLoanHeader;
 import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.DBTables.tblUtility;
@@ -101,13 +103,24 @@ public class tblTransHeader extends tblBase {
 
         if (newData.getTableName().contentEquals(tblGroupPersonLink.Name)) {
             ArrayList<BOGroupPersonLink> groupPersonLinks = DBUtility.DTOGetData(tblGroupPersonLink.Name, newData.getTableLinkKey());
+           if(groupPersonLinks.size()>0){
             BOGroupPersonLink linkData = groupPersonLinks.get(0);
-            BOGroup boGroup = linkData.GroupDetail;
-            BOPerson boPerson = linkData.PersonDetail;
+            BOKeyValue boGroup = linkData.GroupDetail;
+            BOKeyValue boPerson = linkData.PersonDetail;
             newData.link1Key = boGroup.getPrimary_key();
             newData.link2Key = boPerson.getPrimary_key();
-            newData.link1Detail = boGroup.getName();
-            newData.link2Detail = boPerson.getFullName();
+            newData.link1Detail = boGroup.getDisplayValue();
+            newData.link2Detail = boPerson.getDisplayValue();}
+        } else if (newData.getTableName().contentEquals(tblLoanHeader.Name)) {
+            ArrayList<BOLoanHeader> loanHeaders = tblLoanHeader.GetList(newData.getTableLinkKey());
+            if(loanHeaders.size()>0){
+            BOLoanHeader linkData = loanHeaders.get(0);
+            BOKeyValue boGroup = linkData.getGroupKey();
+            BOKeyValue boPerson = linkData.getPersonKey();
+            newData.link1Key = boGroup.getPrimary_key();
+            newData.link2Key = boPerson.getPrimary_key();
+            newData.link1Detail = boGroup.getDisplayValue();
+            newData.link2Detail = boPerson.getDisplayValue();}
         }
 
         newData.setRemarks(res.getString(i++));
@@ -168,9 +181,9 @@ public class tblTransHeader extends tblBase {
                         + "LH.ID AS TABLE_LINK_KEY,"
                         + "G.NAME AS REMARKS,"
                         + "'' AS TRANS_DATE,"
-                        + "LH.AMOUNT AS TOTAL_AMOUNT,"
+                        + "LH.LOAN_AMOUNT AS TOTAL_AMOUNT,"
                         + "0 AS PAID_AMOUNT,"
-                        + "LH.AMOUNT AS BALANCE_AMOUNT "
+                        + "LH.LOAN_AMOUNT AS BALANCE_AMOUNT "
                         + "FROM "
                         + "GROUPS G JOIN "
                         + tblLoanHeader.Name + " LH ON G.ID=LH.GROUP_KEY" +

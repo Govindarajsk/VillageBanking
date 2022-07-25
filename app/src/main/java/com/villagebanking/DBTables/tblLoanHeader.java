@@ -130,7 +130,7 @@ public class tblLoanHeader extends tblBase {
 
         long grpKey = res.getLong(i++);
         BOGroup group = (BOGroup) DBUtility.GetData(tblGroup.Name, grpKey);
-        if (person != null)
+        if (group != null)
             newData.setGroupKey(new BOKeyValue(group.getPrimary_key(), group.getName()));
 
         newData.getLoanType().setPrimary_key(res.getLong(i++));

@@ -8,8 +8,8 @@ public class BOGroupPersonLink extends BOBase {
     private long person_Key;
     private int orderBy;
     private String person_role;
-    public BOGroup GroupDetail;
-    public BOPerson PersonDetail;
+    public BOKeyValue GroupDetail;
+    public BOKeyValue PersonDetail;
 
     public long getGroup_Key() {
         return group_Key;

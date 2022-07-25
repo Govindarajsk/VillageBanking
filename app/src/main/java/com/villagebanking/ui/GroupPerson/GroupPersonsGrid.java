@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.navigation.Navigation;
 
 import com.villagebanking.BOObjects.BOGroupPersonLink;
+import com.villagebanking.BOObjects.BOKeyValue;
 import com.villagebanking.DBTables.tblGroupPersonLink;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
@@ -46,19 +47,16 @@ public class GroupPersonsGrid<T> extends ArrayAdapter {
         String value4 = "";
         long person_key = 0;
         long group_key = 0;
-/*
-        BOPerson person = bindData.getPerson_Detail();
+
+        BOKeyValue person = bindData.PersonDetail;
         if (person != null) {
-            value2 = person.getStrFName() + "-" + person.getPrimary_key();
-            value3 = person.getStrLName();
-            value4 = Long.toString(person.getNumMobile());
-            person_key = person.getPrimary_key();
+            value2 = person.getDisplayValue();
         }
-        BOGroup group = bindData.getGroup_Detail();
+        BOKeyValue group = bindData.GroupDetail;
         if (group != null) {
-            group_key = group.getPrimary_key();
+            value3 = group.getDisplayValue();
         }
-*/
+
         TextView txtSNo = ((TextView) convertView.findViewById(R.id.txtSNo));
         TextView txtFirstName = ((TextView) convertView.findViewById(R.id.txtFirstName));
         TextView txtLastName = ((TextView) convertView.findViewById(R.id.txtLastName));

@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         dropCreateTable();
-        //resetTable();
+        resetTable();
         getDetails();
     }
 
