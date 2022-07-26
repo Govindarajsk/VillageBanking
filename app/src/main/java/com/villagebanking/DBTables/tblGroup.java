@@ -42,7 +42,7 @@ public class tblGroup extends tblBase {
         return columnList;
     }
     //endregion
-    public static final String CREATE_GROUPS = Name + BOColumn.getCreateTableQry(columnList);
+    public static final String CreateTable = Name + BOColumn.getCreateTableQry(columnList);
 
     //region Save(flag,data)
     @RequiresApi(api = Build.VERSION_CODES.N)

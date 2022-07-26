@@ -89,9 +89,9 @@ public class tblLoanHeader extends tblBase {
     //endregion
 
     //region GetList
-    public static ArrayList<BOLoanHeader> GetList(long primaryKey) {
+    public static ArrayList<BOLoanHeader> GetList(long primaryKey, long personKey) {
         ArrayList<BOLoanHeader> returnList = new ArrayList<>();
-        Cursor res = DBUtility.GetDBList(getListQuery(primaryKey));
+        Cursor res = DBUtility.GetDBList(getListQuery(primaryKey, personKey));
         res.moveToFirst();
         while (!res.isAfterLast()) {
             returnList.add(readValue(res));
@@ -100,7 +100,12 @@ public class tblLoanHeader extends tblBase {
         return returnList;
     }
 
-    static String getListQuery(long primaryKey) {
+    static String getListQuery(long primaryKey, long personKey) {
+        String suffix = "";
+        if (primaryKey > 0)
+            suffix += " ID = " + primaryKey;
+        if (personKey > 0)
+            suffix += (suffix.length()>0? " AND " : "")+ " PERSON_KEY = " + personKey;
         return
                 "SELECT " +
                         column0 + "," +
@@ -115,7 +120,7 @@ public class tblLoanHeader extends tblBase {
                         column9 + "," +
                         column10 +
                         " FROM " + Name +
-                        (primaryKey > 0 ? " WHERE ID = " + primaryKey : "");
+                        (suffix.length()>0 ? " WHERE "+ suffix: "") ;
     }
 
     static BOLoanHeader readValue(Cursor res) {
@@ -143,10 +148,9 @@ public class tblLoanHeader extends tblBase {
         long refKey = res.getLong(i++);
         BOPerson ref1 = DBUtility.GetData(tblPerson.Name, refKey);
         if (ref1 != null)
-            newData.setPersonKey(new BOKeyValue(ref1.getPrimary_key(), ref1.getFullName()));
+            newData.setReference1(new BOKeyValue(ref1.getPrimary_key(), ref1.getFullName()));
         newData.setRepayAmount(res.getDouble(i++));
         return newData;
     }
     //endregion
-
 }

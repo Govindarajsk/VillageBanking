@@ -1,6 +1,7 @@
 package com.villagebanking.ui.Loan;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 
+import com.villagebanking.BOObjects.BOLoanDetail;
 import com.villagebanking.BOObjects.BOLoanHeader;
 import com.villagebanking.BOObjects.BOTransDetail;
 import com.villagebanking.Controls.DataGridBase;
@@ -31,23 +33,27 @@ public class LoanHeaderGrid<T> extends DataGridBase {
         View convertView = inflater.inflate(R.layout.loan_header_gridview, null);
 
         BOLoanHeader bindData = (BOLoanHeader) data;
-        String value1 = bindData.getTransDate();
-        String value2 = bindData.getPersonKey().getDisplayValue();
-        String value3 = Double.toString(bindData.getLoanAmount());//bindData.getGroupKey().getDisplayValue();
-        String value4 = Double.toString(bindData.getRepayAmount());
+        String value1 = String.valueOf(row);
+        String value2 = bindData.getTransDate();
+        String value3 = Double.toString(bindData.getRepayAmount());
+        String value4 = bindData.getGroupKey().getDisplayValue();
 
         TextView txtSNo = ((TextView) convertView.findViewById(R.id.txtSNo));
-        TextView txtPersonName = ((TextView) convertView.findViewById(R.id.txtPersonName));
+        TextView txtTransDate = ((TextView) convertView.findViewById(R.id.txtTransDate));
+        TextView lblRepayAmount = ((TextView) convertView.findViewById(R.id.lblRepayAmount));
         TextView txtGroupName = ((TextView) convertView.findViewById(R.id.txtGroupName));
-        TextView txtLoanAmount = ((TextView) convertView.findViewById(R.id.txtLoanAmount));
 
         txtSNo.setText(value1);
-        txtPersonName.setText(value2);
-        txtGroupName.setText(value3);
-        txtLoanAmount.setText(value4);
+        txtTransDate.setText(value2);
+        lblRepayAmount.setText(value3);
+        txtGroupName.setText(value4);
 
         ImageButton btnDelete = ((ImageButton) convertView.findViewById(R.id.btnDelete));
         btnDelete.setOnClickListener(deleteMethod(bindData.getPrimary_key()));
+
+        ImageButton btnEMI = ((ImageButton) convertView.findViewById(R.id.btnEMI));
+        btnEMI.setOnClickListener(showLoanEMI(bindData));
+
         return convertView;
     }
 
@@ -57,6 +63,20 @@ public class LoanHeaderGrid<T> extends DataGridBase {
             public void onClick(View view) {
                 DBUtility.DTOdelete(primaryKey, tblLoanHeader.Name);
                 Navigation.findNavController(view).navigate(R.id.nav_loan_grid_view);
+            }
+        };
+    }
+
+    View.OnClickListener showLoanEMI(BOLoanHeader loanHeader) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (loanHeader.getPaySummary().size() > 0) {
+                    Bundle args = new Bundle();
+                    args.putString("PAGE", tblLoanHeader.Name);
+                    args.putLong("ID", loanHeader.getPrimary_key());
+                    Navigation.findNavController(view).navigate(R.id.nav_loan_header_view, args);
+                }
             }
         };
     }

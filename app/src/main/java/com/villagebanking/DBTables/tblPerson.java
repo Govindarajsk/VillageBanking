@@ -2,7 +2,7 @@ package com.villagebanking.DBTables;
 
 public class tblPerson extends tblBase{
     public static final String Name  = "PERSONS";
-    public static final String CREATE_PERSON =
+    public static final String CreateTable =
             Name + "(" +
                     "ID INTEGER PRIMARY KEY, " +
                     "FIRSTNAME TEXT," +

@@ -10,8 +10,10 @@ import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 
+import com.villagebanking.BOObjects.BOLoanHeader;
 import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.Controls.DataGridBase;
+import com.villagebanking.DBTables.tblLoanHeader;
 import com.villagebanking.DBTables.tblTransHeader;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
@@ -69,7 +71,6 @@ public class TransHeaderGrid<T> extends DataGridBase {
             }
         };
     }
-
     View.OnClickListener detailMethod(BOTransHeader transHeader) {
         return new View.OnClickListener() {
             @Override

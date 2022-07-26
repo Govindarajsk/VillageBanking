@@ -91,7 +91,6 @@ public class GroupPersons extends Fragment {
         ArrayList<BOPerson> people = DBUtility.DTOGetData(tblPerson.Name, 0);
         ArrayList<BOKeyValue> keyValues = new ArrayList<>();
         people.stream().forEach(x -> keyValues.add(new BOKeyValue(x.getPrimary_key(), x.getFullName())));
-
         UIUtility.getAutoBox(this.getContext(), keyValues, binding.editPerson, personKey);
     }
 }

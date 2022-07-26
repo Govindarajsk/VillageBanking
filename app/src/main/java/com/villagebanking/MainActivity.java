@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<BOGroupPersonLink> boGroupPersonLinks = DBUtility.DBGetGroupPerson(tblGroupPersonLink.Name);
         ArrayList<BOTransHeader> boTransHeaders = DBUtility.DTOGetAlls(tblTransHeader.Name);
         ArrayList<BOTransDetail> boTransDetails = DBUtility.DTOGetAlls(tblTransDetail.Name);
-        ArrayList<BOLoanHeader> boLoanHeaders = tblLoanHeader.GetList(0);
+        ArrayList<BOLoanHeader> boLoanHeaders = tblLoanHeader.GetList(0,0);
         ArrayList<BOPeriod> periods = tblPeriod.GetList(0);
         ArrayList<BOPeriod> periods1= tblPeriod.getNextNPeriods(0,1);
     }

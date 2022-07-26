@@ -79,18 +79,20 @@ public class tblUtility {
         tablesList.add(tblTransHeader.Name);
         tablesList.add(tblTransDetail.Name);
         tablesList.add(tblLoanHeader.Name);
+        tablesList.add(tblLoanDetail.Name);
         return tablesList;
     }
 
     public static ArrayList<String> getCreateTables() {
         ArrayList<String> tableCreateList = new ArrayList<>();
-        tableCreateList.add(tblPerson.CREATE_PERSON);
-        tableCreateList.add(tblGroup.CREATE_GROUPS);
-        tableCreateList.add(tblPeriod.CREATE_PERIODS);
-        tableCreateList.add(tblGroupPersonLink.CREATE_GROUP_PERSON_LINK);
+        tableCreateList.add(tblPerson.CreateTable);
+        tableCreateList.add(tblGroup.CreateTable);
+        tableCreateList.add(tblPeriod.CreateTable);
+        tableCreateList.add(tblGroupPersonLink.CreateTable);
         tableCreateList.add(tblTransHeader.CreateTable);
         tableCreateList.add(tblTransDetail.CreateTable);
         tableCreateList.add(tblLoanHeader.CreateTable);
+        tableCreateList.add(tblLoanDetail.CreateTable);
         return tableCreateList;
     }
    //endregion

@@ -27,9 +27,6 @@ public class DB2GetList {
                 case tblGroup.Name:
                     returnList.add((T) getValue(res, new BOGroup()));
                     break;
-                case tblPeriod.Name:
-                    returnList.add((T) getValue(res, new BOPeriod()));
-                    break;
                 case tblGroupPersonLink.Name:
                     returnList.add((T) tblGroupPersonLink.readValue(res));
                     break;
@@ -84,24 +81,4 @@ public class DB2GetList {
         newData.setBondCharge(res.getDouble(5));
         return newData;
     }
-    /*
-        "ID INTEGER PRIMARY KEY," +
-        "PERIOD_TYPE INTEGER, " +
-        "PERIOD_NAME TEXT, " +
-        "ACTUAL_DATE TEXT," +
-        "DATEVALUE INTEGER," +
-        "PERIOD_REMARKS TEXT" +
-     */
-    static BOPeriod getValue(Cursor res, BOPeriod test) {
-        BOPeriod newData = new BOPeriod();
-        newData.setPrimary_key(res.getInt(0));
-        newData.setPeriodType(res.getInt(1));
-        newData.setPeriodName(res.getString(2));
-        newData.setActualDate(res.getString(3));
-        newData.setPeriodValue(res.getLong(4));
-        newData.setPeriodRemarks(res.getString(5));
-        newData.setPeriodStatus(res.getString(6));
-        return newData;
-    }
-
 }

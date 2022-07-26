@@ -26,9 +26,6 @@ public class DB2Save {
             case tblGroup.Name:
                 BOGroup g = (BOGroup) data;
                 return new DB1BOMap(g.getPrimary_key(), getContentValue(g));
-            case tblPeriod.Name:
-                BOPeriod pd = (BOPeriod) data;
-                return new DB1BOMap(pd.getPrimary_key(), getContentValue(pd));
             case tblGroupPersonLink.Name:
                 BOGroupPersonLink gp = (BOGroupPersonLink) data;
                 return new DB1BOMap(gp.getPrimary_key(), getContentValue(gp));
@@ -52,26 +49,6 @@ public class DB2Save {
         contentValues.put("PHONE", g.getNumMobile());
         return contentValues;
     }
-
-    /*
-        "ID INTEGER PRIMARY KEY," +
-        "PERIOD_KEY INTEGER, " +
-        "TABLE_NAME TEXT,"+
-        "TABLE_LINK_KEY INTEGER,"+
-        "REMARKS TEXT,"+
-        "AMOUNT DECIMAL," +
-     */
-    static ContentValues getContentValue(BOPersonTrans g) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("PARENT_KEY", g.getParentKey());
-        contentValues.put("PERIOD_KEY", g.getPeriod_detail().getPrimary_key());
-        contentValues.put("TABLE_NAME", g.getTableName());
-        contentValues.put("TABLE_LINK_KEY", g.getTable_link_key());
-        contentValues.put("REMARKS", g.getRemarks());
-        contentValues.put("AMOUNT", g.getNewAmount());
-        return contentValues;
-    }
-
     /*
         "ID INTEGER PRIMARY KEY, " +
         "GROUP_KEY INTEGER," +
@@ -103,27 +80,6 @@ public class DB2Save {
         contentValues.put("AMOUNT", g.getAmount());
         contentValues.put("START_PERIOD_KEY", g.getPeriodDetail().getPrimary_key());
         contentValues.put("BOND_CHARGE", g.getBondCharge());
-        return contentValues;
-    }
-
-    /*
-        "ID INTEGER PRIMARY KEY," +
-        "PERIOD_TYPE INTEGER, " +
-        "PERIOD_NAME TEXT, " +
-        "ACTUAL_DATE TEXT," +
-        "DATE_VALUE INTEGER," +
-        "PERIOD_REMARKS TEXT" +
-     */
-    static ContentValues getContentValue(BOPeriod g) {
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put("PERIOD_TYPE", g.getPeriodType());
-        contentValues.put("PERIOD_NAME", g.getPeriodName());
-
-        contentValues.put("ACTUAL_DATE", g.getActualDate());
-        contentValues.put("DATE_VALUE", g.getPeriodValue());
-        contentValues.put("PERIOD_REMARKS", g.getPeriodRemarks());
-        contentValues.put("PERIOD_STATUS", "");
         return contentValues;
     }
 }

@@ -48,7 +48,7 @@ public class tblPeriod extends tblBase {
     }
     //endregion
 
-    public static final String CREATE_PERIODS = Name + BOColumn.getCreateTableQry(columnList);
+    public static final String CreateTable = Name + BOColumn.getCreateTableQry(columnList);
 
     //region Save(flag,data)
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -70,7 +70,6 @@ public class tblPeriod extends tblBase {
 
     //region GetList()
     public static ArrayList<BOPeriod> GetList(long primaryKey) {
-
         String qryFilter = (primaryKey > 0 ? " WHERE " + DBColumn0.getClmName() + "=" + primaryKey : "");
         Cursor result = DBUtility.GetDBList(BOColumn.getListQry(Name, columnList, qryFilter));
         return readValue(result);

@@ -7,7 +7,7 @@ public class BOColumn<T> {
     private tblBase.DBCLMTYPE clmType;
     private String clmName;
     private boolean isPrimaryKey;
-    private T columnValue;
+    private String columnValue;
 
     public BOColumn(tblBase.DBCLMTYPE type, String clmName, boolean... isPrimaryKey) {
         this.clmType = type;
@@ -32,12 +32,16 @@ public class BOColumn<T> {
         return isPrimaryKey;
     }
 
-    public T getColumnValue() {
+    public String getColumnValue() {
         return columnValue;
     }
 
     public void setColumnValue(T columnValue) {
-        this.columnValue = columnValue;
+        String value = "";
+        if (columnValue instanceof String)
+            value = "'" + (String) columnValue + "'";
+        else value = String.valueOf(columnValue);
+        this.columnValue = value;
     }
 
     static String getType(tblBase.DBCLMTYPE clmType) {
@@ -82,7 +86,7 @@ public class BOColumn<T> {
             String columnName = "";
             String middle = ") VALUES (";
             String columnValue = "";
-            String suffix = ")";
+            String suffix = ") RETURNING ID";
 
             for (int i = 0; i < n; i++) {
                 BOColumn item = clmList.get(i);

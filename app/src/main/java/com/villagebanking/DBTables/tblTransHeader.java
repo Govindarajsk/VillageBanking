@@ -112,7 +112,7 @@ public class tblTransHeader extends tblBase {
             newData.link1Detail = boGroup.getDisplayValue();
             newData.link2Detail = boPerson.getDisplayValue();}
         } else if (newData.getTableName().contentEquals(tblLoanHeader.Name)) {
-            ArrayList<BOLoanHeader> loanHeaders = tblLoanHeader.GetList(newData.getTableLinkKey());
+            ArrayList<BOLoanHeader> loanHeaders = tblLoanHeader.GetList(newData.getTableLinkKey(),0);
             if(loanHeaders.size()>0){
             BOLoanHeader linkData = loanHeaders.get(0);
             BOKeyValue boGroup = linkData.getGroupKey();

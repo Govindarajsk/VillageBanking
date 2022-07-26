@@ -72,20 +72,6 @@ public class GroupsEdit extends Fragment {
         return ok1 || ok2 || ok3 || ok4 || ok5 || ok6;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public View.OnClickListener clickSave() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!checkFields()) {
-                    //tblGroup.Save("I",readView());
-                    DBUtility.DTOSaveUpdate(readView(), tblGroup.Name);
-                    getActivity().onBackPressed();
-                }
-            }
-        };
-    }
-
     BOGroup readView() {
         if (selectedData == null)
             selectedData = new BOGroup();
@@ -98,15 +84,6 @@ public class GroupsEdit extends Fragment {
     //endregion
 
     //region Load
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    void fill_person(long periodKey) {
-        ArrayList<BOPeriod> list = DBUtility.DTOGetData(tblPerson.Name, 0);
-        ArrayList<BOKeyValue> keyValues = new ArrayList<>();
-        list.stream().forEach(x -> keyValues.add(new BOKeyValue(x.getPrimary_key(), x.getPeriodName())));
-
-        UIUtility.getAutoBox(this.getContext(), keyValues, binding.editPeridType, periodKey);
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_periodType() {
         ArrayList<BOPeriod> actualList = DBUtility.DTOGetAlls(tblPeriod.Name);
@@ -147,15 +124,23 @@ public class GroupsEdit extends Fragment {
             UIUtility.applyValue(binding.lblTotalAmount, selectedData.getAmount() * selectedData.getNoOfPerson());
         }
     }
-
-    void editRestriction() {
-
-    }
-
     //endregion
 
     //region Events
     BOGroup selectedData = new BOGroup();
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public View.OnClickListener clickSave() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!checkFields()) {
+                    tblGroup.Save("I",readView());
+                    //DBUtility.DTOSaveUpdate(readView(), tblGroup.Name);
+                    getActivity().onBackPressed();
+                }
+            }
+        };
+    }
 
     AdapterView.OnItemClickListener periodItemSelected() {
         return new AdapterView.OnItemClickListener() {

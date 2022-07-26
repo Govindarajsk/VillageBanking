@@ -72,6 +72,9 @@ public class PeriodsGrid<T> extends ArrayAdapter {
         ImageButton btnDetail = ((ImageButton) convertView.findViewById(R.id.btnDetail));
         btnDetail.setOnClickListener(openTransHeader(bindData, transHeaders.size()));
 
+        ImageButton btnOpen = ((ImageButton) convertView.findViewById(R.id.btnClose));
+        btnOpen.setOnClickListener(openPeriod(bindData));
+
         return convertView;
     }
 

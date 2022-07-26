@@ -3,11 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <GridLayout android:id="@+id/glEditView"
-        android:visibility="visible"
+    <GridLayout
+        android:layout_row="0"
+        android:id="@+id/glEditView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:columnCount="3">
+        android:columnCount="3"
+        android:visibility="visible">
 
         <AutoCompleteTextView
             android:id="@+id/editPerson"
@@ -106,34 +108,44 @@
             android:layout_column="1"
             android:layout_marginTop="20dp"
             android:layout_marginRight="20dp" />
-
-        <ScrollView android:layout_marginTop="20dp"
-            android:layout_row="9"
-            android:layout_column="0"
-            android:layout_columnSpan="3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_rowWeight="@integer/config_navAnimTime">
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:minHeight="600dp">
-                <GridView
-                    android:id="@+id/gvLoanDetail"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_row="1"
-                    android:layout_rowWeight="@integer/config_navAnimTime"
-                    android:layout_column="0"
-                    android:layout_gravity="top"
-                    android:layout_marginTop="1dp"
-                    android:layoutMode="opticalBounds" />
-            </LinearLayout>
-        </ScrollView>
     </GridLayout>
+    <ScrollView android:id="@+id/glLoanDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_row="1"
+        android:layout_column="0">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:minHeight="600dp">
 
-    <GridLayout android:id="@+id/glGridView"
-        android:visibility="gone">
+            <GridView
+                android:id="@+id/gvLoanDetail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_row="1"
+                android:layout_rowWeight="@integer/config_navAnimTime"
+                android:layout_column="0"
+                android:layout_gravity="top"
+                android:layout_marginTop="1dp"
+                android:layoutMode="opticalBounds" />
+        </LinearLayout>
+    </ScrollView>
+
+    <GridLayout android:layout_row="1"
+        android:id="@+id/glGridView"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/lblName"
+            style="@style/stylDgTxt"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_columnWeight="@integer/config_navAnimTime"
+            android:text="Person Name"
+            android:textSize="25dp"
+            android:textAlignment="center"/>
+
         <GridView
             android:id="@+id/gvDataView"
             android:layout_width="match_parent"
@@ -141,6 +153,7 @@
             android:layout_row="1"
             android:layout_rowWeight="@integer/config_navAnimTime"
             android:layout_column="0"
+            android:layout_columnWeight="@integer/config_navAnimTime"
             android:layout_gravity="top"
             android:layout_marginTop="1dp"
             android:layoutMode="opticalBounds" />

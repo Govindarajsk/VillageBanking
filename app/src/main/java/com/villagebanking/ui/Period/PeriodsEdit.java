@@ -57,8 +57,9 @@ public class PeriodsEdit extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                //tblPeriod.Save("I",getViewData());
-                DBUtility.DTOSaveUpdate(getViewData(), tblPeriod.Name);
+                tblPeriod.Save("I",getViewData());
+                //DBUtility.DTOSaveUpdate(getViewData(), tblPeriod.Name);
+                getActivity().onBackPressed();
             }
         };
     }
@@ -72,6 +73,7 @@ public class PeriodsEdit extends Fragment {
         newData.setActualDate(UIUtility.getDateString(binding.editDate));
         newData.setPeriodValue(UIUtility.getDateInt(binding.editDate));
         newData.setPeriodRemarks(binding.editDetail.getText().toString());
+        newData.setPeriodStatus("");
         return newData;
     }
 
