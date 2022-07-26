@@ -30,11 +30,6 @@ public class PeriodsEdit extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = PeriodsEditviewBinding.inflate(inflater, container, false);
-
-        if (getArguments() != null) {
-            long key = getArguments().getLong("primary_key");
-            applyValue(key);
-        }
         initilize();
         return binding.getRoot();
     }
@@ -51,6 +46,10 @@ public class PeriodsEdit extends Fragment {
         DatePicker simpleDatePicker = (DatePicker) binding.editDate; // initiate a date picker
         simpleDatePicker.setSpinnersShown(true);
         fill_Type(1);
+        if (getArguments() != null) {
+            long key = getArguments().getLong("primary_key");
+            applyValue(key);
+        }
     }
 
     public View.OnClickListener clickMethod() {
@@ -78,13 +77,18 @@ public class PeriodsEdit extends Fragment {
 
     long primary_key = 0;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     void applyValue(long key) {
         ArrayList<BOPeriod> datas = DBUtility.DTOGetData(tblPeriod.Name, key);
         if (datas.size() > 0) {
             BOPeriod editData = datas.get(0);
             primary_key = editData.getPrimary_key();
+            ((AutoBox)binding.editType.getAdapter()).SetSelected(binding.editType,editData.getPeriodType());
+
+            BOKeyValue selected = UIUtility.GetAutoBoxSelected(binding.editType);
+            editData.setPeriodType(selected.getPrimary_key());
+            editData.setPeriodName(selected.getDisplayValue());
             binding.editType.setText(String.valueOf(editData.getPeriodType()));
-            binding.editName.setText(editData.getPeriodName());
             UIUtility.getDateFromString(editData.getActualDate(), binding.editDate);
             binding.editDetail.setText(editData.getPeriodRemarks());
         }
@@ -105,7 +109,6 @@ public class PeriodsEdit extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
                 BOKeyValue value = UIUtility.GetAutoBoxSelected(control);
-                binding.editName.setText(value.getDisplayValue());
             }
         };
     }

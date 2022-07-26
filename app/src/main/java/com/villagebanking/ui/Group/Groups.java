@@ -26,10 +26,10 @@ public class Groups extends Fragment {
 
     void initilize() {
         assignToGridView();
-        binding.btnAdd.setOnClickListener(clickMethod());
+        binding.btnAdd.setOnClickListener(addNew());
     }
 
-    public View.OnClickListener clickMethod() {
+    View.OnClickListener addNew() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {

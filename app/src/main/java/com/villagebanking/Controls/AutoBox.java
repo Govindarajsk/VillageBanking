@@ -96,7 +96,7 @@ public class AutoBox extends ArrayAdapter<BOKeyValue> {
     };
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void SetSelected(AutoCompleteTextView control, long... keys) {
+    public void SetSelected(AutoCompleteTextView control, long... keys) {
         long key = keys.length > 0 ? keys[0] : 0;
         Optional<BOKeyValue> fItem = fullList.stream().filter(x -> x.getPrimary_key() == key).findFirst();
         BOKeyValue item = fullList.size() > 0 ? fullList.get(0) : new BOKeyValue(0, "Empty");
