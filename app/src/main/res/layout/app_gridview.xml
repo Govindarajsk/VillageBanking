@@ -9,13 +9,23 @@
         android:id="@+id/btnAdd"
         style="@style/styleBtnAdd"
         android:layout_row="0"
+        android:layout_column="2"
         android:layout_gravity="right" />
+    <TextView
+        android:id="@+id/lblSummary"
+        style="@style/styleBtnAdd"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:layout_columnSpan="3"
+        android:layout_gravity="fill_horizontal"/>
+
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_row="1"
         android:layout_rowWeight="@integer/config_navAnimTime"
+        android:layout_columnSpan="3"
         android:layout_column="0">
 
         <LinearLayout

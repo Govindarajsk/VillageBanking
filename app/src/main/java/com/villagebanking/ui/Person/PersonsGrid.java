@@ -1,6 +1,9 @@
 package com.villagebanking.ui.Person;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,6 +81,7 @@ public class PersonsGrid<T> extends ArrayAdapter {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+               // someEventListener.someEvent("Hi");
                 Bundle args = new Bundle();
                 args.putString("PAGE", tblPerson.Name);
                 args.putLong("ID", bindData.getPrimary_key());
@@ -85,6 +89,7 @@ public class PersonsGrid<T> extends ArrayAdapter {
             }
         };
     }
+
     View.OnClickListener loanMethod(BOPerson bindData) {
         return new View.OnClickListener() {
             @Override
@@ -96,4 +101,11 @@ public class PersonsGrid<T> extends ArrayAdapter {
             }
         };
     }
+
+
+    public interface onSomeEventListener {
+        public void someEvent(String s);
+    }
+
+    onSomeEventListener someEventListener;
 }

@@ -3,37 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/maingrid"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:columnCount="6"
     android:layoutDirection="locale"
     android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/txtDetails"
-        style="@style/stylMLineText"
-        android:layout_row="0"
-        android:layout_column="0"
-        android:text="Group1"
-        android:layout_columnWeight="@integer/config_navAnimTime"
-        android:textStyle="bold"/>
-    <TextView
-        android:id="@+id/txtRemarks"
-        style="@style/stylMLineText"
-        android:layout_row="1"
-        android:layout_columnSpan="6"
-        android:layout_column="0"
-        android:text="Person Details"
-        android:layout_columnWeight="@integer/config_navAnimTime"
-        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/txtAmount"
         style="@style/stylDgTxt"
         android:layout_row="0"
         android:layout_column="1"
-        android:text="400000.00"
-        android:minWidth="70dp"
         android:layout_gravity="center_vertical"
+        android:layout_columnWeight="@integer/config_navAnimTime"
+        android:minWidth="70dp"
+        android:text="400000.00"
         android:textStyle="bold" />
 
     <CheckBox
@@ -49,23 +32,45 @@
         style="@style/stylDgTxt"
         android:layout_row="0"
         android:layout_column="3"
-        android:text="400000.00"
-        android:textStyle="bold"
-        android:minWidth="70dp"
-        android:layout_marginLeft="-15dp"
         android:layout_gravity="center_vertical|right"
-        android:inputType="numberDecimal"/>
+        android:layout_marginLeft="-15dp"
+        android:inputType="numberDecimal"
+        android:minWidth="70dp"
+        android:text="400000.00"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txtDetails"
+        style="@style/stylMLineText"
+        android:layout_row="1"
+        android:layout_column="0"
+        android:layout_columnSpan="2"
+        android:layout_columnWeight="@integer/config_navAnimTime"
+        android:layout_gravity="center_vertical"
+        android:text="Group1"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txtRemarks"
+        style="@style/stylMLineText"
+        android:layout_marginLeft="10dp"
+        android:layout_row="1"
+        android:layout_column="2"
+        android:layout_columnSpan="4"
+        android:layout_columnWeight="@integer/config_navAnimTime"
+        android:text="Person Details"
+        android:textStyle="bold" />
 
     <ImageButton
         android:id="@+id/btnDelete"
         style="@style/styleBtnReset"
         android:layout_row="0"
-        android:layout_column="4"/>
+        android:layout_column="4" />
 
     <ImageButton
         android:id="@+id/btnDetail"
         style="@style/styleBtnDetail"
         android:layout_row="0"
-        android:layout_column="5"/>
+        android:layout_column="5" />
 
 </GridLayout>

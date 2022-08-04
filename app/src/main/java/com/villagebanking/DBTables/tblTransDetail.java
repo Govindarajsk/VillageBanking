@@ -3,80 +3,150 @@ package com.villagebanking.DBTables;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 
+import androidx.annotation.RequiresApi;
+
+import com.villagebanking.BOObjects.BOGroupPersonLink;
+import com.villagebanking.BOObjects.BOKeyValue;
+import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOTransDetail;
+import com.villagebanking.Database.DBUtility;
+
+import java.util.ArrayList;
 
 public class tblTransDetail extends tblBase {
 
     public static final String Name = "TRANSACTION_DETAIL";
-
+    //region TRANSACTION_DETAIL
     private static String column1 = "PARENT_KEY";
     private static String column2 = "HEADER_KEY";
     private static String column3 = "DATE";
     private static String column4 = "AMOUNT";
     private static String column5 = "REMARKS";
-    public static final String CreateTable =
-            Name + "(" +
-                    "ID INTEGER PRIMARY KEY," +
-                    "PARENT_KEY INTEGER, " +
-                    "HEADER_KEY INTEGER, " +
-                    "DATE TEXT, " +
-                    "AMOUNT DECIMAL, " +
-                    "REMARKS TEXT" +
-                    ")";
 
-    public static BOTransDetail getValue(Cursor res) {
-        BOTransDetail newData = new BOTransDetail();
-        int i = 0;
-        newData.setPrimary_key(res.getLong(i++));
-        newData.setParentKey(res.getLong(i++));
-        newData.setHeaderKey(res.getLong(i++));
-        newData.setTransDate(res.getString(i++));
-        newData.setAmount(res.getDouble(i++));
-        newData.setRemarks(res.getString(i++));
-        if (res.getColumnCount() > 6) {
-            newData.setPeriodKey(res.getLong(i++));
-            newData.setTableName(res.getString(i++));
-            newData.setTableLinkKey(res.getLong(i++));
+
+    private static BOColumn<Long> DBColumn1 = new BOColumn<Long>(DBCLMTYPE.INT, column1);
+    private static BOColumn<Long> DBColumn2 = new BOColumn<Long>(DBCLMTYPE.INT, column2);
+    private static BOColumn<String> DBColumn3 = new BOColumn<String>(DBCLMTYPE.TXT, column3);
+    private static BOColumn<Double> DBColumn4 = new BOColumn<Double>(DBCLMTYPE.DBL, column4);
+    private static BOColumn<String> DBColumn5 = new BOColumn<String>(DBCLMTYPE.TXT, column5);
+
+    //endregion
+
+    //region Columns List => getColumns
+    static ArrayList<BOColumn> columnList = getColumns();
+
+    static ArrayList<BOColumn> getColumns() {
+        if (columnList == null) columnList = new ArrayList<>();
+        columnList.add(DBColumn0);
+        columnList.add(DBColumn1);
+        columnList.add(DBColumn2);
+        columnList.add(DBColumn3);
+        columnList.add(DBColumn4);
+        columnList.add(DBColumn5);
+        return columnList;
+    }
+    //endregion
+
+    public static final String CreateTable = Name + BOColumn.getCreateTableQry(columnList);
+
+    //region Save(flag,data)
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static String Save(String flag, BOTransDetail data) {
+        String sqlQuery = BOColumn.getInsetUpdateQry(flag, Name, getColumnValueMap(data));
+        return DBUtility.DBSave(sqlQuery);
+    }
+
+    static ArrayList<BOColumn> getColumnValueMap(BOTransDetail data) {
+        DBColumn1.setColumnValue(data.getParentKey());
+        DBColumn2.setColumnValue(data.getHeaderKey());
+        DBColumn3.setColumnValue(data.getTransDate());
+        DBColumn4.setColumnValue(data.getAmount());
+        DBColumn5.setColumnValue(data.getRemarks());
+        return columnList;
+    }
+    //endregion
+
+    //region GetList()
+    public static ArrayList<BOTransDetail> GetList(long primaryKey) {
+        String qryFilter = (primaryKey > 0 ? " WHERE " + DBColumn0.getClmName() + "=" + primaryKey : "");
+        Cursor result = DBUtility.GetDBList(BOColumn.getListQry(Name, columnList, qryFilter));
+        return readValue(result);
+    }
+
+    static ArrayList<BOTransDetail> readValue(Cursor res, long... keys) {
+        long key1 = keys.length > 0 ? keys[0] : 0;
+
+        ArrayList<BOTransDetail> returnList = new ArrayList<>();
+        res.moveToFirst();
+        while (!res.isAfterLast()) {
+            BOTransDetail newData = new BOTransDetail();
+            int i = 0;
+            newData.setPrimary_key(res.getLong(i++));
+            newData.setParentKey(res.getLong(i++));
+            newData.setHeaderKey(res.getLong(i++));
+            newData.setTransDate(res.getString(i++));
+            newData.setAmount(res.getDouble(i++));
             newData.setRemarks(res.getString(i++));
-            newData.setTotalAmount(res.getDouble(i++));
-            newData.setPaidAmount(res.getDouble(i++));
-            newData.setBalanceAmount(res.getDouble(i++));
+            if (res.getColumnCount() > 6) {
+                newData.setPeriodKey(res.getLong(i++));
+                newData.setTableName(res.getString(i++));
+                long tblLinkKey = res.getLong(i++);
+                newData.setTableLinkKey(tblLinkKey);
+                BOGroupPersonLink boGroupPersonLink = tblUtility.GetTData(tblGroupPersonLink.GetList(tblLinkKey));
+                String remarks = "";
+                if (boGroupPersonLink != null) {
+                    remarks += (boGroupPersonLink.PersonDetail != null ?
+                            boGroupPersonLink.PersonDetail.getDisplayValue() : "");
+                    BOKeyValue group = boGroupPersonLink.GroupDetail;
+                    if (key1 > 0 && (group != null && group.getPrimary_key() != key1)) {
+                        res.moveToNext();
+                        continue;
+                    }
+                }
+
+                newData.setRemarks(res.getString(i++));
+                newData.setTotalAmount(res.getDouble(i++));
+                newData.setPaidAmount(res.getDouble(i++));
+                newData.setBalanceAmount(res.getDouble(i++));
+                newData.setRemarks(remarks);
+            }
+            returnList.add(newData);
+            res.moveToNext();
         }
-        return newData;
+        res.close();
+        return returnList;
     }
 
-    public static ContentValues getContentValue(BOTransDetail g) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("PARENT_KEY", g.getParentKey());
-        contentValues.put("HEADER_KEY", g.getHeaderKey());
-        contentValues.put("DATE", g.getTransDate());
-        contentValues.put("AMOUNT", g.getAmount());
-        contentValues.put("REMARKS", g.getRemarks());
-        return contentValues;
+    //endregion
+    //region special qry
+    public static ArrayList<BOTransDetail> GetDetailViewList(long primaryKey,long groupKey) {
+        Cursor result = DBUtility.GetDBList(detailViewQry(primaryKey));
+        return readValue(result,groupKey);
     }
 
-    public static Cursor DBGetTransDetail(SQLiteDatabase db, long headerKey) {
-        return db.rawQuery(
-                "SELECT " +
-                        "TD.ID AS ID," +
-                        "TD.PARENT_KEY," +
-                        "TD.HEADER_KEY," +
-                        "TD.DATE," +
-                        "TD.AMOUNT AS AMOUNT," +
-                        "TD.REMARKS," +
-                        "TH.PERIOD_KEY," +
-                        "TH.TABLE_NAME," +
-                        "TH.TABLE_LINK_KEY," +
-                        "TH.REMARKS," +
-                        "TH.TOTAL_AMOUNT," +
-                        "TH.PAID_AMOUNT," +
-                        "TH.BALANCE_AMOUNT " +
-                        "FROM " +
-                        "TRANSACTION_HEADER TH JOIN " +
-                        "TRANSACTION_DETAIL TD ON TD.HEADER_KEY=TH.ID " +
-                        " WHERE PARENT_KEY IN (" + headerKey + ")"
-                , null);
+    static String detailViewQry(long headerKey) {
+        String filter = headerKey > 0 ? " WHERE PARENT_KEY IN (" + headerKey + ")" : "";
+        String qry = "SELECT " +
+                "TD.ID AS ID," +
+                "TD.PARENT_KEY," +
+                "TD.HEADER_KEY," +
+                "TD.DATE," +
+                "TD.AMOUNT AS AMOUNT," +
+                "TD.REMARKS," +
+                "TH.PERIOD_KEY," +
+                "TH.TABLE_NAME," +
+                "TH.TABLE_LINK_KEY," +
+                "TH.REMARKS," +
+                "TH.TOTAL_AMOUNT," +
+                "TH.PAID_AMOUNT," +
+                "TH.BALANCE_AMOUNT " +
+                "FROM " +
+                "TRANSACTION_HEADER TH JOIN " +
+                "TRANSACTION_DETAIL TD ON TD.HEADER_KEY=TH.ID " + filter;
+        return qry;
 
     }
+    //endregion
 }

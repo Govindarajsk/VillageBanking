@@ -42,20 +42,9 @@ public class GroupPersonsGrid<T> extends ArrayAdapter {
 
         BOGroupPersonLink bindData = (BOGroupPersonLink) data;
         String value1 = Integer.toString(row);
-        String value2 = "";
-        String value3 = "";
-        String value4 = "";
-        long person_key = 0;
-        long group_key = 0;
-
-        BOKeyValue person = bindData.PersonDetail;
-        if (person != null) {
-            value2 = person.getDisplayValue();
-        }
-        BOKeyValue group = bindData.GroupDetail;
-        if (group != null) {
-            value3 = group.getDisplayValue();
-        }
+        String value2 = bindData.PersonDetail.getDisplayValue();
+        String value3 = bindData.GroupDetail.getDisplayValue();
+        String value4 = bindData.getPerson_role();
 
         TextView txtSNo = ((TextView) convertView.findViewById(R.id.txtSNo));
         TextView txtFirstName = ((TextView) convertView.findViewById(R.id.txtFirstName));
@@ -66,13 +55,18 @@ public class GroupPersonsGrid<T> extends ArrayAdapter {
         txtFirstName.setText(value2);
         txtLastName.setText(value3);
         txtPhoneNo.setText(value4);
+
         ImageButton btnDelete = ((ImageButton) convertView.findViewById(R.id.btnDelete));
         btnDelete.setOnClickListener(deleteMethod(bindData));
 
-        if (person_key > 0 && group_key > 0) {
-            ImageButton btnEdit = ((ImageButton) convertView.findViewById(R.id.btnEdit));
-            btnEdit.setOnClickListener(editMethod(group_key, person_key));
-        }
+        ImageButton btnEdit = ((ImageButton) convertView.findViewById(R.id.btnEdit));
+        ImageButton btnLoan = ((ImageButton) convertView.findViewById(R.id.btnLoan));
+
+        txtLastName.setVisibility(View.GONE);
+        txtPhoneNo.setVisibility(View.GONE);
+        btnEdit.setVisibility(View.GONE);
+        btnLoan.setVisibility(View.GONE);
+
         return convertView;
     }
 

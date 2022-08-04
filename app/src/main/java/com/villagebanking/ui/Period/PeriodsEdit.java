@@ -101,7 +101,7 @@ public class PeriodsEdit extends Fragment {
         ArrayList<BOKeyValue> keyValues = new ArrayList<>();
         keyValues.add(new BOKeyValue(1, "1.Amavasai"));
         keyValues.add(new BOKeyValue(2, "2.Every 5th"));
-        UIUtility.getAutoBox(this.getContext(), keyValues, binding.editType, type);
+        UIUtility.getAutoBox(this.getContext(), keyValues, binding.editType,null, type);
         binding.editType.setOnItemClickListener(selectedEvent(binding.editType));
     }
 

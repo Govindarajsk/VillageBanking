@@ -13,10 +13,8 @@ import java.util.ArrayList;
 
 public class tblLoanDetail extends tblBase {
     public static final String Name = "LOAN_DETAIL";
-    static ArrayList<BOColumn> columnList = getColumns();
-    public static final String CreateTable = Name + BOColumn.getCreateTableQry(columnList);
 
-    //region Columns 6 =>column1 = "PERIOD_KEY"
+    //region Columns 6 =>column1 = "HEADER_KEY"
     private static String column1 = "HEADER_KEY";
     private static String column2 = "PERIOD_KEY";
     private static String column3 = "EMI_NUMBER";
@@ -29,6 +27,9 @@ public class tblLoanDetail extends tblBase {
     private static BOColumn<Double> DBColumn4 = new BOColumn<Double>(DBCLMTYPE.DBL, column4);
     private static BOColumn<String> DBColumn5 = new BOColumn<String>(DBCLMTYPE.TXT, column5);
     //endregion
+
+    static ArrayList<BOColumn> columnList = getColumns();
+    public static final String CreateTable = Name + BOColumn.getCreateTableQry(columnList);
 
     //region Columns List => getColumns
     static ArrayList<BOColumn> getColumns() {
@@ -48,7 +49,7 @@ public class tblLoanDetail extends tblBase {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static String Save(String flag, BOLoanDetail data) {
         String sqlQuery = BOColumn.getInsetUpdateQry(flag, Name, getColumnValueMap(data));
-        String b =DBUtility.DBSave(sqlQuery);
+        String b = DBUtility.DBSave(sqlQuery);
         return b;
     }
 
@@ -76,14 +77,17 @@ public class tblLoanDetail extends tblBase {
         res.moveToFirst();
         while (!res.isAfterLast()) {
             BOLoanDetail newData = new BOLoanDetail();
-            newData.setPrimary_key(res.getInt(0));
-            newData.getPeriodInfo().setPrimary_key(res.getInt(1));
-            newData.setEmiNo(res.getInt(2));
-            newData.setEmiAmount(res.getDouble(3));
-            newData.setEmiStatus(res.getString(4));
+            int i=0;
+            newData.setPrimary_key(res.getInt(i++));
+            newData.setLoanHeaderKey(res.getInt(i++));
+            newData.getPeriodInfo().setPrimary_key(res.getInt(i++));
+            newData.setEmiNo(res.getInt(i++));
+            newData.setEmiAmount(res.getDouble(i++));
+            newData.setEmiStatus(res.getString(i++));
             returnList.add(newData);
             res.moveToNext();
         }
+        res.close();
         return returnList;
     }
     //endregion

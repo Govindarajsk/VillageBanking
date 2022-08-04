@@ -6,6 +6,13 @@ import java.util.Date;
 
 public class BOGroup extends BOBase {
 
+    private String name;
+    private int noOfPerson;
+    private double amount;
+    private String type;
+    private double bondCharge;
+    private String status;
+
     public String getName() {
         return name;
     }
@@ -27,8 +34,6 @@ public class BOGroup extends BOBase {
     }
 
     public void setAmount(double amount) {
-        DecimalFormat df = new DecimalFormat("0.00");
-        df.setRoundingMode(RoundingMode.DOWN);
         this.amount =  amount;
     }
 
@@ -56,20 +61,15 @@ public class BOGroup extends BOBase {
         this.status = status;
     }
 
-    public BOPeriod getPeriodDetail() {
+
+    private BOKeyValue periodDetail;
+    public BOKeyValue getPeriodDetail() {
         if(periodDetail==null)
-            periodDetail=new BOPeriod();
+            periodDetail=new BOKeyValue();
         return periodDetail;
     }
 
-    public void setPeriodDetail(BOPeriod periodDetail) {
+    public void setPeriodDetail(BOKeyValue periodDetail) {
         this.periodDetail = periodDetail;
     }
-    private String name;
-    private int noOfPerson;
-    private double amount;
-    private String type;
-    private double bondCharge;
-    private BOPeriod periodDetail;
-    private String status;
 }

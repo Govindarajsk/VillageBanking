@@ -68,7 +68,7 @@ public class tblPeriod extends tblBase {
     }
     //endregion
 
-    //region GetList()
+    //region GetList => primaryKey
     public static ArrayList<BOPeriod> GetList(long primaryKey) {
         String qryFilter = (primaryKey > 0 ? " WHERE " + DBColumn0.getClmName() + "=" + primaryKey : "");
         Cursor result = DBUtility.GetDBList(BOColumn.getListQry(Name, columnList, qryFilter));
@@ -90,11 +90,18 @@ public class tblPeriod extends tblBase {
             returnList.add(newData);
             res.moveToNext();
         }
+        res.close();
         return returnList;
     }
     //endregion
 
     //region Special GetList
+    public static ArrayList<BOPeriod> GetViewList(String periodType) {
+        String qryFilter = (periodType.length() > 0 ? " WHERE " + DBColumn1.getClmName() + "=" + periodType : "");
+        Cursor result = DBUtility.GetDBList(BOColumn.getListQry(Name, columnList, qryFilter));
+        return readValue(result);
+    }
+
     public static ArrayList<BOPeriod> getNextNPeriods(long primaryKey, int N) {
         String qryFilter = (primaryKey > 0 ? " WHERE " + DBColumn0.getClmName() + "=" + primaryKey : "") +
                 " LIMIT " + N;

@@ -18,6 +18,7 @@ import com.villagebanking.DBTables.tblTransDetail;
 import com.villagebanking.DBTables.tblTransHeader;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
+import com.villagebanking.databinding.AppGridviewBinding;
 import com.villagebanking.databinding.TransHeaderViewBinding;
 import com.villagebanking.ui.UIUtility;
 
@@ -61,29 +62,28 @@ public class TransHeader extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_trans_Header(String periodkeys, long personKey) {
-        ArrayList<BOTransHeader> transHeaderFlist = DBUtility.FetchPeriodTrans(tblTransHeader.Name,
-                periodkeys);
-
+        ArrayList<BOTransHeader> transHeaderFlist =
+                tblTransHeader.GetViewList(tblTransHeader.Name, periodkeys, "");
 
         ArrayList<BOTransHeader> transHeaders = new ArrayList<>();
         transHeaderFlist.forEach(x -> {
             x.setTransDetails(fill_trans_Detail(x.getPrimary_key()));
             if (personKey > 0) {
-                if (x.link2Key == personKey)
+                if (x.getLinkDetail2().getPrimary_key() == personKey)
                     transHeaders.add(x);
             } else
                 transHeaders.add(x);
 
         });
 
-        TransHeaderGrid adapter = new TransHeaderGrid(this.getContext(), R.layout.groups_gridview, transHeaders);
+        TransHeaderGrid adapter = new TransHeaderGrid(this.getContext(), R.layout.trans_header_gridview,
+                transHeaders);
         binding.gvDataView.setAdapter(adapter);
-
         amountCalculation(transHeaders);
     }
 
     ArrayList<BOTransDetail> fill_trans_Detail(long headerKey) {
-        ArrayList<BOTransDetail> transDetails = DBUtility.DTOGetTransData(headerKey);
+        ArrayList<BOTransDetail> transDetails = tblTransDetail.GetDetailViewList(headerKey, 0);
         return transDetails;
     }
 

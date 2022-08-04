@@ -81,12 +81,13 @@ public class BOColumn<T> {
     public static String getInsetUpdateQry(String flag, String tblName, ArrayList<BOColumn> clmList) {
         String qry = "";
         int n = clmList.size();
+        //region INSERT
         if (flag == "I") {
             String prefix = "INSERT INTO " + tblName + "(";
             String columnName = "";
             String middle = ") VALUES (";
             String columnValue = "";
-            String suffix = ") RETURNING ID";
+            String suffix = ")";
 
             for (int i = 0; i < n; i++) {
                 BOColumn item = clmList.get(i);
@@ -100,7 +101,10 @@ public class BOColumn<T> {
                 }
             }
             qry = prefix + columnName + middle + columnValue + suffix;
-        } else {
+        }
+        //endregion
+        //region UPDATE
+        else {
             String prefix = "UPDATE " + tblName + " SET ";
             String updateSet = "";
             String suffix = "";
@@ -118,6 +122,7 @@ public class BOColumn<T> {
             }
             qry = prefix + updateSet + suffix;
         }
+        //endregion
         return qry;
     }
 

@@ -34,6 +34,7 @@ import java.util.ArrayList;
 public class LoanHeader extends Fragment {
     private LoanHeaderViewBinding binding;
 
+    //region Initialize
     @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = LoanHeaderViewBinding.inflate(inflater, container, false);
@@ -45,14 +46,18 @@ public class LoanHeader extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.N)
     void initialize() {
         String fromPage = "";
-        ArrayList<BOLoanHeader> boLoanHeaders = new ArrayList<>();
         if (getArguments() != null) {
             fromPage = getArguments().getString("PAGE");
         }
         binding.glEditView.setVisibility(View.GONE);
         binding.glLoanDetail.setVisibility(View.GONE);
         binding.glGridView.setVisibility(View.GONE);
+        loadHeader(fromPage);
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    void loadHeader(String fromPage) {
+        ArrayList<BOLoanHeader> boLoanHeaders = new ArrayList<>();
         switch (fromPage) {
             case tblPerson.Name:
                 long personKey = getArguments().getLong("ID");
@@ -80,18 +85,24 @@ public class LoanHeader extends Fragment {
                 loadDetailGrid(loanDetails);
                 break;
             default:
+                loanKey = 0;
+                loanDetails = tblLoanDetail.GetList(loanKey);
+                binding.glLoanDetail.setVisibility(View.VISIBLE);
+                loadDetailGrid(loanDetails);
                 break;
         }
     }
+    //endregion
 
+    //region Load/Fill Fields
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_person(long personKey) {
         ArrayList<BOPerson> people = DBUtility.DTOGetData(tblPerson.Name, 0);
         ArrayList<BOKeyValue> keyValues = new ArrayList<>();
         people.stream().forEach(x -> keyValues.add(new BOKeyValue(x.getPrimary_key(), x.getFullName())));
 
-        UIUtility.getAutoBox(this.getContext(), keyValues, binding.editPerson, personKey);
-        UIUtility.getAutoBox(this.getContext(), keyValues, binding.editReference1);
+        UIUtility.getAutoBox(this.getContext(), keyValues, binding.editPerson, null, personKey);
+        UIUtility.getAutoBox(this.getContext(), keyValues, binding.editReference1, null);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -100,7 +111,7 @@ public class LoanHeader extends Fragment {
 
         ArrayList<BOKeyValue> keyValues = new ArrayList<>();
         groups.stream().forEach(x -> keyValues.add(new BOKeyValue(x.getPrimary_key(), x.getName(), x)));
-        UIUtility.getAutoBox(this.getContext(), keyValues, binding.editGroup);
+        UIUtility.getAutoBox(this.getContext(), keyValues, binding.editGroup, null);
 
         binding.editGroup.setOnItemClickListener(selectedEvent(binding.editGroup));
         selectedEvent(binding.editGroup);
@@ -111,7 +122,7 @@ public class LoanHeader extends Fragment {
         ArrayList<BOKeyValue> keyValues = new ArrayList<>();
         keyValues.add(new BOKeyValue(1, "Commission"));
         keyValues.add(new BOKeyValue(2, "EMI"));
-        UIUtility.getAutoBox(this.getContext(), keyValues, binding.editLoanType, type);
+        UIUtility.getAutoBox(this.getContext(), keyValues, binding.editLoanType, null, type);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -120,6 +131,8 @@ public class LoanHeader extends Fragment {
         LoanHeaderGrid adapter = new LoanHeaderGrid(this.getContext(), R.layout.loan_header_gridview, boLoanHeaders);
         binding.gvDataView.setAdapter(adapter);
     }
+
+    // endregion
 
     //region Loan Detail
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -186,6 +199,7 @@ public class LoanHeader extends Fragment {
         };
         return fieldValidatorTextWatcher;
     }
+
     AdapterView.OnItemClickListener selectedEvent(AutoCompleteTextView control) {
         return new AdapterView.OnItemClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -196,6 +210,7 @@ public class LoanHeader extends Fragment {
             }
         };
     }
+
     View.OnClickListener clickSave() {
         return new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)

@@ -8,8 +8,6 @@ public class BOGroupPersonLink extends BOBase {
     private long person_Key;
     private int orderBy;
     private String person_role;
-    public BOKeyValue GroupDetail;
-    public BOKeyValue PersonDetail;
 
     public long getGroup_Key() {
         return group_Key;
@@ -27,6 +25,10 @@ public class BOGroupPersonLink extends BOBase {
         this.person_Key = person_Key;
     }
 
+    public int getOrderBy() {
+        return orderBy;
+    }
+
     public void setOrderBy(int orderBy) {
         this.orderBy = orderBy;
     }
@@ -38,4 +40,7 @@ public class BOGroupPersonLink extends BOBase {
     public void setPerson_role(String person_role) {
         this.person_role = person_role;
     }
+
+    public BOKeyValue GroupDetail;
+    public BOKeyValue PersonDetail;
 }

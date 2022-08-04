@@ -29,16 +29,16 @@ public class TransDetailGrid<T> extends DataGridBase {
 
         BOTransDetail bindData = (BOTransDetail) data;
         String value1 = bindData.getTransDate();
-        String value2 = Double.toString(bindData.getAmount());
-        String value3 = Double.toString(bindData.getBalanceAmount());
+        String value2 = bindData.getRemarks();
+        String value3 = Double.toString(bindData.getAmount());
 
-        TextView txtRemarks = ((TextView) convertView.findViewById(R.id.txtDetails));
+        TextView txtTransDate = ((TextView) convertView.findViewById(R.id.txtTransDate));
+        TextView txtDetails = ((TextView) convertView.findViewById(R.id.txtDetails));
         TextView txtAmount = ((TextView) convertView.findViewById(R.id.txtAmount));
-        TextView txtBalAmount = ((TextView) convertView.findViewById(R.id.txtNewAmount));
 
-        txtRemarks.setText(value1);
-        txtAmount.setText(value2);
-        txtBalAmount.setText(value3);
+        txtTransDate.setText(value1);
+        txtDetails.setText(value2);
+        txtAmount.setText(value3);
 
         ImageButton btnDelete = ((ImageButton) convertView.findViewById(R.id.btnDelete));
         btnDelete.setOnClickListener(deleteMethod(bindData.getPrimary_key()));

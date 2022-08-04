@@ -102,35 +102,5 @@ public class DBSQLQuery extends SQLiteOpenHelper {
         Cursor res = db.rawQuery("SELECT * FROM " + TBLNAME + " WHERE " + CLMNAME + "=" + INPUT, null);
         return res;
     }
-
-    public Cursor DBGroupPerson() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = tblGroupPersonLink.GetDetailQry(db);
-        return res;
-    }
-
-    public Cursor DBFetchGroupLink(String periodkeys) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = tblTransHeader.DBGenTransHeader(db, periodkeys);
-        return res;
-    }
-
-    public Cursor DBFetchLoanTransHeader(String periodkeys) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = tblTransHeader.DBGenLoanTransHeader(db, periodkeys);
-        return res;
-    }
-
-    public Cursor DBFetchTransHeader(String periodkeys) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = tblTransHeader.DBGetTransHeader(db, periodkeys, "");
-        return res;
-    }
-
-    public Cursor DBGetTransDetail(long headerKey) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = tblTransDetail.DBGetTransDetail(db, headerKey);
-        return res;
-    }
     //endregion
 }

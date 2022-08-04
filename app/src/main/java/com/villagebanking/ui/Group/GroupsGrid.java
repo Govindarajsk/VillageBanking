@@ -44,7 +44,7 @@ public class GroupsGrid<T> extends ArrayAdapter {
         String groupName = bindData.getName();
         String amount = Double.toString(bindData.getAmount());
         String noPerson = Integer.toString(bindData.getNoOfPerson());
-        String actDate = bindData.getPeriodDetail().getActualDate();
+        String actDate = bindData.getPeriodDetail().getDisplayValue();
         String total = Double.toString(bindData.getNoOfPerson() * bindData.getAmount());
 
 

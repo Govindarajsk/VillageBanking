@@ -12,6 +12,7 @@ import androidx.navigation.Navigation;
 import com.villagebanking.BOObjects.BOLoanDetail;
 import com.villagebanking.BOObjects.BOLoanHeader;
 import com.villagebanking.Controls.DataGridBase;
+import com.villagebanking.DBTables.tblLoanDetail;
 import com.villagebanking.DBTables.tblLoanHeader;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
@@ -43,15 +44,15 @@ public class LoanDetailGrid <T> extends DataGridBase {
         txtPeriodName.setText(value2);
         txtInstallAmount.setText(value3);
 
-        //ImageButton btnDelete = ((ImageButton) convertView.findViewById(R.id.btnDelete));
-        //btnDelete.setOnClickListener(deleteMethod(bindData.getPrimary_key()));
+        ImageButton btnDelete = ((ImageButton) convertView.findViewById(R.id.btnDelete));
+        btnDelete.setOnClickListener(deleteMethod(bindData.getPrimary_key()));
         return convertView;
     }
     View.OnClickListener deleteMethod(long primaryKey) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DBUtility.DTOdelete(primaryKey, tblLoanHeader.Name);
+                DBUtility.DTOdelete(primaryKey, tblLoanDetail.Name);
             }
         };
     }

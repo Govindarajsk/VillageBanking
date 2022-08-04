@@ -31,6 +31,7 @@ public class GroupsEdit extends Fragment {
 
     //region Initialize
     private GroupsEditviewBinding binding;
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = GroupsEditviewBinding.inflate(inflater, container, false);
@@ -53,9 +54,6 @@ public class GroupsEdit extends Fragment {
             writeView(group_Key);
         }
         binding.btnSave.setOnClickListener(clickSave());
-        binding.editPeridType.setOnItemClickListener(periodItemSelected());
-        binding.editStartDate.setOnItemClickListener(periodTypeItemSelected());
-
         UIUtility.ApplyTextWatcher(this.getContext(), binding.editAmount, binding.editNoOfPerson, binding.lblTotalAmount);
     }
     //endregion
@@ -67,9 +65,9 @@ public class GroupsEdit extends Fragment {
         boolean ok3 = UIUtility.IsFieldEmpty(UIUtility.V_NUMBER, 0, 50000, binding.editAmount);
         boolean ok4 = UIUtility.IsFieldEmpty(UIUtility.V_STRING, 0, 1000, binding.editBondCharge);
         boolean ok5 = UIUtility.IsFieldEmpty(UIUtility.V_STRING, 0, 15, binding.editPeridType);
-        boolean ok6 = UIUtility.IsFieldEmpty(UIUtility.V_STRING, 0, 15, binding.editStartDate);
+        //boolean ok6 = UIUtility.IsFieldEmpty(UIUtility.V_STRING, 0, 15, binding.editStartDate);
 
-        return ok1 || ok2 || ok3 || ok4 || ok5 || ok6;
+        return ok1 || ok2 || ok3 || ok4 || ok5;
     }
 
     BOGroup readView() {
@@ -78,6 +76,7 @@ public class GroupsEdit extends Fragment {
         selectedData.setName(binding.editName.getText().toString());
         selectedData.setNoOfPerson(Integer.valueOf(binding.editNoOfPerson.getText().toString()));
         selectedData.setAmount(Double.parseDouble(binding.editAmount.getText().toString()));
+        selectedData.setPeriodDetail(UIUtility.GetAutoBoxSelected(binding.editPeridType));
         selectedData.setBondCharge(Double.parseDouble(binding.editBondCharge.getText().toString()));
         return selectedData;
     }
@@ -86,40 +85,23 @@ public class GroupsEdit extends Fragment {
     //region Load
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_periodType() {
-        ArrayList<BOPeriod> actualList = DBUtility.DTOGetAlls(tblPeriod.Name);
-        Map<String, List<BOPeriod>> okperiod = UIUtility.GroupByPeriod(actualList);
-        Set<String> list = okperiod.keySet();
+        ArrayList<BOPeriod> actualList = tblPeriod.GetList(0);
 
         ArrayList<BOKeyValue> autoCompleteList = new ArrayList<>();
-        for (String item : list) {
-            String[] strings = item.split(":");
-            if (strings.length > 1)
-                autoCompleteList.add(new BOKeyValue(Integer.valueOf(strings[0]), item));
-        }
-        UIUtility.LoadAutoBox(this.getContext(), autoCompleteList, binding.editPeridType);
-    }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    void fill_periodStart(long periodType) {
-        ArrayList<BOPeriod> boPeriods = DBUtility.DTOGetAlls(tblPeriod.Name);
-        boPeriods.removeIf(x -> x.getPeriodType() != periodType);
-        boPeriods.sort((t1, t2) -> Long.toString(t1.getPeriodValue()).compareTo(Long.toString(t2.getPeriodValue())));
-        ArrayList<BOKeyValue> autoCompleteList = new ArrayList<>();
-        for (BOPeriod item : boPeriods) {
-            autoCompleteList.add(new BOKeyValue(item.getPrimary_key(), item.getActualDate()));
-        }
-        UIUtility.LoadAutoBox(this.getContext(), autoCompleteList, binding.editStartDate);
+        actualList.forEach(x -> autoCompleteList.add(new BOKeyValue(x.getPrimary_key(),
+                x.getActualDate() + "-" + x.getPeriodName())));
+        UIUtility.getAutoBox(this.getContext(), autoCompleteList, binding.editPeridType,null);
     }
 
     void writeView(long primary_key) {
-        ArrayList<BOGroup> fList = DBUtility.DTOGetData(tblGroup.Name, primary_key);
+        ArrayList<BOGroup> fList = tblGroup.GetList(primary_key);
         if (fList.size() > 0) {
             selectedData = fList.get(0);
             UIUtility.applyValue(binding.editName, selectedData.getName());
             UIUtility.applyValue(binding.editNoOfPerson, selectedData.getNoOfPerson());
             UIUtility.applyValue(binding.editAmount, selectedData.getAmount());
-            UIUtility.applyValue(binding.editStartDate, selectedData.getPeriodDetail().getActualDate());
-            UIUtility.applyValue(binding.editPeridType, selectedData.getPeriodDetail().getPeriodName());
+            UIUtility.applyValue(binding.editPeridType, selectedData.getPeriodDetail().getDisplayValue());
             UIUtility.applyValue(binding.editBondCharge, selectedData.getBondCharge());
             UIUtility.applyValue(binding.lblTotalAmount, selectedData.getAmount() * selectedData.getNoOfPerson());
         }
@@ -128,41 +110,18 @@ public class GroupsEdit extends Fragment {
 
     //region Events
     BOGroup selectedData = new BOGroup();
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public View.OnClickListener clickSave() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!checkFields()) {
-                    tblGroup.Save("I",readView());
-                    //DBUtility.DTOSaveUpdate(readView(), tblGroup.Name);
+                    tblGroup.Save(selectedData.getPrimary_key() == 0 ? "I" : "U", readView());
                     getActivity().onBackPressed();
                 }
             }
         };
     }
-
-    AdapterView.OnItemClickListener periodItemSelected() {
-        return new AdapterView.OnItemClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-                long key = UIUtility.getAutoBoxKey(parent.getItemAtPosition(position));
-                selectedData.getPeriodDetail().setPeriodType(key);
-                fill_periodStart(key);
-            }
-        };
-    }
-
-    AdapterView.OnItemClickListener periodTypeItemSelected() {
-        return new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-                long key = UIUtility.getAutoBoxKey(parent.getItemAtPosition(position));
-                selectedData.getPeriodDetail().setPrimary_key(key);
-            }
-        };
-    }
-
     //endregion
 }

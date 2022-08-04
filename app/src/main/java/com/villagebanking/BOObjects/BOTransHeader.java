@@ -2,18 +2,6 @@ package com.villagebanking.BOObjects;
 
 import java.util.ArrayList;
 
-/*
-TRANSACTION_HEADER
-    "ID INTEGER PRIMARY KEY," +
-    "PERIOD_KEY INTEGER, " +
-    "TABLE_NAME TEXT," +
-    "TABLE_LINK_KEY INTEGER," +
-    "REMARKS TEXT," +
-    "DATE TEXT," +
-    "TOTAL_AMOUNT DECIMAL," +
-    "PAID_AMOUNT DECIMAL," +
-    "BALANCE_AMOUNT DECIMAL"
- */
 public class BOTransHeader extends BOBase {
     private long periodKey;
     private String tableName;
@@ -23,13 +11,13 @@ public class BOTransHeader extends BOBase {
     private double totalAmount;
     private double paidAmount;
     private double balanceAmount;
-    private ArrayList<BOTransDetail> transDetails;
+
+    private BOKeyValue linkDetail1;
+    private BOKeyValue linkDetail2;
 
     public boolean IsNew;
-    public long link1Key;
-    public String link1Detail;
-    public long link2Key;
-    public String link2Detail;
+    private ArrayList<BOTransDetail> transDetails;
+
 
     public long getPeriodKey() {
         return periodKey;
@@ -95,8 +83,26 @@ public class BOTransHeader extends BOBase {
         this.balanceAmount = balanceAmount;
     }
 
+    public BOKeyValue getLinkDetail1() {
+        if (linkDetail1 == null) linkDetail1 = new BOKeyValue();
+        return linkDetail1;
+    }
+
+    public void setLinkDetail1(BOKeyValue linkDetail1) {
+        this.linkDetail1 = linkDetail1;
+    }
+
+    public BOKeyValue getLinkDetail2() {
+        if (linkDetail2 == null) linkDetail2 = new BOKeyValue();
+        return linkDetail2;
+    }
+
+    public void setLinkDetail2(BOKeyValue linkDetail2) {
+        this.linkDetail2 = linkDetail2;
+    }
+
     public ArrayList<BOTransDetail> getTransDetails() {
-        if(transDetails==null)transDetails=new ArrayList<>();
+        if (transDetails == null) transDetails = new ArrayList<>();
         return transDetails;
     }
 

@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public class AutoBox extends ArrayAdapter<BOKeyValue> {
+
     private List<BOKeyValue> fullList;
     private List<BOKeyValue> filteredList;
 
@@ -107,18 +108,20 @@ public class AutoBox extends ArrayAdapter<BOKeyValue> {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void LoadAutoBox(AutoCompleteTextView control, long... keys) {
+    public void LoadAutoBox(AutoCompleteTextView control, AdapterView.OnItemClickListener listener, long... keys) {
         control.setAdapter(this);
         this.SetSelected(control, keys);
-        control.setOnItemClickListener(itemSelected());
+        control.setOnItemClickListener(itemSelected(listener));
     }
 
-    AdapterView.OnItemClickListener itemSelected() {
+    AdapterView.OnItemClickListener itemSelected(AdapterView.OnItemClickListener listener) {
         return new AdapterView.OnItemClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
                 selectedItem = (BOKeyValue) parent.getItemAtPosition(position);
+                if (listener != null)
+                    listener.onItemClick(parent, arg1, position, arg3);
             }
         };
     }

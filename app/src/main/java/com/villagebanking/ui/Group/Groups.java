@@ -40,7 +40,7 @@ public class Groups extends Fragment {
 
     void assignToGridView() {
         GroupsGrid adapter = new GroupsGrid(this.getContext(), R.layout.groups_gridview,
-                DBUtility.DTOGetAlls(tblGroup.Name));
+                tblGroup.GetList(0));
         binding.gvDataView.setAdapter(adapter);
     }
 }

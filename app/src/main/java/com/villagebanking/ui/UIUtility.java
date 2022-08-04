@@ -5,6 +5,7 @@ import android.media.metrics.Event;
 import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -90,28 +91,15 @@ public class UIUtility {
     //region AutoCompleteBox
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public static AutoBox getAutoBox(Context cnxt, ArrayList<BOKeyValue> list, AutoCompleteTextView control, long... keys) {
+    public static AutoBox getAutoBox(Context cnxt, ArrayList<BOKeyValue> list, AutoCompleteTextView control, AdapterView.OnItemClickListener listener, long... keys) {
         AutoBox autoBox = new AutoBox(cnxt, list);
-        autoBox.LoadAutoBox(control, keys);
+        autoBox.LoadAutoBox(control, listener, keys);
         return autoBox;
-    }
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public static void LoadAutoBox(Context cnxt, ArrayList<BOKeyValue> list, AutoCompleteTextView control, long... keys) {
-        AutoBox autoComplete = new AutoBox(cnxt, list);
-        control.setAdapter(autoComplete);
     }
 
     public static BOKeyValue GetAutoBoxSelected(AutoCompleteTextView control) {
         BOKeyValue selectedValue = ((AutoBox) control.getAdapter()).getSelectedItem();
         return selectedValue;
-    }
-
-    public static long getAutoBoxKey(Object item) {
-        if (item instanceof BOKeyValue) {
-            BOKeyValue itemSelected = (BOKeyValue) item;
-            return itemSelected.getPrimary_key();
-        }
-        return 0;
     }
     //endregion
 

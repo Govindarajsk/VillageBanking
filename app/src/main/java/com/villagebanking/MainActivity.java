@@ -1,5 +1,9 @@
 package com.villagebanking;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.Menu;
@@ -8,7 +12,7 @@ import android.widget.GridLayout;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintLayoutStates;
+import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -16,23 +20,19 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.villagebanking.BOObjects.BOGroupPersonLink;
+import com.villagebanking.BOObjects.BOLoanDetail;
 import com.villagebanking.BOObjects.BOLoanHeader;
-import com.villagebanking.BOObjects.BOPeriod;
-import com.villagebanking.BOObjects.BOTransDetail;
-import com.villagebanking.BOObjects.BOTransHeader;
-import com.villagebanking.DBTables.tblGroupPersonLink;
+import com.villagebanking.DBTables.tblLoanDetail;
 import com.villagebanking.DBTables.tblLoanHeader;
-import com.villagebanking.DBTables.tblPeriod;
 import com.villagebanking.DBTables.tblTransDetail;
 import com.villagebanking.DBTables.tblTransHeader;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.databinding.AppActivityBinding;
+import com.villagebanking.ui.Person.PersonsGrid;
 
-import java.lang.invoke.ConstantCallSite;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PersonsGrid.onSomeEventListener {
 
     private AppBarConfiguration mAppBarConfiguration;
     private AppActivityBinding binding;
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.item1:
-             ConstraintLayout b=   binding.appBarMain.contents.getRoot();
+                //ConstraintLayout b=   binding.appBarMain.contents.getRoot();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -105,7 +105,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void dropCreateTable() {
-        //DBUtility.AlterTable(tblLoanHeader.Name,tblLoanHeader.CreateTable);
+//        DBUtility.AlterTable(tblLoanDetail.Name, tblLoanDetail.CreateTable);
+//        DBUtility.AlterTable(tblTransHeader.Name, tblTransHeader.CreateTable);
+//        DBUtility.AlterTable(tblTransDetail.Name, tblTransDetail.CreateTable);
     }
 
     private void resetTable() {
@@ -114,11 +116,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getDetails() {
-        ArrayList<BOGroupPersonLink> boGroupPersonLinks = DBUtility.DBGetGroupPerson(tblGroupPersonLink.Name);
-        ArrayList<BOTransHeader> boTransHeaders = DBUtility.DTOGetAlls(tblTransHeader.Name);
-        ArrayList<BOTransDetail> boTransDetails = DBUtility.DTOGetAlls(tblTransDetail.Name);
-        ArrayList<BOLoanHeader> boLoanHeaders = tblLoanHeader.GetList(0,0);
-        ArrayList<BOPeriod> periods = tblPeriod.GetList(0);
-        ArrayList<BOPeriod> periods1= tblPeriod.getNextNPeriods(0,1);
+//        ArrayList<BOGroupPersonLink> boGroupPersonLinks = DBUtility.DBGetGroupPerson(tblGroupPersonLink.Name);
+//        ArrayList<BOTransHeader> boTransHeaders = DBUtility.DTOGetAlls(tblTransHeader.Name);
+//        ArrayList<BOTransDetail> boTransDetails = DBUtility.DTOGetAlls(tblTransDetail.Name);
+        ArrayList<BOLoanHeader> boLoanHeaders = tblLoanHeader.GetList(0, 0);
+        //ArrayList<BOLoanDetail> loanDetails = tblLoanDetail.GetList(0);
+//        ArrayList<BOPeriod> periods = tblPeriod.GetList(0);
+//        ArrayList<BOPeriod> periods1= tblPeriod.getNextNPeriods(0,1);
+    }
+
+    @Override
+    public void someEvent(String s) {
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:0377778888"));
+
+        if (ActivityCompat.checkSelfPermission(MainActivity.this,
+                Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        startActivity(callIntent);
     }
 }

@@ -15,6 +15,7 @@ import androidx.navigation.Navigation;
 
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOTransHeader;
+import com.villagebanking.Controls.DataGridBase;
 import com.villagebanking.DBTables.tblGroupPersonLink;
 import com.villagebanking.DBTables.tblLoanHeader;
 import com.villagebanking.DBTables.tblPeriod;
@@ -25,24 +26,13 @@ import com.villagebanking.ui.UIUtility;
 
 import java.util.ArrayList;
 
-public class PeriodsGrid<T> extends ArrayAdapter {
+public class PeriodsGrid<T> extends DataGridBase {
     public PeriodsGrid(Context context, int textViewResourceId, ArrayList<T> objects) {
         super(context, textViewResourceId, objects);
-    }
 
+    }
     @Override
-    public int getCount() {
-        return super.getCount();
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        T data = (T) super.getItem(position);
-        convertView = customeView(position + 1, data);
-        return convertView;
-    }
-
-    private View customeView(int row, T data) {
+    public View customeView(int row, Object data) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View convertView = inflater.inflate(R.layout.periods_gridview, null);
 
@@ -50,8 +40,7 @@ public class PeriodsGrid<T> extends ArrayAdapter {
         String value1 = Long.toString(row);
         String value2 = bindData.getPeriodName();
 
-        ArrayList<BOTransHeader> transHeaders =
-                DBUtility.FetchPeriodTrans(tblTransHeader.Name, String.valueOf(bindData.getPrimary_key()));
+        ArrayList<BOTransHeader> transHeaders = tblTransHeader.GetViewList(tblTransHeader.Name, String.valueOf(bindData.getPrimary_key()), "");
 
         String value3 = bindData.getActualDate() + "-" + transHeaders.size();
 
@@ -78,6 +67,7 @@ public class PeriodsGrid<T> extends ArrayAdapter {
         return convertView;
     }
 
+    //region Events
     View.OnClickListener deleteGroup(long primaryKey, long transHeaderCount) {
         return new View.OnClickListener() {
             @Override
@@ -124,26 +114,25 @@ public class PeriodsGrid<T> extends ArrayAdapter {
             }
         };
     }
+    //endregion
 
     String keys = "0";
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void periodOpen(BOPeriod period, View view) {
+        ArrayList<BOPeriod> boPeriods = tblPeriod.GetViewList(UIUtility.ToString(period.getPeriodType()));
 
-        ArrayList<BOPeriod> boPeriods = DBUtility.DBGetDataFilter(tblPeriod.Name, "PERIOD_TYPE",
-                UIUtility.ToString(period.getPeriodType()));
         keys = "";
-
-        boPeriods.stream().forEach(x -> keys =
-                (
+        boPeriods.stream().forEach(
+                x -> keys = (
                         x.getPeriodValue() <= period.getPeriodValue() ?
                                 (keys.length() > 0 ? (keys + ",") : "") + x.getPrimary_key()
                                 : keys
                 )
         );
 
-        ArrayList<BOTransHeader> transPerson = DBUtility.FetchPeriodTrans(tblGroupPersonLink.Name, keys);
-        ArrayList<BOTransHeader> transLoan = DBUtility.FetchPeriodTrans(tblLoanHeader.Name, keys);
+        ArrayList<BOTransHeader> transPerson = tblTransHeader.GetViewList(tblGroupPersonLink.Name, keys, "");
+        ArrayList<BOTransHeader> transLoan = tblTransHeader.GetViewList(tblLoanHeader.Name, keys, "");
 
         transPerson.addAll(transLoan);
 
@@ -154,12 +143,13 @@ public class PeriodsGrid<T> extends ArrayAdapter {
         Navigation.findNavController(view).navigate(R.id.nav_period_grid_view);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     void generateTransaction(BOTransHeader x, long periodKey) {
         x.setTransDate(UIUtility.getCurrentDate());
         Long primaryKey = Long.valueOf(periodKey + (x.getTableName().equals(tblGroupPersonLink.Name) ? "0" : "1") +
                 x.getTableLinkKey());
         x.setPrimary_key(primaryKey);
         x.setPeriodKey(periodKey);
-        DBUtility.DTOInsertUpdate("I", x);
+        tblTransHeader.Save("I", x);
     }
 }

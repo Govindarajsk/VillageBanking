@@ -23,18 +23,18 @@ import java.util.ArrayList;
 public class TransHeaderGrid<T> extends DataGridBase {
     public TransHeaderGrid(Context context, int textViewResourceId, ArrayList<T> objects) {
         super(context, textViewResourceId, objects);
-    }
 
+    }
     @Override
     public View customeView(int row, Object data) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View convertView = inflater.inflate(R.layout.trans_header_gridview, null);
 
         BOTransHeader bindData = (BOTransHeader) data;
-        String value1 = bindData.link1Detail;
+        String value1 = bindData.getLinkDetail1().getDisplayValue();
         String value2 = String.valueOf(bindData.getPaidAmount());
         String value3 = String.valueOf(bindData.getBalanceAmount());
-        String value4 = bindData.link2Detail;
+        String value4 = bindData.getLinkDetail2().getDisplayValue();
 
         TextView txtDetails = ((TextView) convertView.findViewById(R.id.txtDetails));
         TextView txtAmount = ((TextView) convertView.findViewById(R.id.txtAmount));
@@ -68,6 +68,7 @@ public class TransHeaderGrid<T> extends DataGridBase {
             public void onClick(View view) {
                 if (transHeader.getTransDetails().size() == 0)
                     DBUtility.DTOdelete(transHeader.getPrimary_key(), tblTransHeader.Name);
+
             }
         };
     }

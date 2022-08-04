@@ -4,17 +4,10 @@ import android.content.ContentValues;
 
 import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOGroupPersonLink;
-import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPerson;
-import com.villagebanking.BOObjects.BOPersonTrans;
-import com.villagebanking.BOObjects.BOTransDetail;
-import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.DBTables.tblGroup;
 import com.villagebanking.DBTables.tblGroupPersonLink;
-import com.villagebanking.DBTables.tblPeriod;
 import com.villagebanking.DBTables.tblPerson;
-import com.villagebanking.DBTables.tblTransDetail;
-import com.villagebanking.DBTables.tblTransHeader;
 
 public class DB2Save {
 
@@ -29,9 +22,6 @@ public class DB2Save {
             case tblGroupPersonLink.Name:
                 BOGroupPersonLink gp = (BOGroupPersonLink) data;
                 return new DB1BOMap(gp.getPrimary_key(), getContentValue(gp));
-            case tblTransDetail.Name:
-                BOTransDetail td = (BOTransDetail) data;
-                return new DB1BOMap(td.getPrimary_key(), tblTransDetail.getContentValue(td));
         }
         return null;
     }

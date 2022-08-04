@@ -1,5 +1,9 @@
 package com.villagebanking.DBTables;
 
+import com.villagebanking.BOObjects.BOPerson;
+import com.villagebanking.Database.DB2GetList;
+import com.villagebanking.Database.DBUtility;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -7,7 +11,7 @@ import java.util.List;
 
 import kotlin.jvm.internal.Intrinsics;
 
-public class tblUtility {
+public class tblUtility<T> {
     static final String primaryKey = " INTEGER PRIMARY KEY";
     static final String integerType = " INTEGER";
     static final String textType = " TEXT";
@@ -47,6 +51,7 @@ public class tblUtility {
     }
     //endregion
 
+    //region Tempo
     public static final String getStrWithComma(ArrayList<String> inputList) {
         String tempStr = "";
         int n = inputList.size();
@@ -68,6 +73,16 @@ public class tblUtility {
         }
         return columns;
     }
+    //endregion
+
+    //region ok gk
+    public static <T> T GetTData(ArrayList<T> list){
+        if (list.size() > 0) {
+            return list.get(0);
+        }
+        return null;
+    }
+    //endregion
 
     //region getTables getCreateTables
     public static ArrayList<String> getTables() {

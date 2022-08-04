@@ -1,7 +1,5 @@
 package com.villagebanking.BOObjects;
 
-import java.util.Date;
-
 public class BOBase {
     private long primary_key;
     public long getPrimary_key() {

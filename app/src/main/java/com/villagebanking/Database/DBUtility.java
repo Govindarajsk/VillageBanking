@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class DBUtility<T> {
 
-    static int version = 5;
+    static int version = 6;
     public static DBSQLQuery DBSQLQuery;
     //region Basic
 
@@ -29,15 +29,11 @@ public class DBUtility<T> {
         if (ID == 0)
             DBSQLQuery.DBDelete(ID, tableName);
         else
-            DBSQLQuery.DBDelete(ID,tableName);
+            DBSQLQuery.DBDelete(ID, tableName);
     }
     //endregion
 
     //region Insert/update
-    public static <T> String DTOInsertUpdate(String flag, T data) {
-        String insertQry = DB2IUD.DTOSaveUpdate(flag, data);
-        return DBSQLQuery.DBDMLQuery(insertQry);
-    }
 
     public static <T> String DTOSaveUpdate(T data, String tableName) {
         DB1BOMap map = DB2Save.DTOSaveUpdate(data, tableName);
@@ -62,39 +58,12 @@ public class DBUtility<T> {
         Cursor res = DBSQLQuery.DBGetData(tableName, primary_key);
         return DB2GetList.DTOGetAlls(res, tableName);
     }
-
-    public static <T> ArrayList<T> FetchPeriodTrans(String tableName, String periodKeys) {
-        ArrayList<T> retunList = new ArrayList<>();
-        if (tableName.equals(tblGroupPersonLink.Name)) {
-            Cursor res = DBSQLQuery.DBFetchGroupLink(periodKeys);
-            retunList = DB2GetList.DTOGetAlls(res, tblTransHeader.Name);
-        } else if (tableName.equals(tblLoanHeader.Name)) {
-            Cursor res = DBSQLQuery.DBFetchLoanTransHeader(periodKeys);
-            retunList = DB2GetList.DTOGetAlls(res, tblTransHeader.Name);
-        } else if (tableName.equals(tblTransHeader.Name)) {
-            Cursor res = DBSQLQuery.DBFetchTransHeader(periodKeys);
-            retunList = DB2GetList.DTOGetAlls(res, tblTransHeader.Name);
-        }
-        return retunList;
-    }
-
-
-    public static <T> ArrayList<T> DBGetGroupPerson(String tblName) {
-        Cursor res = DBSQLQuery.DBGroupPerson();
-        return DB2GetList.DTOGetAlls(res, tblName);
-    }
-
     //endregion
 
     //region Trans List
     public static <T> ArrayList<T> DBGetDataFilter(String tableName, String columnName, String inputValue) {
         Cursor res = DBSQLQuery.DBGetDataFilter(tableName, columnName, inputValue);
         return DB2GetList.DTOGetAlls(res, tableName);
-    }
-
-    public static ArrayList<BOTransDetail> DTOGetTransData(long headerKey) {
-        Cursor res = DBSQLQuery.DBGetTransDetail(headerKey);
-        return DB2GetList.DTOGetAlls(res, tblTransDetail.Name);
     }
     //endregion
 

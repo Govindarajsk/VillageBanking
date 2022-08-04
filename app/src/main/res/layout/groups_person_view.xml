@@ -8,19 +8,20 @@
     <GridLayout android:layout_columnWeight="@integer/config_navAnimTime"
         android:layout_row="0"
         android:columnCount="3"
+        android:layout_marginStart="5dp"
         android:id="@+id/editPart">
 
         <TextView
             android:id="@+id/editGroup"
             style="@style/editText"
             android:layout_row="0"
-            android:layout_column="0"
             android:layout_columnSpan="3"
             android:inputType="text"
             android:text="Group1" />
 
         <AutoCompleteTextView
             android:id="@+id/editPerson"
+            android:layout_marginStart="1dp"
             style="@style/spnStyle"
             android:layout_row="1"
             android:layout_column="0"
@@ -38,7 +39,10 @@
 
     <GridView android:layout_columnWeight="@integer/config_navAnimTime"
         android:id="@+id/gvPersons"
+        android:layout_height="wrap_content"
         android:layout_row="1"
         android:layout_column="0"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="110dp"
+        />
 </GridLayout>

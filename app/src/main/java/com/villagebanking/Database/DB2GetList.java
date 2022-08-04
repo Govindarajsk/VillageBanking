@@ -3,6 +3,7 @@ package com.villagebanking.Database;
 import android.database.Cursor;
 
 import com.villagebanking.BOObjects.BOGroup;
+import com.villagebanking.BOObjects.BOKeyValue;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.DBTables.tblGroup;
@@ -27,18 +28,13 @@ public class DB2GetList {
                 case tblGroup.Name:
                     returnList.add((T) getValue(res, new BOGroup()));
                     break;
-                case tblGroupPersonLink.Name:
-                    returnList.add((T) tblGroupPersonLink.readValue(res));
-                    break;
                 case tblTransHeader.Name:
                     returnList.add((T) tblTransHeader.readValue(res));
-                    break;
-                case tblTransDetail.Name:
-                    returnList.add((T) tblTransDetail.getValue(res));
                     break;
             }
             res.moveToNext();
         }
+        res.close();
         return returnList;
     }
 
@@ -75,7 +71,7 @@ public class DB2GetList {
         ArrayList<Object> periodList = DBUtility.DTOGetData(tblPeriod.Name, period_key);
         if (periodList.size() > 0) {
             BOPeriod item = (BOPeriod) periodList.get(0);
-            newData.setPeriodDetail(item);
+            newData.setPeriodDetail(new BOKeyValue(item.getPrimary_key(),item.getActualDate()+"-"+item.getPeriodName()));
         }
 
         newData.setBondCharge(res.getDouble(5));

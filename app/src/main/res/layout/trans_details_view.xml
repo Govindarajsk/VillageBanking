@@ -2,13 +2,23 @@
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:columnCount="2"
     android:layout_height="match_parent">
 
+    <AutoCompleteTextView
+        android:id="@+id/selectGroup"
+        style="@style/editText"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:hint="Select group"
+        android:inputType="textAutoComplete" />
+
     <TextView android:layout_row="0"
-        android:layout_height="wrap_content"
-        android:text="Basic Information"
-        android:layout_gravity="center_horizontal"
-        android:height="20dp"/>
+        android:layout_columnSpan="1"
+        android:id="@+id/lblSummary"
+        android:text="8000000.00"
+        android:layout_gravity="right"
+        android:textSize="30dp"/>
 
     <GridView
         android:id="@+id/gvDataView"
@@ -17,13 +27,9 @@
         android:layout_row="1"
         android:layout_rowWeight="@integer/config_navAnimTime"
         android:layout_column="0"
+        android:layout_columnSpan="2"
         android:layout_gravity="top"
         android:layout_marginTop="1dp"
         android:layoutMode="opticalBounds" />
 
-    <!--
-    material_emphasis_high_type
-    material_emphasis_disabled
-    material_emphasis_medium
-    -->
 </GridLayout>

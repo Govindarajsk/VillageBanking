@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/maingrid"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:columnCount="6"
+    android:layout_height="wrap_content"
+    android:columnCount="3"
     android:layoutDirection="locale"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/txtDetails"
+        android:id="@+id/txtTransDate"
         style="@style/stylDgTxt"
-        android:layout_row="1"
+        android:layout_row="0"
         android:layout_column="0"
         android:text="Group1"
         android:maxWidth="100dp"
@@ -22,40 +22,28 @@
     <TextView
         android:id="@+id/txtAmount"
         style="@style/stylDgTxt"
-        android:layout_row="1"
+        android:layout_row="0"
         android:layout_column="1"
         android:text="400000.00"
         android:layout_gravity="center_vertical|right"
         android:textStyle="bold" />
 
-    <CheckBox
-        android:id="@+id/chkIsFull"
-        android:layout_row="1"
-        android:layout_column="2"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:width="10dp"
-        android:checked="false" />
-
-    <TextView
-        android:id="@+id/txtNewAmount"
-        style="@style/stylDgTxt"
-        android:layout_row="1"
-        android:layout_column="3"
-        android:text="400000.00"
-        android:textStyle="bold"
-        android:layout_gravity="center_vertical|right"
-        android:inputType="numberDecimal"/>
-
     <ImageButton
         android:id="@+id/btnDelete"
         style="@style/styleBtnReset"
-        android:layout_row="1"
-        android:layout_column="4"/>
+        android:layout_row="0"
+        android:layout_column="2"/>
 
-    <ImageButton android:visibility="gone"
-        android:id="@+id/btnDetail"
-        style="@style/styleBtnDetail"
+    <TextView
+        android:id="@+id/txtDetails"
+        style="@style/stylDgTxt"
         android:layout_row="1"
-        android:layout_column="5"/>
+        android:layout_column="0"
+        android:layout_columnSpan="3"
+        android:text="Other Information"
+        android:maxWidth="100dp"
+        android:layout_columnWeight="@integer/config_navAnimTime"
+        android:layout_gravity="fill_horizontal"
+        android:textStyle="bold"/>
 
 </GridLayout>
