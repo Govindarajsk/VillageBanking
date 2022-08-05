@@ -166,11 +166,11 @@ public class UIUtility {
 
     //region Converters
     public static String ToString(long input) {
-        return input > 0 ? String.valueOf(input) : "";
+        return input > 0 ? String.valueOf(input) : "Empty";
     }
 
     public static String ToString(Double input) {
-        return input > 0 ? String.valueOf(input) : "";
+        return input > 0 ? String.valueOf(input) : "Empty";
     }
 
     public static Double ToDouble(String input) {

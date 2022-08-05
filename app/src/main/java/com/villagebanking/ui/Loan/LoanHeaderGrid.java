@@ -62,7 +62,7 @@ public class LoanHeaderGrid<T> extends DataGridBase {
             @Override
             public void onClick(View view) {
                 DBUtility.DTOdelete(primaryKey, tblLoanHeader.Name);
-                Navigation.findNavController(view).navigate(R.id.nav_loan_grid_view);
+                Navigation.findNavController(view).navigate(R.id.nav_loan_header_view);
             }
         };
     }

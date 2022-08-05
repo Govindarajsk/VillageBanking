@@ -7,7 +7,6 @@ public class BOLoanDetail extends BOBase {
     private long emiNo;
     private String emiStatus;
 
-
     public long getLoanHeaderKey() {
         return loanHeaderKey;
     }
@@ -15,12 +14,29 @@ public class BOLoanDetail extends BOBase {
     public void setLoanHeaderKey(long loanHeaderKey) {
         this.loanHeaderKey = loanHeaderKey;
     }
+
+    public double getEmiAmount() {
+        return emiAmount;
+    }
+
+    public void setEmiAmount(double emiAmount) {
+        this.emiAmount = emiAmount;
+    }
+
     public long getEmiNo() {
         return emiNo;
     }
 
-    public void setEmiNo(long installment) {
-        this.emiNo = installment;
+    public void setEmiNo(long emiNo) {
+        this.emiNo = emiNo;
+    }
+
+    public String getEmiStatus() {
+        return emiStatus;
+    }
+
+    public void setEmiStatus(String emiStatus) {
+        this.emiStatus = emiStatus;
     }
 
     public BOKeyValue getPeriodInfo() {
@@ -32,19 +48,4 @@ public class BOLoanDetail extends BOBase {
         this.periodInfo = periodInfo;
     }
 
-    public double getEmiAmount() {
-        return emiAmount;
-    }
-
-    public void setEmiAmount(double emiAmount) {
-        this.emiAmount = emiAmount;
-    }
-
-    public String getEmiStatus() {
-        return emiStatus;
-    }
-
-    public void setEmiStatus(String emiStatus) {
-        this.emiStatus = emiStatus;
-    }
 }

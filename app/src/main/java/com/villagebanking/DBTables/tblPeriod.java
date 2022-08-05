@@ -103,9 +103,18 @@ public class tblPeriod extends tblBase {
     }
 
     public static ArrayList<BOPeriod> getNextNPeriods(long primaryKey, int N) {
-        String qryFilter = (primaryKey > 0 ? " WHERE " + DBColumn0.getClmName() + "=" + primaryKey : "") +
-                " LIMIT " + N;
-        Cursor result = DBUtility.GetDBList(BOColumn.getListQry(Name, columnList, qryFilter));
+        String qryFilter = "";
+        BOPeriod data = tblUtility.GetTData(GetList(primaryKey));
+        if (data != null) {
+            Long type = data.getPeriodType();
+            Long date = data.getPeriodValue();
+
+            qryFilter = " WHERE " + DBColumn1.getClmName() + "=" + type +
+                    " AND DATE_VALUE > " + date +
+                    " LIMIT " + N;
+        }
+        String qry = BOColumn.getListQry(Name, columnList, qryFilter);
+        Cursor result = DBUtility.GetDBList(qry);
         return readValue(result);
     }
 }

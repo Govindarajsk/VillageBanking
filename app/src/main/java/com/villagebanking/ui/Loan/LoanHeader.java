@@ -18,11 +18,14 @@ import com.villagebanking.BOObjects.BOGroup;
 import com.villagebanking.BOObjects.BOKeyValue;
 import com.villagebanking.BOObjects.BOLoanDetail;
 import com.villagebanking.BOObjects.BOLoanHeader;
+import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPerson;
 
+import com.villagebanking.Controls.AutoBox;
 import com.villagebanking.DBTables.tblGroup;
 import com.villagebanking.DBTables.tblLoanDetail;
 import com.villagebanking.DBTables.tblLoanHeader;
+import com.villagebanking.DBTables.tblPeriod;
 import com.villagebanking.DBTables.tblPerson;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
@@ -49,14 +52,17 @@ public class LoanHeader extends Fragment {
         if (getArguments() != null) {
             fromPage = getArguments().getString("PAGE");
         }
-        binding.glEditView.setVisibility(View.GONE);
-        binding.glLoanDetail.setVisibility(View.GONE);
-        binding.glGridView.setVisibility(View.GONE);
+
         loadHeader(fromPage);
+
+        binding.btnAdd.setOnClickListener(clickAddNew());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void loadHeader(String fromPage) {
+        binding.glEditView.setVisibility(View.GONE);
+        binding.glLoanDetail.setVisibility(View.GONE);
+        binding.glGridView.setVisibility(View.GONE);
         ArrayList<BOLoanHeader> boLoanHeaders = new ArrayList<>();
         switch (fromPage) {
             case tblPerson.Name:
@@ -79,14 +85,19 @@ public class LoanHeader extends Fragment {
                 }
                 break;
             case tblLoanHeader.Name:
-                long loanKey = getArguments().getLong("ID");
-                ArrayList<BOLoanDetail> loanDetails = tblLoanDetail.GetList(loanKey);
+                personKey = getArguments().getLong("ID");
+                fill_person(personKey);
+                fill_group(0);
+                fill_Type(1);
+                binding.glEditView.setVisibility(View.VISIBLE);
                 binding.glLoanDetail.setVisibility(View.VISIBLE);
-                loadDetailGrid(loanDetails);
+
+                binding.editLoanAmount.addTextChangedListener(textChangedEvent());
+                binding.btnSave.setOnClickListener(clickSave());
                 break;
             default:
-                loanKey = 0;
-                loanDetails = tblLoanDetail.GetList(loanKey);
+                long loanKey = 0;
+                ArrayList<BOLoanDetail> loanDetails = tblLoanDetail.GetList(loanKey);
                 binding.glLoanDetail.setVisibility(View.VISIBLE);
                 loadDetailGrid(loanDetails);
                 break;
@@ -111,10 +122,11 @@ public class LoanHeader extends Fragment {
 
         ArrayList<BOKeyValue> keyValues = new ArrayList<>();
         groups.stream().forEach(x -> keyValues.add(new BOKeyValue(x.getPrimary_key(), x.getName(), x)));
-        UIUtility.getAutoBox(this.getContext(), keyValues, binding.editGroup, null);
+        AutoBox autoBox = UIUtility.getAutoBox(this.getContext(), keyValues, binding.editGroup, selectedEvent(binding.editGroup));
 
-        binding.editGroup.setOnItemClickListener(selectedEvent(binding.editGroup));
-        selectedEvent(binding.editGroup);
+        BOGroup selectedValue = (BOGroup) autoBox.getSelectedItem().getActualObject();
+        if (selectedValue != null)
+            binding.lblBondCharge.setText(String.valueOf(selectedValue.getBondCharge()));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -122,7 +134,7 @@ public class LoanHeader extends Fragment {
         ArrayList<BOKeyValue> keyValues = new ArrayList<>();
         keyValues.add(new BOKeyValue(1, "Commission"));
         keyValues.add(new BOKeyValue(2, "EMI"));
-        UIUtility.getAutoBox(this.getContext(), keyValues, binding.editLoanType, null, type);
+        AutoBox autoBox = UIUtility.getAutoBox(this.getContext(), keyValues, binding.editLoanType, null, type);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -143,16 +155,24 @@ public class LoanHeader extends Fragment {
         loadDetailGrid(boLoanDetails);
     }
 
+    int noOfInstallment = 6;
+
     ArrayList<BOLoanDetail> getLoanDetail(double value) {
+        BOKeyValue group = UIUtility.GetAutoBoxSelected(binding.editGroup);
+        BOGroup data = (BOGroup) group.getActualObject();
+        ArrayList<BOPeriod> fPeriod = tblPeriod.getNextNPeriods(data.getPeriodDetail().getPrimary_key(), noOfInstallment);
+
         ArrayList<BOLoanDetail> boLoanDetails = new ArrayList<>();
         double withInterest = value + (value / 5);
-        double eachPeriod = withInterest / 6;
-        for (int i = 1; i <= 6; i++) {
+        double eachPeriod = withInterest / fPeriod.size();
+
+        int i = 1;
+        for (BOPeriod period : fPeriod) {
             BOLoanDetail boLoanDetail = new BOLoanDetail();
-            boLoanDetail.setEmiNo(i);
-            boLoanDetail.setLoanHeaderKey(i);
+            boLoanDetail.setEmiNo(i++);
+            boLoanDetail.setLoanHeaderKey(1);
             boLoanDetail.setEmiAmount(eachPeriod);
-            boLoanDetail.setPeriodInfo(new BOKeyValue(1, "12/05/1990"));
+            boLoanDetail.setPeriodInfo(new BOKeyValue(period.getPrimary_key(), period.getActualDate()));
             boLoanDetails.add(boLoanDetail);
         }
         return boLoanDetails;
@@ -222,18 +242,27 @@ public class LoanHeader extends Fragment {
                 BOKeyValue ref1 = UIUtility.GetAutoBoxSelected(binding.editReference1);
 
                 BOLoanHeader loanHeader = new BOLoanHeader();
-                loanHeader.getPersonKey().setPrimary_key(person.getPrimary_key());
-                loanHeader.getGroupKey().setPrimary_key(group.getPrimary_key());
-                loanHeader.getLoanType().setPrimary_key(lonType.getPrimary_key());
+                loanHeader.setPersonKey(person);
+                loanHeader.setGroupKey(group);
+                loanHeader.setLoanType(lonType);
                 loanHeader.setLoanAmount(UIUtility.ToDouble(binding.editLoanAmount));
                 loanHeader.setOtherAmount(UIUtility.ToDouble(binding.lblOtherAmount));
                 loanHeader.setTransDate(UIUtility.getCurrentDate());
                 loanHeader.setRemarks("ok");
-                loanHeader.getReference1().setPrimary_key(ref1.getPrimary_key());
+                loanHeader.setReference1(ref1);
                 double withInterest = loanHeader.getLoanAmount() + (loanHeader.getLoanAmount() / 5);
                 loanHeader.setRepayAmount(withInterest);
                 tblLoanHeader.Save("I", loanHeader);
                 detailSave(1);
+            }
+        };
+    }
+    View.OnClickListener clickAddNew() {
+        return new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                loadHeader(tblLoanHeader.Name);
             }
         };
     }

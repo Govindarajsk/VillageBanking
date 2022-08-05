@@ -3,13 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <GridLayout
+    <GridLayout android:visibility="gone"
         android:layout_row="0"
         android:id="@+id/glEditView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnCount="3"
-        android:visibility="visible">
+        android:columnCount="3">
 
         <AutoCompleteTextView
             android:id="@+id/editPerson"
@@ -17,7 +16,6 @@
             android:layout_row="0"
             android:layout_column="0"
             android:layout_columnSpan="2"
-            android:layout_marginTop="10dp"
             android:hint="Select Person"
             android:inputType="textAutoComplete" />
 
@@ -26,8 +24,6 @@
             style="@style/editText"
             android:layout_row="1"
             android:layout_column="0"
-            android:layout_columnSpan="2"
-            android:layout_marginTop="10dp"
             android:hint="Select Account"
             android:inputType="textAutoComplete" />
 
@@ -37,47 +33,37 @@
             android:layout_row="2"
             android:layout_column="0"
             android:layout_columnSpan="2"
-            android:layout_marginTop="10dp"
             android:hint="Select Loan Type"
             android:inputType="textAutoComplete" />
 
         <EditText
             android:id="@+id/editLoanAmount"
             style="@style/editText"
-            android:layout_row="3"
-            android:layout_column="1"
-            android:layout_marginEnd="20dp"
+            android:layout_row="4"
+            android:layout_column="0"
             android:width="100dp"
             android:hint="Loan Amount"
             android:inputType="numberDecimal"
+            android:textAlignment="viewEnd"
             android:maxLength="10"
-            android:textAlignment="textEnd"
             android:textSize="20dp" />
-
-        <TextView
-            style="@style/styLbl"
-            android:layout_row="4"
-            android:layout_column="0"
-            android:layout_gravity="fill_horizontal"
-            android:inputType="numberDecimal"
-            android:text="Bond charge : " />
 
         <TextView
             android:id="@+id/lblBondCharge"
             style="@style/styLbl"
-            android:layout_row="4"
+            android:layout_row="1"
             android:layout_column="1"
-            android:layout_marginRight="20dp"
             android:hint="Bond charge"
+            android:textAlignment="viewEnd"
             android:inputType="numberDecimal" />
 
-        <TextView
+        <EditText
             android:id="@+id/lblOtherAmount"
-            style="@style/styLbl"
+            style="@style/editText"
             android:layout_row="5"
-            android:layout_column="1"
-            android:layout_marginRight="20dp"
-            android:hint="Other amount any"
+            android:layout_column="0"
+            android:hint="Amount any"
+            android:textAlignment="viewEnd"
             android:inputType="numberDecimal" />
 
         <TextView
@@ -85,8 +71,6 @@
             style="@style/styLbl"
             android:layout_row="6"
             android:layout_column="0"
-            android:layout_columnSpan="2"
-            android:layout_marginRight="20dp"
             android:hint="Payable Amount"
             android:inputType="numberDecimal"
             android:textSize="30dp" />
@@ -94,29 +78,28 @@
         <AutoCompleteTextView
             android:id="@+id/editReference1"
             style="@style/editText"
-            android:layout_row="7"
+            android:layout_row="3"
             android:layout_column="0"
             android:layout_columnSpan="2"
-            android:layout_marginTop="10dp"
             android:hint="Select Reference"
             android:inputType="textAutoComplete" />
 
         <ImageButton
             android:id="@+id/btnSave"
             style="@style/styleBtnSave"
-            android:layout_row="8"
+            android:layout_row="6"
             android:layout_column="1"
-            android:layout_marginTop="20dp"
             android:layout_marginRight="20dp" />
     </GridLayout>
-    <ScrollView android:id="@+id/glLoanDetail"
+    <ScrollView android:visibility="visible"
+        android:id="@+id/glLoanDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_row="1"
         android:layout_column="0">
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:minHeight="600dp">
 
             <GridView
@@ -132,19 +115,27 @@
         </LinearLayout>
     </ScrollView>
 
-    <GridLayout android:layout_row="1"
+    <GridLayout android:visibility="gone"
+        android:layout_row="1"
+        android:layout_column="0" android:layout_columnSpan="2"
         android:id="@+id/glGridView"
-        android:visibility="visible">
+        android:columnCount="2">
 
         <TextView
             android:id="@+id/lblName"
             style="@style/stylDgTxt"
             android:layout_row="0"
             android:layout_column="0"
+            android:layout_gravity="fill_horizontal"
             android:layout_columnWeight="@integer/config_navAnimTime"
             android:text="Person Name"
-            android:textSize="25dp"
-            android:textAlignment="center"/>
+            android:textSize="25dp"/>
+        <ImageButton
+            android:id="@+id/btnAdd"
+            style="@style/styleBtnAdd"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:layout_gravity="right" />
 
         <GridView
             android:id="@+id/gvDataView"
@@ -153,6 +144,7 @@
             android:layout_row="1"
             android:layout_rowWeight="@integer/config_navAnimTime"
             android:layout_column="0"
+            android:layout_columnSpan="2"
             android:layout_columnWeight="@integer/config_navAnimTime"
             android:layout_gravity="top"
             android:layout_marginTop="1dp"

@@ -32,7 +32,7 @@ public class LoanDetailGrid <T> extends DataGridBase {
         View convertView = inflater.inflate(R.layout.loan_detail_gridview, null);
 
         BOLoanDetail bindData = (BOLoanDetail) data;
-        String value1 = UIUtility.ToString(bindData.getEmiNo());
+        String value1 = UIUtility.ToString(row);//bindData.getEmiNo());
         String value2 = bindData.getPeriodInfo().getDisplayValue();
         String value3 =  UIUtility.ToString(bindData.getEmiAmount());
 
@@ -53,6 +53,7 @@ public class LoanDetailGrid <T> extends DataGridBase {
             @Override
             public void onClick(View view) {
                 DBUtility.DTOdelete(primaryKey, tblLoanDetail.Name);
+                Navigation.findNavController(view).navigate(R.id.nav_loan_grid_view);
             }
         };
     }

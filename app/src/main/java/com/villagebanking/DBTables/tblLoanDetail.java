@@ -5,6 +5,7 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import com.villagebanking.BOObjects.BOKeyValue;
 import com.villagebanking.BOObjects.BOLoanDetail;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.Database.DBUtility;
@@ -71,7 +72,6 @@ public class tblLoanDetail extends tblBase {
         return readValue(result);
     }
 
-
     static ArrayList<BOLoanDetail> readValue(Cursor res) {
         ArrayList<BOLoanDetail> returnList = new ArrayList<>();
         res.moveToFirst();
@@ -80,7 +80,10 @@ public class tblLoanDetail extends tblBase {
             int i=0;
             newData.setPrimary_key(res.getInt(i++));
             newData.setLoanHeaderKey(res.getInt(i++));
-            newData.getPeriodInfo().setPrimary_key(res.getInt(i++));
+            long periodKey= res.getInt(i++);
+            BOPeriod data = tblUtility.GetTData(tblPeriod.GetList(periodKey));
+            if(data!=null)
+            newData.setPeriodInfo(new BOKeyValue(data.getPrimary_key(),data.getActualDate()));
             newData.setEmiNo(res.getInt(i++));
             newData.setEmiAmount(res.getDouble(i++));
             newData.setEmiStatus(res.getString(i++));

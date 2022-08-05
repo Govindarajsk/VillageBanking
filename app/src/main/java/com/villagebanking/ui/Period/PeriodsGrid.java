@@ -31,6 +31,7 @@ public class PeriodsGrid<T> extends DataGridBase {
         super(context, textViewResourceId, objects);
 
     }
+
     @Override
     public View customeView(int row, Object data) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
