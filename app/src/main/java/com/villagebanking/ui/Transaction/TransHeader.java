@@ -28,6 +28,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public class TransHeader extends Fragment {
+
+    //region Initialize
     private TransHeaderViewBinding binding;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -46,48 +48,48 @@ public class TransHeader extends Fragment {
             switch (fromPage) {
                 case tblPeriod.Name:
                     long period_Key = getArguments().getLong("ID");
-                    fill_trans_Header(String.valueOf(period_Key), 0);
+                    fill_trans_Header(period_Key, 0);
                     break;
                 case tblPerson.Name:
                     long person_Key = getArguments().getLong("ID");
-                    String periodKeys = "";
-                    fill_trans_Header(periodKeys, person_Key);
+                    period_Key = 0;
+                    fill_trans_Header(period_Key, person_Key);
                     break;
                 default:
                     break;
             }
         }
-        binding.btnSave.setOnClickListener(clickSave());
+        binding.btnSave.setOnClickListener(clickDetailSave());
     }
 
+    //endregion
+
+    //region Load / Display
     @RequiresApi(api = Build.VERSION_CODES.N)
-    void fill_trans_Header(String periodkeys, long personKey) {
-        ArrayList<BOTransHeader> transHeaderFlist =
-                tblTransHeader.GetViewList(tblTransHeader.Name, periodkeys, "");
-
-        ArrayList<BOTransHeader> transHeaders = new ArrayList<>();
-        transHeaderFlist.forEach(x -> {
-            x.setTransDetails(fill_trans_Detail(x.getPrimary_key()));
-            if (personKey > 0) {
-                if (x.getLinkDetail2().getPrimary_key() == personKey)
-                    transHeaders.add(x);
-            } else
-                transHeaders.add(x);
-
-        });
+    void fill_trans_Header(long periodkey, long personKey) {
+        ArrayList<BOTransHeader> transHeaders =
+                tblTransHeader.GetViewList(tblTransHeader.Name, UIUtility.ToString(periodkey), UIUtility.ToString(personKey));
 
         TransHeaderGrid adapter = new TransHeaderGrid(this.getContext(), R.layout.trans_header_gridview,
                 transHeaders);
         binding.gvDataView.setAdapter(adapter);
-        amountCalculation(transHeaders);
+        accountSummary(transHeaders);
     }
 
-    ArrayList<BOTransDetail> fill_trans_Detail(long headerKey) {
-        ArrayList<BOTransDetail> transDetails = tblTransDetail.GetDetailViewList(headerKey, 0);
-        return transDetails;
-    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void accountSummary(ArrayList<BOTransHeader> transHeaders) {
+        Double totalAmount = transHeaders.stream().mapToDouble(x -> x.getTotalAmount()).sum();
+        Double totalPaid = transHeaders.stream().mapToDouble(x -> x.getPaidAmount()).sum();
+        Double totalBal = transHeaders.stream().mapToDouble(x -> x.getBalanceAmount()).sum();
 
-    View.OnClickListener clickSave() {
+        binding.txtTotal.setText(totalAmount.toString());
+        binding.txtPaid.setText(totalPaid.toString());
+        binding.txtBalance.setText(totalBal.toString());
+    }
+    //endregion
+
+    //region Events
+    View.OnClickListener clickDetailSave() {
         return new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
@@ -101,37 +103,12 @@ public class TransHeader extends Fragment {
                     transDetail.setTransDate(UIUtility.getCurrentDate());
                     transDetail.setRemarks("SKG");
                     if (transHeader.IsNew) {
-                        DBUtility.DTOSaveUpdate(transDetail, tblTransDetail.Name);
+                        tblTransDetail.Save("I", transDetail);
                     }
+                   //tblTransHeader.UpdateAmount(transHeader);
                 }
             }
         };
-    }
-
-    //region Calculation part
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    private void amountCalculation(ArrayList<BOTransHeader> transHeaders) {
-
-        transHeaders.forEach(x -> setDetailList(x));
-
-        Double totalAmount = transHeaders.stream().mapToDouble(x -> x.getTotalAmount()).sum();
-        Double totalPaid = transHeaders.stream().mapToDouble(x -> x.getPaidAmount()).sum();
-        Double totalBal = transHeaders.stream().mapToDouble(x -> x.getBalanceAmount()).sum();
-
-        binding.txtTotal.setText(totalAmount.toString());
-        binding.txtPaid.setText(totalPaid.toString());
-        binding.txtBalance.setText(totalBal.toString());
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    void setDetailList(BOTransHeader transHeader) {
-        ArrayList<BOTransDetail> transDetails = transHeader.getTransDetails();
-
-        Double paidAmount = transDetails.stream().mapToDouble(x -> x.getAmount()).sum();
-        transHeader.setPaidAmount(paidAmount);
-        Double pendingAmount = transHeader.getTotalAmount() - paidAmount;
-        transHeader.setBalanceAmount(pendingAmount);
     }
     //endregion
 }

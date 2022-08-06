@@ -24,6 +24,7 @@ import com.villagebanking.BOObjects.BOLoanDetail;
 import com.villagebanking.BOObjects.BOLoanHeader;
 import com.villagebanking.DBTables.tblLoanDetail;
 import com.villagebanking.DBTables.tblLoanHeader;
+import com.villagebanking.DBTables.tblPerson;
 import com.villagebanking.DBTables.tblTransDetail;
 import com.villagebanking.DBTables.tblTransHeader;
 import com.villagebanking.Database.DBUtility;
@@ -32,7 +33,7 @@ import com.villagebanking.ui.Person.PersonsGrid;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements PersonsGrid.onSomeEventListener {
+public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private AppActivityBinding binding;
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements PersonsGrid.onSom
     }
 
     private void dropCreateTable() {
-//        DBUtility.AlterTable(tblLoanDetail.Name, tblLoanDetail.CreateTable);
+        //DBUtility.AlterTable(tblPerson.Name, tblPerson.CreateTable);
 //        DBUtility.AlterTable(tblTransHeader.Name, tblTransHeader.CreateTable);
 //        DBUtility.AlterTable(tblTransDetail.Name, tblTransDetail.CreateTable);
     }
@@ -116,16 +117,15 @@ public class MainActivity extends AppCompatActivity implements PersonsGrid.onSom
     }
 
     private void getDetails() {
-//        ArrayList<BOGroupPersonLink> boGroupPersonLinks = DBUtility.DBGetGroupPerson(tblGroupPersonLink.Name);
-//        ArrayList<BOTransHeader> boTransHeaders = DBUtility.DTOGetAlls(tblTransHeader.Name);
-//        ArrayList<BOTransDetail> boTransDetails = DBUtility.DTOGetAlls(tblTransDetail.Name);
+        //ArrayList<BOGroupPersonLink> boGroupPersonLinks = DBUtility.DBGetGroupPerson(tblGroupPersonLink.Name);
+        //ArrayList<BOTransHeader> boTransHeaders = DBUtility.DTOGetAlls(tblTransHeader.Name);
+        //ArrayList<BOTransDetail> boTransDetails = DBUtility.DTOGetAlls(tblTransDetail.Name);
         ArrayList<BOLoanHeader> boLoanHeaders = tblLoanHeader.GetList(0, 0);
         //ArrayList<BOLoanDetail> loanDetails = tblLoanDetail.GetList(0);
-//        ArrayList<BOPeriod> periods = tblPeriod.GetList(0);
-//        ArrayList<BOPeriod> periods1= tblPeriod.getNextNPeriods(0,1);
+        //ArrayList<BOPeriod> periods = tblPeriod.GetList(0);
+        //ArrayList<BOPeriod> periods1= tblPeriod.getNextNPeriods(0,1);
     }
 
-    @Override
     public void someEvent(String s) {
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:0377778888"));

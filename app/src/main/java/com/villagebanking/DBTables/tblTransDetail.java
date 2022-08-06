@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi;
 
 import com.villagebanking.BOObjects.BOGroupPersonLink;
 import com.villagebanking.BOObjects.BOKeyValue;
+import com.villagebanking.BOObjects.BOLoanHeader;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOTransDetail;
 import com.villagebanking.Database.DBUtility;
@@ -91,18 +92,32 @@ public class tblTransDetail extends tblBase {
             newData.setRemarks(res.getString(i++));
             if (res.getColumnCount() > 6) {
                 newData.setPeriodKey(res.getLong(i++));
-                newData.setTableName(res.getString(i++));
+                String tableName = res.getString(i++);
                 long tblLinkKey = res.getLong(i++);
                 newData.setTableLinkKey(tblLinkKey);
-                BOGroupPersonLink boGroupPersonLink = tblUtility.GetTData(tblGroupPersonLink.GetList(tblLinkKey));
+                newData.setTableName(tableName);
                 String remarks = "";
-                if (boGroupPersonLink != null) {
-                    remarks += (boGroupPersonLink.PersonDetail != null ?
-                            boGroupPersonLink.PersonDetail.getDisplayValue() : "");
-                    BOKeyValue group = boGroupPersonLink.GroupDetail;
-                    if (key1 > 0 && (group != null && group.getPrimary_key() != key1)) {
-                        res.moveToNext();
-                        continue;
+                if (tableName.equals(tblGroupPersonLink.Name)) {
+                    BOGroupPersonLink data = tblUtility.GetTData(tblGroupPersonLink.GetList(tblLinkKey));
+                    if (data != null) {
+                        remarks += (data.getPerson() != null ?
+                                data.getPerson().getDisplayValue() : "");
+                        BOKeyValue group = data.getGroup();
+                        if (key1 > 0 && (group != null && group.getPrimary_key() != key1)) {
+                            res.moveToNext();
+                            continue;
+                        }
+                    }
+                } else if (tableName.equals(tblLoanHeader.Name)) {
+                    BOLoanHeader data = tblUtility.GetTData(tblLoanHeader.GetList(tblLinkKey));
+                    if (data != null) {
+                        remarks += (data.getPerson() != null ?
+                                data.getPerson().getDisplayValue() : "");
+                        BOKeyValue group = data.getGroup();
+                        if (key1 > 0 && (group != null && group.getPrimary_key() != key1)) {
+                            res.moveToNext();
+                            continue;
+                        }
                     }
                 }
 
@@ -121,13 +136,13 @@ public class tblTransDetail extends tblBase {
 
     //endregion
     //region special qry
-    public static ArrayList<BOTransDetail> GetDetailViewList(long primaryKey,long groupKey) {
-        Cursor result = DBUtility.GetDBList(detailViewQry(primaryKey));
-        return readValue(result,groupKey);
+    public static ArrayList<BOTransDetail> GetDetailViewList(long headerKey, long groupKey) {
+        Cursor result = DBUtility.GetDBList(detailViewQry(headerKey));
+        return readValue(result, groupKey);
     }
 
     static String detailViewQry(long headerKey) {
-        String filter = headerKey > 0 ? " WHERE PARENT_KEY IN (" + headerKey + ")" : "";
+        String filter = headerKey > 0 ? " WHERE TH.ID IN (" + headerKey + ")" : "";
         String qry = "SELECT " +
                 "TD.ID AS ID," +
                 "TD.PARENT_KEY," +

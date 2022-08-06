@@ -1,6 +1,7 @@
-package com.villagebanking.Controls;
+package com.villagebanking.ui.Base;
 
 import android.content.Context;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +13,8 @@ import com.villagebanking.R;
 import java.util.ArrayList;
 
 public abstract class DataGridBase<T> extends ArrayAdapter {
-    public DataGridBase(Context context, int textViewResourceId, ArrayList<T> objects) {
-        super(context, textViewResourceId, objects);
+    public DataGridBase(Context context, int textViewResourceId, ArrayList<T> list) {
+        super(context, textViewResourceId, list);
     }
 
     @Override
@@ -23,9 +24,11 @@ public abstract class DataGridBase<T> extends ArrayAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         T data = (T) super.getItem(position);
-        convertView = customeView(position + 1, data);
+        convertView = customeView(position + 1, data, inflater);
         return convertView;
     }
-    public abstract View customeView(int row, T data);
+
+    public abstract View customeView(int row, T data, LayoutInflater layout);
 }

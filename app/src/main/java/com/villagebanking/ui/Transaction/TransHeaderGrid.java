@@ -10,25 +10,22 @@ import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 
-import com.villagebanking.BOObjects.BOLoanHeader;
 import com.villagebanking.BOObjects.BOTransHeader;
-import com.villagebanking.Controls.DataGridBase;
-import com.villagebanking.DBTables.tblLoanHeader;
+import com.villagebanking.ui.Base.DataGridBase;
 import com.villagebanking.DBTables.tblTransHeader;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 
 import java.util.ArrayList;
 
-public class TransHeaderGrid<T> extends DataGridBase {
-    public TransHeaderGrid(Context context, int textViewResourceId, ArrayList<T> objects) {
+public class TransHeaderGrid<T> extends DataGridBase<BOTransHeader> {
+    public TransHeaderGrid(Context context, int textViewResourceId, ArrayList<BOTransHeader> objects) {
         super(context, textViewResourceId, objects);
 
     }
     @Override
-    public View customeView(int row, Object data) {
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View convertView = inflater.inflate(R.layout.trans_header_gridview, null);
+    public View customeView(int row, BOTransHeader data,LayoutInflater layout) {
+        View convertView = layout.inflate(R.layout.trans_header_gridview, null);
 
         BOTransHeader bindData = (BOTransHeader) data;
         String value1 = bindData.getLinkDetail1().getDisplayValue();

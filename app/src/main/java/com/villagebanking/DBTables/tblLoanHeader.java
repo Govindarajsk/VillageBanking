@@ -13,6 +13,7 @@ import com.villagebanking.BOObjects.BOLoanHeader;
 import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.Database.DBUtility;
+import com.villagebanking.ui.UIUtility;
 
 import java.util.ArrayList;
 
@@ -70,12 +71,12 @@ public class tblLoanHeader extends tblBase {
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static String Save(String flag, BOLoanHeader data) {
         String sqlQuery = BOColumn.getInsetUpdateQry(flag, Name, getColumnValueMap(data));
-        return DBUtility.DBSave(sqlQuery);
+        return DBUtility.DBSQLWriteQry(sqlQuery);
     }
 
     static ArrayList<BOColumn> getColumnValueMap(BOLoanHeader data) {
-        DBColumn1.setColumnValue(data.getPersonKey().getPrimary_key());
-        DBColumn2.setColumnValue(data.getGroupKey().getPrimary_key());
+        DBColumn1.setColumnValue(data.getPerson().getPrimary_key());
+        DBColumn2.setColumnValue(data.getGroup().getPrimary_key());
         DBColumn3.setColumnValue(data.getLoanType().getPrimary_key());
         DBColumn4.setColumnValue(data.getLoanAmount());
         DBColumn5.setColumnValue(data.getOtherAmount());
@@ -89,7 +90,6 @@ public class tblLoanHeader extends tblBase {
     //endregion
 
     //region GetList => primaryKey
-    /* ID,PERSON_KEY */
     public static ArrayList<BOLoanHeader> GetList(long... Keys) {
         String qryFilter = getQryFilter(Keys);
         Cursor result = DBUtility.GetDBList(BOColumn.getListQry(Name, columnList, qryFilter));
@@ -103,16 +103,15 @@ public class tblLoanHeader extends tblBase {
             BOLoanHeader newData = new BOLoanHeader();
             int i = 0;
             newData.setPrimary_key(res.getLong(i++));
-            //newData.getPersonKey().setPrimary_key(res.getLong(i++));
             long personKey = res.getLong(i++);
-            BOPerson person = (BOPerson) DBUtility.GetData(tblPerson.Name, personKey);
+            BOPerson person = tblUtility.GetTData(tblPerson.GetList(personKey));
             if (person != null)
-                newData.setPersonKey(new BOKeyValue(person.getPrimary_key(), person.getFullName()));
+                newData.setPerson(new BOKeyValue(person.getPrimary_key(), person.getFullName()));
 
             long grpKey = res.getLong(i++);
-            BOGroup group = (BOGroup) DBUtility.GetData(tblGroup.Name, grpKey);
+            BOGroup group = tblUtility.GetTData(tblGroup.GetList(grpKey));
             if (group != null)
-                newData.setGroupKey(new BOKeyValue(group.getPrimary_key(), group.getName()));
+                newData.setGroup(new BOKeyValue(group.getPrimary_key(), group.getName()));
 
             newData.getLoanType().setPrimary_key(res.getLong(i++));
             newData.setLoanAmount(res.getDouble(i++));

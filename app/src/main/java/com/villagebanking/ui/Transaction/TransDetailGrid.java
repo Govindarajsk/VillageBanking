@@ -9,23 +9,22 @@ import android.widget.TextView;
 import androidx.navigation.Navigation;
 
 import com.villagebanking.BOObjects.BOTransDetail;
-import com.villagebanking.Controls.DataGridBase;
+import com.villagebanking.ui.Base.DataGridBase;
 import com.villagebanking.DBTables.tblTransDetail;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 
 import java.util.ArrayList;
 
-public class TransDetailGrid<T> extends DataGridBase {
+public class TransDetailGrid<T> extends DataGridBase<BOTransDetail> {
 
-    public TransDetailGrid(Context context, int textViewResourceId, ArrayList<T> objects) {
+    public TransDetailGrid(Context context, int textViewResourceId, ArrayList<BOTransDetail> objects) {
         super(context, textViewResourceId, objects);
     }
 
     @Override
-    public View customeView(int row, Object data) {
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View convertView = inflater.inflate(R.layout.trans_details_gridview, null);
+    public View customeView(int row, BOTransDetail data,LayoutInflater layout) {
+        View convertView = layout.inflate(R.layout.trans_details_gridview, null);
 
         BOTransDetail bindData = (BOTransDetail) data;
         String value1 = bindData.getTransDate();

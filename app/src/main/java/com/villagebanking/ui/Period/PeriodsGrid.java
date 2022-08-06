@@ -5,8 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -15,7 +13,7 @@ import androidx.navigation.Navigation;
 
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOTransHeader;
-import com.villagebanking.Controls.DataGridBase;
+import com.villagebanking.ui.Base.DataGridBase;
 import com.villagebanking.DBTables.tblGroupPersonLink;
 import com.villagebanking.DBTables.tblLoanHeader;
 import com.villagebanking.DBTables.tblPeriod;
@@ -25,51 +23,57 @@ import com.villagebanking.R;
 import com.villagebanking.ui.UIUtility;
 
 import java.util.ArrayList;
+import java.util.stream.LongStream;
 
-public class PeriodsGrid<T> extends DataGridBase {
-    public PeriodsGrid(Context context, int textViewResourceId, ArrayList<T> objects) {
-        super(context, textViewResourceId, objects);
+public class PeriodsGrid<T> extends DataGridBase<BOPeriod> {
 
+    //region Initialize
+    public PeriodsGrid(Context context, int textViewResourceId, ArrayList<BOPeriod> list) {
+        super(context, textViewResourceId, list);
     }
 
     @Override
-    public View customeView(int row, Object data) {
+    public View customeView(int row, BOPeriod bindData, LayoutInflater layout) {
+
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View convertView = inflater.inflate(R.layout.periods_gridview, null);
 
-        BOPeriod bindData = (BOPeriod) data;
-        String value1 = Long.toString(row);
+        String value0 = Long.toString(row);
+        TextView txtSNo = convertView.findViewById(R.id.txtSNo);
+        txtSNo.setText(value0);
+
         String value2 = bindData.getPeriodName();
 
-        ArrayList<BOTransHeader> transHeaders = tblTransHeader.GetViewList(tblTransHeader.Name, String.valueOf(bindData.getPrimary_key()), "");
-
+        ArrayList<BOTransHeader> transHeaders = tblTransHeader.GetViewList(tblTransHeader.Name, UIUtility.ToString(bindData.getPrimary_key()), "");
         String value3 = bindData.getActualDate() + "-" + transHeaders.size();
 
-        TextView column1 = ((TextView) convertView.findViewById(R.id.txtSNo));
-        TextView column2 = ((TextView) convertView.findViewById(R.id.txtPeriodType));
-        TextView column3 = ((TextView) convertView.findViewById(R.id.txtActualDate));
+        TextView txtPeriodType = convertView.findViewById(R.id.txtPeriodType);
+        TextView txtActualDate = convertView.findViewById(R.id.txtActualDate);
 
-        column1.setText(value1);
-        column2.setText(value2);
-        column3.setText(value3);
+        txtPeriodType.setText(value2);
+        txtActualDate.setText(value3);
 
-        ImageButton btnDelete = ((ImageButton) convertView.findViewById(R.id.btnDelete));
-        btnDelete.setOnClickListener(deleteGroup(bindData.getPrimary_key(), transHeaders.size()));
+        long size = transHeaders.size();
 
-        ImageButton btnEdit = ((ImageButton) convertView.findViewById(R.id.btnEdit));
-        btnEdit.setOnClickListener(editGroup(bindData));
+        ImageButton btnDelete = convertView.findViewById(R.id.btnDelete);
+        btnDelete.setOnClickListener(delete(bindData.getPrimary_key(), size));
 
-        ImageButton btnDetail = ((ImageButton) convertView.findViewById(R.id.btnDetail));
-        btnDetail.setOnClickListener(openTransHeader(bindData, transHeaders.size()));
+        ImageButton btnEdit = convertView.findViewById(R.id.btnEdit);
+        btnEdit.setOnClickListener(edit(bindData));
 
-        ImageButton btnOpen = ((ImageButton) convertView.findViewById(R.id.btnClose));
+        ImageButton btnDetail = convertView.findViewById(R.id.btnDetail);
+        btnDetail.setOnClickListener(callTransHeader(bindData, size));
+
+        ImageButton btnOpen = convertView.findViewById(R.id.btnClose);
         btnOpen.setOnClickListener(openPeriod(bindData));
 
         return convertView;
     }
 
+    //endregion
+
     //region Events
-    View.OnClickListener deleteGroup(long primaryKey, long transHeaderCount) {
+    View.OnClickListener delete(long primaryKey, long transHeaderCount) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +85,7 @@ public class PeriodsGrid<T> extends DataGridBase {
         };
     }
 
-    View.OnClickListener editGroup(BOPeriod bindData) {
+    View.OnClickListener edit(BOPeriod bindData) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,7 +96,7 @@ public class PeriodsGrid<T> extends DataGridBase {
         };
     }
 
-    View.OnClickListener openTransHeader(BOPeriod bindData, long transHeaderCount) {
+    View.OnClickListener callTransHeader(BOPeriod bindData, long transHeaderCount) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,26 +115,22 @@ public class PeriodsGrid<T> extends DataGridBase {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                periodOpen(bindData, view);
+                genTransHeader(bindData, view);
             }
         };
     }
     //endregion
 
-    String keys = "0";
+
+    String keys = "";
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    void periodOpen(BOPeriod period, View view) {
-        ArrayList<BOPeriod> boPeriods = tblPeriod.GetViewList(UIUtility.ToString(period.getPeriodType()));
+    void genTransHeader(BOPeriod period, View view) {
+        ArrayList<BOPeriod> boPeriods = tblPeriod.getNextNPeriods(period.getPrimary_key(), 0);
 
-        keys = "";
-        boPeriods.stream().forEach(
-                x -> keys = (
-                        x.getPeriodValue() <= period.getPeriodValue() ?
-                                (keys.length() > 0 ? (keys + ",") : "") + x.getPrimary_key()
-                                : keys
-                )
-        );
+        LongStream keyStream = boPeriods.stream().mapToLong(x -> x.getPrimary_key());
+        keyStream.forEach(x -> keys += (keys.length() > 0 ? "," : "") + UIUtility.ToString(x));
+
 
         ArrayList<BOTransHeader> transPerson = tblTransHeader.GetViewList(tblGroupPersonLink.Name, keys, "");
         ArrayList<BOTransHeader> transLoan = tblTransHeader.GetViewList(tblLoanHeader.Name, keys, "");

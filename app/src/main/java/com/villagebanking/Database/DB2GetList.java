@@ -22,12 +22,6 @@ public class DB2GetList {
         res.moveToFirst();
         while (!res.isAfterLast()) {
             switch (tableName) {
-                case tblPerson.Name:
-                    returnList.add((T) getValue(res, new BOPerson()));
-                    break;
-                case tblGroup.Name:
-                    returnList.add((T) getValue(res, new BOGroup()));
-                    break;
                 case tblTransHeader.Name:
                     returnList.add((T) tblTransHeader.readValue(res));
                     break;
@@ -36,45 +30,5 @@ public class DB2GetList {
         }
         res.close();
         return returnList;
-    }
-
-    /*
-       "ID INTEGER PRIMARY KEY, " +
-       "FIRSTNAME TEXT," +
-       "LASTNAME TEXT," +
-       "PHONE TEXT"+;
-    */
-    static BOPerson getValue(Cursor res, BOPerson test) {
-        BOPerson newData = new BOPerson();
-        newData.setPrimary_key(res.getLong(0));
-        newData.setStrFName(res.getString(1));
-        newData.setStrLName(res.getString(2));
-        newData.setNumMobile(res.getLong(3));
-        return newData;
-    }
-    /*
-        "ID INTEGER PRIMARY KEY, " +
-        "NAME TEXT," +
-        "NO_OF_PERSON INTEGER," +
-        "AMOUNT DECIMAL" +
-        "START_PERIOD_KEY INTEGER"+
-        "BOND_CHARGE DECIMAL"+
-     */
-    static BOGroup getValue(Cursor res, BOGroup test) {
-        BOGroup newData = new BOGroup();
-        newData.setPrimary_key(res.getInt(0));
-        newData.setName(res.getString(1));
-        newData.setNoOfPerson(res.getInt(2));
-        newData.setAmount(res.getDouble(3));
-
-        long period_key = res.getLong(4);
-        ArrayList<Object> periodList = DBUtility.DTOGetData(tblPeriod.Name, period_key);
-        if (periodList.size() > 0) {
-            BOPeriod item = (BOPeriod) periodList.get(0);
-            newData.setPeriodDetail(new BOKeyValue(item.getPrimary_key(),item.getActualDate()+"-"+item.getPeriodName()));
-        }
-
-        newData.setBondCharge(res.getDouble(5));
-        return newData;
     }
 }

@@ -104,23 +104,6 @@ public class UIUtility {
     //endregion
 
     //region Other
-    public static Map<String, List<BOPeriod>> GroupByPeriod(ArrayList<BOPeriod> periods) {
-        Map<String, List<BOPeriod>> map = new HashMap<>();
-        for (BOPeriod item : periods) {
-            String value = item.getPeriodType() + ":" + item.getPeriodName();
-            List<BOPeriod> list;
-            if (map.containsKey(value)) {
-                list = map.get(value);
-            } else {
-                list = new ArrayList<>();
-            }
-            list.add(item);
-            map.put(value, list);
-        }
-        map.values(); // this will give Collection of values.
-        return map;
-    }
-
     public static void ApplyTextWatcher(Context context, EditText editText1, EditText editText2, TextView txtView) {
         TextWatcher fieldValidatorTextWatcher = new TextWatcher() {
             @Override
@@ -153,24 +136,24 @@ public class UIUtility {
         String val = value != null ? value.toString() : "";
         if (value instanceof Double) {
             DecimalFormat formater = new DecimalFormat("0.00");
-            //formater.format(value instanceof  Double);
-            // txtView.setText(String.format("%.##",val));
         }
         txtView.setText(val);
     }
 
-    public static void disableField(TextView txtView) {
-        txtView.setEnabled(false);
-    }
     //endregion
 
     //region Converters
     public static String ToString(long input) {
-        return input > 0 ? String.valueOf(input) : "Empty";
+        return input > 0 ? String.valueOf(input) : "";
     }
 
     public static String ToString(Double input) {
-        return input > 0 ? String.valueOf(input) : "Empty";
+        return input > 0 ? String.valueOf(input) : "";
+    }
+
+    public static String ToString(TextView input) {
+        return input != null && input.getText().length() > 0 ?
+                input.getText().toString() : "";
     }
 
     public static Double ToDouble(String input) {
@@ -178,36 +161,13 @@ public class UIUtility {
     }
 
     public static Double ToDouble(TextView input) {
-        return input != null && input.getText().length() > 0 ? Double.parseDouble(input.getText().toString()) : 0;
-    }
-    //endregion
-
-    //region Events
-
-    TextWatcher textChangedEvnt(Event events) {
-        TextWatcher fieldValidatorTextWatcher = new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {
-                Double value = s != null && s.length() > 0 ? Double.parseDouble(s.toString()) : 0.00;
-                //events=method();
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //ShowMessage(context, "beforeTextChanged");
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Double value = s != null && s.length() > 0 ? Double.parseDouble(s.toString()) : 0.00;
-
-            }
-        };
-        return fieldValidatorTextWatcher;
+        return input != null && input.getText().length() > 0 ?
+                Double.parseDouble(input.getText().toString()) : 0;
     }
 
-    void method() {
-
+    public static Long ToLong(TextView input) {
+        return input != null && input.getText().length() > 0 ?
+                Long.parseLong(input.getText().toString()) : 0;
     }
     //endregion
 }

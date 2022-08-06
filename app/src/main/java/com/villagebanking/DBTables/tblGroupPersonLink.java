@@ -84,11 +84,11 @@ public class tblGroupPersonLink extends tblBase {
 
             BOGroup group = (BOGroup) DBUtility.GetData(tblGroup.Name, newData.getGroup_Key());
             if (group != null)
-                newData.GroupDetail = new BOKeyValue(group.getPrimary_key(), group.getName());
+                newData.setGroup(new BOKeyValue(group.getPrimary_key(), group.getName()));
 
             BOPerson person = (BOPerson) DBUtility.GetData(tblPerson.Name, newData.getPerson_Key());
             if (person != null)
-                newData.PersonDetail = new BOKeyValue(person.getPrimary_key(), person.getFullName());
+                newData.setPerson( new BOKeyValue(person.getPrimary_key(), person.getFullName()));
 
             newData.setPerson_role(res.getString(3));
             returnList.add(newData);

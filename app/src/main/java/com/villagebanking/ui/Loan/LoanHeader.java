@@ -21,6 +21,7 @@ import com.villagebanking.BOObjects.BOLoanHeader;
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPerson;
 
+import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.Controls.AutoBox;
 import com.villagebanking.DBTables.tblGroup;
 import com.villagebanking.DBTables.tblLoanDetail;
@@ -75,10 +76,14 @@ public class LoanHeader extends Fragment {
                     binding.glEditView.setVisibility(View.VISIBLE);
                     binding.glLoanDetail.setVisibility(View.VISIBLE);
 
+
+                    binding.selectLoanHeader.setVisibility(View.GONE);
+                    binding.lblSummary.setVisibility(View.GONE);
+
                     binding.editLoanAmount.addTextChangedListener(textChangedEvent());
                     binding.btnSave.setOnClickListener(clickSave());
                 } else {
-                    String personName = boLoanHeaders.get(0).getPersonKey().getDisplayValue();
+                    String personName = boLoanHeaders.get(0).getPerson().getDisplayValue();
                     binding.lblName.setText(personName);
                     binding.glGridView.setVisibility(View.VISIBLE);
                     loadGridView(boLoanHeaders);
@@ -91,15 +96,16 @@ public class LoanHeader extends Fragment {
                 fill_Type(1);
                 binding.glEditView.setVisibility(View.VISIBLE);
                 binding.glLoanDetail.setVisibility(View.VISIBLE);
+                binding.selectLoanHeader.setVisibility(View.GONE);
+                binding.lblSummary.setVisibility(View.GONE);
 
                 binding.editLoanAmount.addTextChangedListener(textChangedEvent());
                 binding.btnSave.setOnClickListener(clickSave());
                 break;
             default:
-                long loanKey = 0;
-                ArrayList<BOLoanDetail> loanDetails = tblLoanDetail.GetList(loanKey);
+                boLoanHeaders = tblLoanHeader.GetList();
                 binding.glLoanDetail.setVisibility(View.VISIBLE);
-                loadDetailGrid(loanDetails);
+                fill_loanHeader(boLoanHeaders);
                 break;
         }
     }
@@ -108,7 +114,7 @@ public class LoanHeader extends Fragment {
     //region Load/Fill Fields
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_person(long personKey) {
-        ArrayList<BOPerson> people = DBUtility.DTOGetData(tblPerson.Name, 0);
+        ArrayList<BOPerson> people = tblPerson.GetList(0);
         ArrayList<BOKeyValue> keyValues = new ArrayList<>();
         people.stream().forEach(x -> keyValues.add(new BOKeyValue(x.getPrimary_key(), x.getFullName())));
 
@@ -118,7 +124,7 @@ public class LoanHeader extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_group(long groupKey) {
-        ArrayList<BOGroup> groups = DBUtility.DTOGetData(tblGroup.Name, groupKey);
+        ArrayList<BOGroup> groups = tblGroup.GetList(groupKey);
 
         ArrayList<BOKeyValue> keyValues = new ArrayList<>();
         groups.stream().forEach(x -> keyValues.add(new BOKeyValue(x.getPrimary_key(), x.getName(), x)));
@@ -139,7 +145,6 @@ public class LoanHeader extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void loadGridView(ArrayList<BOLoanHeader> boLoanHeaders) {
-        boLoanHeaders.sort((t1, t2) -> Long.toString(t1.getGroupKey().getPrimary_key()).compareTo(Long.toString(t2.getGroupKey().getPrimary_key())));
         LoanHeaderGrid adapter = new LoanHeaderGrid(this.getContext(), R.layout.loan_header_gridview, boLoanHeaders);
         binding.gvDataView.setAdapter(adapter);
     }
@@ -147,6 +152,34 @@ public class LoanHeader extends Fragment {
     // endregion
 
     //region Loan Detail
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    void fill_loanHeader(ArrayList<BOLoanHeader> boLoanHeaders) {
+        ArrayList<BOKeyValue> autoBoxList = new ArrayList<>();
+        boLoanHeaders.stream().forEach(x -> autoBoxList.add(new BOKeyValue(x.getPrimary_key(),
+                x.getGroup().getDisplayValue() + "-" +
+                        x.getPerson().getDisplayValue() + "-" +
+                        x.getRemarks()
+                , x)));
+
+        UIUtility.getAutoBox(this.getContext(), autoBoxList, binding.selectLoanHeader,
+                itemSelected(null));
+
+        itemSelected(null).onItemClick(null, null, 0, 1);
+    }
+
+    AdapterView.OnItemClickListener itemSelected(AdapterView.OnItemClickListener listener) {
+        return new AdapterView.OnItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
+                BOKeyValue keyValue = ((AutoBox) binding.selectLoanHeader.getAdapter()).getSelectedItem();
+
+                ArrayList<BOLoanDetail> loanDetails = tblLoanDetail.GetList(0);
+                loadDetailGrid(loanDetails);
+            }
+        };
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     void calculation(double value) {
         Double actualValue = value - UIUtility.ToDouble(binding.lblBondCharge.getText().toString());
@@ -157,6 +190,7 @@ public class LoanHeader extends Fragment {
 
     int noOfInstallment = 6;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     ArrayList<BOLoanDetail> getLoanDetail(double value) {
         BOKeyValue group = UIUtility.GetAutoBoxSelected(binding.editGroup);
         BOGroup data = (BOGroup) group.getActualObject();
@@ -192,6 +226,9 @@ public class LoanHeader extends Fragment {
         loanDetails.sort((t1, t2) -> Long.toString(t1.getEmiNo()).compareTo(Long.toString(t2.getEmiNo())));
         LoanDetailGrid adapter = new LoanDetailGrid(this.getContext(), R.layout.loan_detail_gridview, loanDetails);
         binding.gvLoanDetail.setAdapter(adapter);
+
+        double total = loanDetails.stream().mapToDouble(x -> x.getEmiAmount()).sum();
+        binding.lblSummary.setText(String.valueOf(total));
     }
     //endregion
 
@@ -242,8 +279,8 @@ public class LoanHeader extends Fragment {
                 BOKeyValue ref1 = UIUtility.GetAutoBoxSelected(binding.editReference1);
 
                 BOLoanHeader loanHeader = new BOLoanHeader();
-                loanHeader.setPersonKey(person);
-                loanHeader.setGroupKey(group);
+                loanHeader.setPerson(person);
+                loanHeader.setGroup(group);
                 loanHeader.setLoanType(lonType);
                 loanHeader.setLoanAmount(UIUtility.ToDouble(binding.editLoanAmount));
                 loanHeader.setOtherAmount(UIUtility.ToDouble(binding.lblOtherAmount));
@@ -252,11 +289,14 @@ public class LoanHeader extends Fragment {
                 loanHeader.setReference1(ref1);
                 double withInterest = loanHeader.getLoanAmount() + (loanHeader.getLoanAmount() / 5);
                 loanHeader.setRepayAmount(withInterest);
-                tblLoanHeader.Save("I", loanHeader);
-                detailSave(1);
+                String headerKey = tblLoanHeader.Save("I", loanHeader);
+                long key = Long.parseLong(headerKey);
+                if (key > 0)
+                    detailSave(key);
             }
         };
     }
+
     View.OnClickListener clickAddNew() {
         return new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)

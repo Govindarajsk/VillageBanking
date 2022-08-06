@@ -42,8 +42,8 @@ public class GroupPersonsGrid<T> extends ArrayAdapter {
 
         BOGroupPersonLink bindData = (BOGroupPersonLink) data;
         String value1 = Integer.toString(row);
-        String value2 = bindData.PersonDetail.getDisplayValue();
-        String value3 = bindData.GroupDetail.getDisplayValue();
+        String value2 = bindData.getPerson().getDisplayValue();
+        String value3 = bindData.getGroup().getDisplayValue();
         String value4 = bindData.getPerson_role();
 
         TextView txtSNo = ((TextView) convertView.findViewById(R.id.txtSNo));

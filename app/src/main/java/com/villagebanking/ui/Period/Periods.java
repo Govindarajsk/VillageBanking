@@ -49,7 +49,6 @@ public class Periods extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.N)
     void assignToGridView() {
         ArrayList<BOPeriod> periods = tblPeriod.GetList(0);
-        periods.sort((t1, t2) -> Long.toString(t1.getPeriodValue()).compareTo(Long.toString(t2.getPeriodValue())));
         PeriodsGrid adapter = new PeriodsGrid(this.getContext(), R.layout.app_gridview, periods);
         binding.gvDataView.setAdapter(adapter);
     }

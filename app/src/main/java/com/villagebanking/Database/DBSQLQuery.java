@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.DBTables.tblGroupPersonLink;
+import com.villagebanking.DBTables.tblLoanHeader;
 import com.villagebanking.DBTables.tblTransDetail;
 import com.villagebanking.DBTables.tblTransHeader;
 import com.villagebanking.DBTables.tblUtility;
@@ -78,16 +79,6 @@ public class DBSQLQuery extends SQLiteOpenHelper {
         return true;
     }
 
-    public String DBDMLQuery(String sqlQry) {
-        try {
-            SQLiteDatabase db = this.getWritableDatabase();
-            db.execSQL(sqlQry);
-            return SUCCESS;
-        } catch (Exception ex) {
-            return ex.getMessage();
-        }
-    }
-
     public void updateField(String TBLNAME, String CLMNAME, String VALUE, long ID) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("UPDATE " + TBLNAME + " SET " + CLMNAME + "='" + VALUE + "' WHERE ID=" + ID);
@@ -96,11 +87,18 @@ public class DBSQLQuery extends SQLiteOpenHelper {
 
     //endregion
 
-    //region GETLIST
-    public Cursor DBGetDataFilter(String TBLNAME, String CLMNAME, String INPUT) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM " + TBLNAME + " WHERE " + CLMNAME + "=" + INPUT, null);
-        return res;
+
+    public String ExecuteSQL(String sqlQuery) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(sqlQuery);
+
+        Cursor res = db.rawQuery("SELECT MAX(ID)  FROM " + tblLoanHeader.Name, null);
+        String value = "0";
+        while (res.moveToNext()) {//there is no need to use while, if condition is good.
+            value = String.valueOf(res.getLong(0));
+            value = res.getString(0);
+            System.out.println(value);
+        }
+        return value;
     }
-    //endregion
 }

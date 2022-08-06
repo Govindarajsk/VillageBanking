@@ -3,8 +3,8 @@ package com.villagebanking.BOObjects;
 import java.util.ArrayList;
 
 public class BOLoanHeader extends BOBase {
-    private BOKeyValue personKey;
-    private BOKeyValue groupKey;
+    private BOKeyValue person;
+    private BOKeyValue group;
     private BOKeyValue loanType;
     private double loanAmount;
     private double otherAmount;
@@ -14,22 +14,22 @@ public class BOLoanHeader extends BOBase {
     private BOKeyValue reference1;
     private double repayAmount;
 
-    public BOKeyValue getPersonKey() {
-        if (personKey == null) personKey = new BOKeyValue();
-        return personKey;
+    public BOKeyValue getPerson() {
+        if (person == null) person = new BOKeyValue();
+        return person;
     }
 
-    public void setPersonKey(BOKeyValue personKey) {
-        this.personKey = personKey;
+    public void setPerson(BOKeyValue person) {
+        this.person = person;
     }
 
-    public BOKeyValue getGroupKey() {
-        if (groupKey == null) groupKey = new BOKeyValue();
-        return groupKey;
+    public BOKeyValue getGroup() {
+        if (group == null) group = new BOKeyValue();
+        return group;
     }
 
-    public void setGroupKey(BOKeyValue groupKey) {
-        this.groupKey = groupKey;
+    public void setGroup(BOKeyValue group) {
+        this.group = group;
     }
 
     public BOKeyValue getLoanType() {

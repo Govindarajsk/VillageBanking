@@ -69,12 +69,14 @@ public class tblPeriod extends tblBase {
     //endregion
 
     //region GetList => primaryKey
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static ArrayList<BOPeriod> GetList(long primaryKey) {
         String qryFilter = (primaryKey > 0 ? " WHERE " + DBColumn0.getClmName() + "=" + primaryKey : "");
         Cursor result = DBUtility.GetDBList(BOColumn.getListQry(Name, columnList, qryFilter));
         return readValue(result);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     static ArrayList<BOPeriod> readValue(Cursor res) {
         ArrayList<BOPeriod> returnList = new ArrayList<>();
         res.moveToFirst();
@@ -91,17 +93,22 @@ public class tblPeriod extends tblBase {
             res.moveToNext();
         }
         res.close();
+
+        returnList.sort((t1, t2) -> Long.toString(t1.getPeriodValue()).
+                compareTo(Long.toString(t2.getPeriodValue())));
         return returnList;
     }
     //endregion
 
     //region Special GetList
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static ArrayList<BOPeriod> GetViewList(String periodType) {
         String qryFilter = (periodType.length() > 0 ? " WHERE " + DBColumn1.getClmName() + "=" + periodType : "");
         Cursor result = DBUtility.GetDBList(BOColumn.getListQry(Name, columnList, qryFilter));
         return readValue(result);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static ArrayList<BOPeriod> getNextNPeriods(long primaryKey, int N) {
         String qryFilter = "";
         BOPeriod data = tblUtility.GetTData(GetList(primaryKey));
@@ -109,12 +116,12 @@ public class tblPeriod extends tblBase {
             Long type = data.getPeriodType();
             Long date = data.getPeriodValue();
 
-            qryFilter = " WHERE " + DBColumn1.getClmName() + "=" + type +
-                    " AND DATE_VALUE > " + date +
-                    " LIMIT " + N;
+            qryFilter = " WHERE " + DBColumn1.getClmName() + "=" + type + " AND " +
+                    (N > 0 ? ("DATE_VALUE > " + date + " LIMIT " + N) : "DATE_VALUE <= " + date);
         }
         String qry = BOColumn.getListQry(Name, columnList, qryFilter);
         Cursor result = DBUtility.GetDBList(qry);
         return readValue(result);
     }
+    //endregion
 }

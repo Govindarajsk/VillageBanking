@@ -44,30 +44,32 @@ public class PersonsGrid<T> extends ArrayAdapter {
 
         BOPerson bindData = (BOPerson) data;
         String value1 = Integer.toString(row);
-        String value2 = bindData.getStrFName();// + "-" + bindData.getPrimary_key();
-        String value3 = bindData.getStrLName();
-        String value4 = Long.toString(bindData.getNumMobile());
+        String value2 = bindData.getFName();
+        String value3 = bindData.getLName();
+        String value4 = Long.toString(bindData.getMobile());
 
-        TextView txtSNo = ((TextView) convertView.findViewById(R.id.txtSNo));
-        TextView txtFirstName = ((TextView) convertView.findViewById(R.id.txtFirstName));
-        TextView txtLastName = ((TextView) convertView.findViewById(R.id.txtLastName));
-        TextView txtPhoneNo = ((TextView) convertView.findViewById(R.id.txtPhoneNo));
+        TextView txtSNo = convertView.findViewById(R.id.txtSNo);
+        TextView txtFirstName = convertView.findViewById(R.id.txtFirstName);
+        TextView txtLastName = convertView.findViewById(R.id.txtLastName);
+        TextView txtPhoneNo = convertView.findViewById(R.id.txtPhoneNo);
 
         txtSNo.setText(value1);
         txtFirstName.setText(value2);
         txtLastName.setText(value3);
         txtPhoneNo.setText(value4);
-        ImageButton btnDelete = (ImageButton) convertView.findViewById(R.id.btnDelete);
-        btnDelete.setOnClickListener(deleteMethod(bindData.getPrimary_key()));
-        ImageButton btnEdit = ((ImageButton) convertView.findViewById(R.id.btnEdit));
-        btnEdit.setOnClickListener(editMethod(bindData));
-        ImageButton btnLoan = ((ImageButton) convertView.findViewById(R.id.btnLoan));
+
+        ImageButton btnDelete = convertView.findViewById(R.id.btnDelete);
+        ImageButton btnEdit = convertView.findViewById(R.id.btnEdit);
+        ImageButton btnLoan = convertView.findViewById(R.id.btnLoan);
+
+        btnDelete.setOnClickListener(delete(bindData.getPrimary_key()));
+        btnEdit.setOnClickListener(edit(bindData));
         btnLoan.setOnClickListener(loanMethod(bindData));
 
         return convertView;
     }
 
-    View.OnClickListener deleteMethod(long primaryKey) {
+    View.OnClickListener delete(long primaryKey) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,11 +79,10 @@ public class PersonsGrid<T> extends ArrayAdapter {
         };
     }
 
-    View.OnClickListener editMethod(BOPerson bindData) {
+    View.OnClickListener edit(BOPerson bindData) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // someEventListener.someEvent("Hi");
                 Bundle args = new Bundle();
                 args.putString("PAGE", tblPerson.Name);
                 args.putLong("ID", bindData.getPrimary_key());
@@ -101,11 +102,4 @@ public class PersonsGrid<T> extends ArrayAdapter {
             }
         };
     }
-
-
-    public interface onSomeEventListener {
-        public void someEvent(String s);
-    }
-
-    onSomeEventListener someEventListener;
 }

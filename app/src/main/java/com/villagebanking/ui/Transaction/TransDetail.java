@@ -60,8 +60,6 @@ public class TransDetail extends Fragment {
         groups.stream().forEach(x -> keyValues.add(new BOKeyValue(x.getPrimary_key(), x.getName(), x)));
         AutoBox autoBox = UIUtility.getAutoBox(this.getContext(), keyValues, binding.selectGroup,
                 itemSelected(null));
-
-        //binding.selectGroup.setOnItemClickListener(selectedEvent(binding.selectGroup));
         long grpKey = autoBox.getSelectedItem().getPrimary_key();
         trans_Detail(grpKey);
 

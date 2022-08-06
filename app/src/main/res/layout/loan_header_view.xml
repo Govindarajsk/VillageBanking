@@ -94,25 +94,40 @@
     <ScrollView android:visibility="visible"
         android:id="@+id/glLoanDetail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_row="1"
         android:layout_column="0">
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="600dp">
+        <GridLayout
+            android:columnCount="2"
+            android:minHeight="700dp"
+            android:layout_gravity="fill_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent">
 
+            <AutoCompleteTextView
+                android:id="@+id/selectLoanHeader"
+                style="@style/editText"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:hint="Select Loan"
+                android:inputType="textAutoComplete" />
+
+            <TextView android:layout_row="0"
+                android:layout_columnSpan="1"
+                android:id="@+id/lblSummary"
+                android:hint="0.00"
+                android:layout_gravity="right"
+                android:textSize="30dp"/>
             <GridView
                 android:id="@+id/gvLoanDetail"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:layout_row="1"
                 android:layout_rowWeight="@integer/config_navAnimTime"
                 android:layout_column="0"
-                android:layout_gravity="top"
+                android:layout_columnSpan="2"
                 android:layout_marginTop="1dp"
                 android:layoutMode="opticalBounds" />
-        </LinearLayout>
+        </GridLayout>
     </ScrollView>
 
     <GridLayout android:visibility="gone"

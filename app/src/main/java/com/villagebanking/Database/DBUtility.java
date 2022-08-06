@@ -35,34 +35,14 @@ public class DBUtility<T> {
 
     //region Insert/update
 
-    public static <T> String DTOSaveUpdate(T data, String tableName) {
-        DB1BOMap map = DB2Save.DTOSaveUpdate(data, tableName);
-        if (map != null) //SAVE TO TABLE
-            DBSQLQuery.DBSaveUpdate(map.getPrimary_key(), map.getContentValues(), tableName);
-        return "";
-    }
-
     public static void updateField(String tableName, String columnName, String inputValue, long primaryKey) {
         DBSQLQuery.updateField(tableName, columnName, inputValue, primaryKey);
     }
     //endregion
 
     //region Getlist
-    public static <T> ArrayList<T> DTOGetAlls(String tableName) {
-        Cursor res = DBSQLQuery.DBGetData(tableName, 0);
-        ArrayList<T> getList = DB2GetList.DTOGetAlls(res, tableName);
-        return getList;
-    }
-
     public static <T> ArrayList<T> DTOGetData(String tableName, long primary_key) {
         Cursor res = DBSQLQuery.DBGetData(tableName, primary_key);
-        return DB2GetList.DTOGetAlls(res, tableName);
-    }
-    //endregion
-
-    //region Trans List
-    public static <T> ArrayList<T> DBGetDataFilter(String tableName, String columnName, String inputValue) {
-        Cursor res = DBSQLQuery.DBGetDataFilter(tableName, columnName, inputValue);
         return DB2GetList.DTOGetAlls(res, tableName);
     }
     //endregion
@@ -81,6 +61,15 @@ public class DBUtility<T> {
             return ex.getMessage();
         }
     }
+
+    public static String DBSQLWriteQry(String sqlQuery) {
+        try {
+            return DBSQLQuery.ExecuteSQL(sqlQuery);
+        } catch (Exception ex) {
+            return ex.getMessage();
+        }
+    }
+
 
     public static Cursor GetDBList(String sqlQuery) {
         return DBSQLQuery.GetReadableDB().rawQuery(sqlQuery, null);

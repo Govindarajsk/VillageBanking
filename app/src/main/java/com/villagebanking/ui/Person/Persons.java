@@ -42,7 +42,7 @@ public class Persons extends Fragment {
 
     void assignToGridView() {
         PersonsGrid adapter = new PersonsGrid(this.getContext(), R.layout.persons_gridview,
-                DBUtility.DTOGetAlls(tblPerson.Name));
+                tblPerson.GetList(0));
         binding.gvDataView.setAdapter(adapter);
     }
 }

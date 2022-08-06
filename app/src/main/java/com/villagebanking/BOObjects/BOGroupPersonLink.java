@@ -1,7 +1,5 @@
 package com.villagebanking.BOObjects;
 
-import java.security.PublicKey;
-
 public class BOGroupPersonLink extends BOBase {
 
     private long group_Key;
@@ -41,6 +39,26 @@ public class BOGroupPersonLink extends BOBase {
         this.person_role = person_role;
     }
 
-    public BOKeyValue GroupDetail;
-    public BOKeyValue PersonDetail;
+
+
+    private BOKeyValue person;
+    private BOKeyValue group;
+    public BOKeyValue getPerson() {
+        if (person == null) person = new BOKeyValue();
+        return person;
+    }
+
+    public void setPerson(BOKeyValue person) {
+        this.person = person;
+    }
+
+    public BOKeyValue getGroup() {
+        if (group == null) group = new BOKeyValue();
+        return group;
+    }
+
+    public void setGroup(BOKeyValue group) {
+        this.group = group;
+    }
+
 }

@@ -1,6 +1,6 @@
 package com.villagebanking.BOObjects;
 
-public class BOLoanDetail extends BOBase {
+public class BOLoanDetail extends BOLoanHeader {
     private BOKeyValue periodInfo;
     private long loanHeaderKey;
     private double emiAmount;

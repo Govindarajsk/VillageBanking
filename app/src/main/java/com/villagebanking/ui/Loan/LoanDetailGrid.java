@@ -1,7 +1,6 @@
 package com.villagebanking.ui.Loan;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -10,28 +9,24 @@ import android.widget.TextView;
 import androidx.navigation.Navigation;
 
 import com.villagebanking.BOObjects.BOLoanDetail;
-import com.villagebanking.BOObjects.BOLoanHeader;
-import com.villagebanking.Controls.DataGridBase;
+import com.villagebanking.ui.Base.DataGridBase;
 import com.villagebanking.DBTables.tblLoanDetail;
-import com.villagebanking.DBTables.tblLoanHeader;
 import com.villagebanking.Database.DBUtility;
 import com.villagebanking.R;
 import com.villagebanking.ui.UIUtility;
 
 import java.util.ArrayList;
 
-public class LoanDetailGrid <T> extends DataGridBase {
+public class LoanDetailGrid <T> extends DataGridBase<BOLoanDetail> {
 
-    public LoanDetailGrid(Context context, int textViewResourceId, ArrayList<T> objects) {
+    public LoanDetailGrid(Context context, int textViewResourceId, ArrayList<BOLoanDetail> objects) {
         super(context, textViewResourceId, objects);
     }
 
     @Override
-    public View customeView(int row, Object data) {
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View convertView = inflater.inflate(R.layout.loan_detail_gridview, null);
+    public View customeView(int row, BOLoanDetail bindData, LayoutInflater layout) {
+        View convertView = layout.inflate(R.layout.loan_detail_gridview, null);
 
-        BOLoanDetail bindData = (BOLoanDetail) data;
         String value1 = UIUtility.ToString(row);//bindData.getEmiNo());
         String value2 = bindData.getPeriodInfo().getDisplayValue();
         String value3 =  UIUtility.ToString(bindData.getEmiAmount());
