@@ -54,7 +54,7 @@ public class TransDetail extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_group(long groupKey) {
-        ArrayList<BOGroup> groups = DBUtility.DTOGetData(tblGroup.Name, groupKey);
+        ArrayList<BOGroup> groups = tblGroup.GetList(groupKey);
 
         ArrayList<BOKeyValue> keyValues = new ArrayList<>();
         groups.stream().forEach(x -> keyValues.add(new BOKeyValue(x.getPrimary_key(), x.getName(), x)));

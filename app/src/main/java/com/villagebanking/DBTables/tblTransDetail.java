@@ -25,6 +25,7 @@ public class tblTransDetail extends tblBase {
     private static String column3 = "DATE";
     private static String column4 = "AMOUNT";
     private static String column5 = "REMARKS";
+    private static String column6 = "PERIOD_KEY";
 
 
     private static BOColumn<Long> DBColumn1 = new BOColumn<Long>(DBCLMTYPE.INT, column1);
@@ -32,6 +33,7 @@ public class tblTransDetail extends tblBase {
     private static BOColumn<String> DBColumn3 = new BOColumn<String>(DBCLMTYPE.TXT, column3);
     private static BOColumn<Double> DBColumn4 = new BOColumn<Double>(DBCLMTYPE.DBL, column4);
     private static BOColumn<String> DBColumn5 = new BOColumn<String>(DBCLMTYPE.TXT, column5);
+    private static BOColumn<Long> DBColumn6 = new BOColumn<Long>(DBCLMTYPE.INT, column6);
 
     //endregion
 
@@ -46,6 +48,7 @@ public class tblTransDetail extends tblBase {
         columnList.add(DBColumn3);
         columnList.add(DBColumn4);
         columnList.add(DBColumn5);
+        columnList.add(DBColumn6);
         return columnList;
     }
     //endregion
@@ -65,6 +68,7 @@ public class tblTransDetail extends tblBase {
         DBColumn3.setColumnValue(data.getTransDate());
         DBColumn4.setColumnValue(data.getAmount());
         DBColumn5.setColumnValue(data.getRemarks());
+        DBColumn6.setColumnValue(data.getPeriodKey());
         return columnList;
     }
     //endregion
@@ -90,7 +94,8 @@ public class tblTransDetail extends tblBase {
             newData.setTransDate(res.getString(i++));
             newData.setAmount(res.getDouble(i++));
             newData.setRemarks(res.getString(i++));
-            if (res.getColumnCount() > 6) {
+            newData.settD_Period_Key(res.getLong(i++));
+            if (res.getColumnCount() > 5) {
                 newData.setPeriodKey(res.getLong(i++));
                 String tableName = res.getString(i++);
                 long tblLinkKey = res.getLong(i++);
@@ -124,7 +129,8 @@ public class tblTransDetail extends tblBase {
                 newData.setRemarks(res.getString(i++));
                 newData.setTotalAmount(res.getDouble(i++));
                 newData.setPaidAmount(res.getDouble(i++));
-                newData.setBalanceAmount(res.getDouble(i++));
+                newData.setBalanceAmount(newData.getTotalAmount() - newData.getAmount());
+                // newData.setBalanceAmount(res.getDouble(i++));
                 newData.setRemarks(remarks);
             }
             returnList.add(newData);
@@ -150,7 +156,8 @@ public class tblTransDetail extends tblBase {
                 "TD.DATE," +
                 "TD.AMOUNT AS AMOUNT," +
                 "TD.REMARKS," +
-                "TH.PERIOD_KEY," +
+                "TD.PERIOD_KEY AS PERIOD_KEY," +
+                "TD.PERIOD_KEY," +
                 "TH.TABLE_NAME," +
                 "TH.TABLE_LINK_KEY," +
                 "TH.REMARKS," +
@@ -161,7 +168,36 @@ public class tblTransDetail extends tblBase {
                 "TRANSACTION_HEADER TH JOIN " +
                 "TRANSACTION_DETAIL TD ON TD.HEADER_KEY=TH.ID " + filter;
         return qry;
+    }
 
+
+    public static ArrayList<BOTransDetail> GetViewList(String periodKeys) {
+        Cursor result = DBUtility.GetDBList(viewQry(periodKeys));
+        return readValue(result);
+    }
+
+    static String viewQry(String periodKeys) {
+        String filter = periodKeys.length() > 0 ? " WHERE TH.PERIOD_KEY IN (" + periodKeys + ")" :"";
+                //+ " AND TD.PERIOD_KEY IN (" + periodKeys + ")" : "";
+        String qry = "SELECT " +
+                "TD.ID AS ID," +
+                "TD.PARENT_KEY," +
+                "TH.ID AS HEADER_KEY," +
+                "TD.DATE," +
+                "TD.AMOUNT AS AMOUNT," +
+                "TD.REMARKS," +
+                "TD.PERIOD_KEY AS PERIOD_KEY," +
+                "TH.PERIOD_KEY," +
+                "TH.TABLE_NAME," +
+                "TH.TABLE_LINK_KEY," +
+                "TH.REMARKS," +
+                "TH.TOTAL_AMOUNT," +
+                "TD.AMOUNT PAID_AMOUNT," +
+                "TH.BALANCE_AMOUNT " +
+                "FROM " +
+                "TRANSACTION_HEADER TH LEFT JOIN " +
+                "TRANSACTION_DETAIL TD ON TD.HEADER_KEY=TH.ID " + filter;
+        return qry;
     }
     //endregion
 }

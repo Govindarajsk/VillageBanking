@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi;
 
 import com.villagebanking.BOObjects.BOLoanHeader;
 import com.villagebanking.BOObjects.BOPeriod;
+import com.villagebanking.BOObjects.BOTransHeader;
 import com.villagebanking.Database.DBUtility;
 
 import java.util.ArrayList;
@@ -58,6 +59,7 @@ public class tblPeriod extends tblBase {
     }
 
     static ArrayList<BOColumn> getColumnValueMap(BOPeriod boPeriod) {
+        DBColumn0.setColumnValue(boPeriod.getPrimary_key());
         DBColumn1.setColumnValue(boPeriod.getPeriodType());
         DBColumn2.setColumnValue(boPeriod.getPeriodName());
         DBColumn3.setColumnValue(boPeriod.getActualDate());
@@ -65,6 +67,19 @@ public class tblPeriod extends tblBase {
         DBColumn5.setColumnValue(boPeriod.getPeriodRemarks());
         DBColumn6.setColumnValue(boPeriod.getPeriodStatus());
         return columnList;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static String UpdateStatus(long key,String status) {
+        DBColumn0.setColumnValue(key);
+        DBColumn6.setColumnValue(status);
+
+        ArrayList<BOColumn> newList = new ArrayList<>();
+        newList.add(DBColumn0);
+        newList.add(DBColumn6);
+        String sqlQuery = BOColumn.getInsetUpdateQry("U", Name, newList);
+        String returnVal = DBUtility.DBSave(sqlQuery);
+        return returnVal;
     }
     //endregion
 

@@ -13,6 +13,7 @@ import androidx.navigation.Navigation;
 
 import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOTransHeader;
+import com.villagebanking.DBTables.tblUtility;
 import com.villagebanking.ui.Base.DataGridBase;
 import com.villagebanking.DBTables.tblGroupPersonLink;
 import com.villagebanking.DBTables.tblLoanHeader;
@@ -32,6 +33,7 @@ public class PeriodsGrid<T> extends DataGridBase<BOPeriod> {
         super(context, textViewResourceId, list);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View customeView(int row, BOPeriod bindData, LayoutInflater layout) {
 
@@ -42,10 +44,11 @@ public class PeriodsGrid<T> extends DataGridBase<BOPeriod> {
         TextView txtSNo = convertView.findViewById(R.id.txtSNo);
         txtSNo.setText(value0);
 
-        String value2 = bindData.getPeriodName();
+        String value2 = bindData.getPeriodName() + "-" + bindData.getPeriodStatus() + "-" + bindData.getPrimary_key();
 
-        ArrayList<BOTransHeader> transHeaders = tblTransHeader.GetViewList(tblTransHeader.Name, UIUtility.ToString(bindData.getPrimary_key()), "");
-        String value3 = bindData.getActualDate() + "-" + transHeaders.size();
+        ArrayList<BOTransHeader> transHeaders = tblTransHeader.GetViewList(tblTransHeader.Name,
+                UIUtility.ToString(bindData.getPrimary_key()), "");
+        String value3 = bindData.getPeriodType() + "-" + bindData.getActualDate() + "-" + transHeaders.size();
 
         TextView txtPeriodType = convertView.findViewById(R.id.txtPeriodType);
         TextView txtActualDate = convertView.findViewById(R.id.txtActualDate);
@@ -75,12 +78,14 @@ public class PeriodsGrid<T> extends DataGridBase<BOPeriod> {
     //region Events
     View.OnClickListener delete(long primaryKey, long transHeaderCount) {
         return new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                if (transHeaderCount == 0) {
-                    DBUtility.DTOdelete(primaryKey, tblPeriod.Name);
-                    Navigation.findNavController(view).navigate(R.id.nav_period_grid_view);
-                }
+                // if (transHeaderCount == 0) {
+                //DBUtility.DTOdelete(primaryKey, tblPeriod.Name);
+                tblPeriod.UpdateStatus(primaryKey, "C");
+                Navigation.findNavController(view).navigate(R.id.nav_period_grid_view);
+                //  }
             }
         };
     }
@@ -100,12 +105,12 @@ public class PeriodsGrid<T> extends DataGridBase<BOPeriod> {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (transHeaderCount > 0) {
+               // if (transHeaderCount > 0) {
                     Bundle args = new Bundle();
                     args.putString("PAGE", tblPeriod.Name);
                     args.putLong("ID", bindData.getPrimary_key());
                     Navigation.findNavController(view).navigate(R.id.nav_linkview_trans_header, args);
-                }
+             //   }
             }
         };
     }
@@ -116,11 +121,11 @@ public class PeriodsGrid<T> extends DataGridBase<BOPeriod> {
             @Override
             public void onClick(View view) {
                 genTransHeader(bindData, view);
+                tblPeriod.UpdateStatus(bindData.getPrimary_key(), "A");
             }
         };
     }
     //endregion
-
 
     String keys = "";
 
@@ -131,26 +136,38 @@ public class PeriodsGrid<T> extends DataGridBase<BOPeriod> {
         LongStream keyStream = boPeriods.stream().mapToLong(x -> x.getPrimary_key());
         keyStream.forEach(x -> keys += (keys.length() > 0 ? "," : "") + UIUtility.ToString(x));
 
-
         ArrayList<BOTransHeader> transPerson = tblTransHeader.GetViewList(tblGroupPersonLink.Name, keys, "");
         ArrayList<BOTransHeader> transLoan = tblTransHeader.GetViewList(tblLoanHeader.Name, keys, "");
 
         transPerson.addAll(transLoan);
 
-        String countStr = String.valueOf(transPerson.size());
-        transPerson.forEach(x -> generateTransaction(x, period.getPrimary_key()));
+        transPerson.forEach(x -> generateTransaction(x, period));
 
-        DBUtility.updateField(tblPeriod.Name, "PERIOD_STATUS", countStr, period.getPrimary_key());
         Navigation.findNavController(view).navigate(R.id.nav_period_grid_view);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    void generateTransaction(BOTransHeader x, long periodKey) {
-        x.setTransDate(UIUtility.getCurrentDate());
-        Long primaryKey = Long.valueOf(periodKey + (x.getTableName().equals(tblGroupPersonLink.Name) ? "0" : "1") +
-                x.getTableLinkKey());
+    void generateTransaction(BOTransHeader x, BOPeriod period) {
+        x.setTransDate(period.getActualDate());
+        long periodKey = period.getPrimary_key();
+
+        Long primaryKey = getPrimaryKey(periodKey, tblGroupPersonLink.Name, x.getTableLinkKey());
         x.setPrimary_key(primaryKey);
-        x.setPeriodKey(periodKey);
-        tblTransHeader.Save("I", x);
+        //x.setPeriodKey(periodKey);
+        BOTransHeader transHeader = tblUtility.GetTData(tblTransHeader.GetList(primaryKey));
+
+        if (transHeader == null) {
+            tblTransHeader.Save("I", x);
+        } else {
+            tblTransHeader.Save("U", x);
+        }
+    }
+
+    long getPrimaryKey(long periodKey, String tblName, long linkKey) {
+        long key_1 = periodKey;
+        long key_2 = tblName.equals(tblGroupPersonLink.Name) ? 0 : 1;
+        long key_3 = linkKey;
+        Long key = Long.valueOf(key_1 + "" + key_2 + "" + key_3);
+        return key;
     }
 }

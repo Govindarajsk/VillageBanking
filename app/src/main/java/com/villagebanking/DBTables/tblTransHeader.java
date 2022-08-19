@@ -27,23 +27,25 @@ public class tblTransHeader extends tblBase {
     //region TRANSACTION_HEADER
     public static final String Name = "TRANSACTION_HEADER";
 
-    private static String column1 = "PERIOD_KEY";
-    private static String column2 = "TABLE_NAME";
-    private static String column3 = "TABLE_LINK_KEY";
-    private static String column4 = "REMARKS";
-    private static String column5 = "TRANS_DATE";
-    private static String column6 = "TOTAL_AMOUNT";
-    private static String column7 = "PAID_AMOUNT";
-    private static String column8 = "BALANCE_AMOUNT";
+    static String column1 = "PERIOD_KEY";
+    static String column2 = "TABLE_NAME";
+    static String column3 = "TABLE_LINK_KEY";
+    static String column4 = "REMARKS";
+    static String column5 = "TRANS_DATE";
+    static String column6 = "TOTAL_AMOUNT";
+    static String column7 = "PAID_AMOUNT";
+    static String column8 = "BALANCE_AMOUNT";
+    static String column9 = "PARENT_KEY";
 
-    private static BOColumn<Long> DBColumn1 = new BOColumn<Long>(DBCLMTYPE.INT, column1);
-    private static BOColumn<String> DBColumn2 = new BOColumn<String>(DBCLMTYPE.TXT, column2);
-    private static BOColumn<Long> DBColumn3 = new BOColumn<Long>(DBCLMTYPE.INT, column3);
-    private static BOColumn<String> DBColumn4 = new BOColumn<String>(DBCLMTYPE.TXT, column4);
-    private static BOColumn<String> DBColumn5 = new BOColumn<String>(DBCLMTYPE.TXT, column5);
-    private static BOColumn<Double> DBColumn6 = new BOColumn<Double>(DBCLMTYPE.DBL, column6);
-    private static BOColumn<Double> DBColumn7 = new BOColumn<Double>(DBCLMTYPE.DBL, column7);
-    private static BOColumn<Double> DBColumn8 = new BOColumn<Double>(DBCLMTYPE.DBL, column8);
+    static BOColumn<Long> DBColumn1 = new BOColumn<Long>(DBCLMTYPE.INT, column1);
+    static BOColumn<String> DBColumn2 = new BOColumn<String>(DBCLMTYPE.TXT, column2);
+    static BOColumn<Long> DBColumn3 = new BOColumn<Long>(DBCLMTYPE.INT, column3);
+    static BOColumn<String> DBColumn4 = new BOColumn<String>(DBCLMTYPE.TXT, column4);
+    static BOColumn<String> DBColumn5 = new BOColumn<String>(DBCLMTYPE.TXT, column5);
+    static BOColumn<Double> DBColumn6 = new BOColumn<Double>(DBCLMTYPE.DBL, column6);
+    static BOColumn<Double> DBColumn7 = new BOColumn<Double>(DBCLMTYPE.DBL, column7);
+    static BOColumn<Double> DBColumn8 = new BOColumn<Double>(DBCLMTYPE.DBL, column8);
+    static BOColumn<Long> DBColumn9 = new BOColumn<Long>(DBCLMTYPE.INT, column9);
 
     //endregion
 
@@ -61,11 +63,10 @@ public class tblTransHeader extends tblBase {
         columnList.add(DBColumn6);
         columnList.add(DBColumn7);
         columnList.add(DBColumn8);
+        columnList.add(DBColumn9);
         return columnList;
     }
     //endregion
-
-    public static final String CreateTable = Name + BOColumn.getCreateTableQry(columnList);
 
     //region String <= Save(flag,data)
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -77,6 +78,7 @@ public class tblTransHeader extends tblBase {
     }
 
     static ArrayList<BOColumn> getColumnValueMap(BOTransHeader data) {
+        DBColumn0.setColumnValue(data.getPrimary_key());
         DBColumn1.setColumnValue(data.getPeriodKey());
         DBColumn2.setColumnValue(data.getTableName());
         DBColumn3.setColumnValue(data.getTableLinkKey());
@@ -85,21 +87,9 @@ public class tblTransHeader extends tblBase {
         DBColumn6.setColumnValue(data.getTotalAmount());
         DBColumn7.setColumnValue(data.getPaidAmount());
         DBColumn8.setColumnValue(data.getBalanceAmount());
+        DBColumn9.setColumnValue(data.getParentKey());
         return columnList;
     }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public static String UpdateAmount(BOTransHeader data) {
-        columnList = getColumnValueMap(data);
-        ArrayList<BOColumn> newList = new ArrayList<>();
-        newList.add(DBColumn7);
-        newList.add(DBColumn8);
-        String sqlQuery = BOColumn.getInsetUpdateQry("U", Name, newList);
-        String returnVal = DBUtility.DBSave(sqlQuery);
-        return returnVal;
-    }
-
-
     //endregion
 
     //region GetList => primaryKey
@@ -107,6 +97,20 @@ public class tblTransHeader extends tblBase {
     public static ArrayList<BOTransHeader> GetList(long primaryKey) {
         String qryFilter = (primaryKey > 0 ? " WHERE " + DBColumn0.getClmName() + "=" + primaryKey : "");
         Cursor result = DBUtility.GetDBList(BOColumn.getListQry(Name, columnList, qryFilter));
+        return readValue(result);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static ArrayList<BOTransHeader> GetViewList(String tableName, String periodKeys, String personKeys) {
+        String qry = "";
+        if (tableName.equals(tblGroupPersonLink.Name)) {
+            qry = getGPLinkQry(periodKeys);
+        } else if (tableName.equals(tblLoanHeader.Name)) {
+            qry = getLoanHeaderQry(periodKeys);
+        } else if (tableName.equals(tblTransHeader.Name)) {
+            qry = getTransHeaderQry(periodKeys, personKeys);
+        }
+        Cursor result = DBUtility.GetDBList(qry);
         return readValue(result);
     }
 
@@ -119,12 +123,11 @@ public class tblTransHeader extends tblBase {
             int i = 0;
             long primaryKey = res.getLong(i++);
             newData.setPrimary_key(primaryKey);
-            ArrayList<BOTransDetail> transDetails = tblTransDetail.GetDetailViewList(primaryKey,0);
+            ArrayList<BOTransDetail> transDetails = tblTransDetail.GetDetailViewList(primaryKey, 0);
             newData.setTransDetails(transDetails);
             newData.setPeriodKey(res.getLong(i++));
             newData.setTableName(res.getString(i++));
             newData.setTableLinkKey(res.getLong(i++));
-
             if (newData.getTableName().contentEquals(tblGroupPersonLink.Name)) {
                 ArrayList<BOGroupPersonLink> groupPersonLinks = tblGroupPersonLink.GetList(newData.getTableLinkKey());
                 if (groupPersonLinks.size() > 0) {
@@ -147,7 +150,10 @@ public class tblTransHeader extends tblBase {
             newData.setRemarks(res.getString(i++));
             newData.setTransDate(res.getString(i++));
             Double totalAmount = res.getDouble(i++);
+
             Double paidAmount = transDetails.stream().mapToDouble(x -> x.getAmount()).sum();
+            if (transDetails.size() > 0)
+                newData.settD_Period_Key(transDetails.stream().findFirst().get().getPeriodKey());
             Double balAmount = totalAmount - paidAmount;
 
             newData.setTotalAmount(totalAmount);
@@ -162,20 +168,8 @@ public class tblTransHeader extends tblBase {
     }
     //endregion
 
-    //region Special get List
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public static ArrayList<BOTransHeader> GetViewList(String tableName, String periodKeys, String personKeys) {
-        String qry = "";
-        if (tableName.equals(tblGroupPersonLink.Name)) {
-            qry = getGPLinkQry(periodKeys);
-        } else if (tableName.equals(tblLoanHeader.Name)) {
-            qry = getLoanHeaderQry(periodKeys);
-        } else if (tableName.equals(tblTransHeader.Name)) {
-            qry = getTransHeaderQry(periodKeys, personKeys);
-        }
-        Cursor result = DBUtility.GetDBList(qry);
-        return readValue(result);
-    }
+    //region SQL Query SQL
+    public static final String CreateTable = Name + BOColumn.getCreateTableQry(columnList);
 
     public static String getTransHeaderQry(String periodKeys, String personKeys) {
         String qryFilter = "";
@@ -206,11 +200,13 @@ public class tblTransHeader extends tblBase {
                         + "TH.PAID_AMOUNT AS PAID_AMOUNT,"
                         + "TH.BALANCE_AMOUNT AS BALANCE_AMOUNT,"
                         + "GPL.GROUP_KEY AS GROUP_KEY,"
-                        + "GPL.PERSON_KEY AS PERSON_KEY"
+                        + "GPL.PERSON_KEY AS PERSON_KEY,"
+                        + "TH.PARENT_KEY AS PARENT_KEY"
                         + " FROM "
                         + "TRANSACTION_HEADER TH JOIN "
                         + "GROUP_PERSON_LINK GPL ON TH.TABLE_LINK_KEY=GPL.ID"
                         + qryFilter;
+
         qry += " UNION  SELECT " +
                 "TH.ID AS ID,"
                 + "TH.PERIOD_KEY AS PERIOD_KEY,"
@@ -222,7 +218,8 @@ public class tblTransHeader extends tblBase {
                 + "TH.PAID_AMOUNT AS PAID_AMOUNT,"
                 + "TH.BALANCE_AMOUNT AS BALANCE_AMOUNT,"
                 + "LH.GROUP_KEY AS GROUP_KEY,"
-                + "LH.PERSON_KEY AS PERSON_KEY"
+                + "LH.PERSON_KEY AS PERSON_KEY,"
+                + "TH.PARENT_KEY AS PARENT_KEY"
                 + " FROM "
                 + "TRANSACTION_HEADER TH JOIN "
                 + tblLoanDetail.Name + " LD ON TH.TABLE_LINK_KEY=LD.ID JOIN "
@@ -236,7 +233,7 @@ public class tblTransHeader extends tblBase {
         String qryFilter = (periodkeys.length() > 0 ? " WHERE G.START_PERIOD_KEY IN (" + periodkeys + ")" : "");
         String qry =
                 "SELECT " +
-                        "0 AS ID,"
+                        "TH.ID AS ID,"
                         + "G.START_PERIOD_KEY AS PERIOD_KEY,"
                         + "'GROUP_PERSON_LINK' AS TABLE_NAME,"
                         + "GPL.ID AS TABLE_LINK_KEY,"
@@ -246,10 +243,14 @@ public class tblTransHeader extends tblBase {
                         + "0 AS PAID_AMOUNT,"
                         + "G.AMOUNT AS BALANCE_AMOUNT,"
                         + "GPL.GROUP_KEY AS GROUP_KEY,"
-                        + "GPL.PERSON_KEY AS PERSON_KEY"
+                        + "GPL.PERSON_KEY AS PERSON_KEY,"
+                        + "TH.PARENT_KEY AS PARENT_KEY,"
+                        + "0 AS TD_PERIOD_KEY"
                         + " FROM "
-                        + "GROUPS G JOIN "
-                        + "GROUP_PERSON_LINK GPL ON G.ID=GPL.GROUP_KEY" + qryFilter;
+                        + "GROUPS G  JOIN "
+                        + "GROUP_PERSON_LINK GPL ON G.ID=GPL.GROUP_KEY LEFT JOIN "
+                        + "TRANSACTION_HEADER TH ON TH.ID = GPL.ID"
+                        + qryFilter;
         return qry;
     }
 
@@ -266,7 +267,9 @@ public class tblTransHeader extends tblBase {
                 + "0 AS PAID_AMOUNT,"
                 + "LD.EMI_AMOUNT AS BALANCE_AMOUNT,"
                 + "LH.GROUP_KEY AS GROUP_KEY,"
-                + "LH.PERSON_KEY AS PERSON_KEY"
+                + "LH.PERSON_KEY AS PERSON_KEY,"
+                + "0 AS PARENT_KEY,"
+                + "0 AS TD_PERIOD_KEY"
                 + " FROM "
                 + tblLoanDetail.Name + " LD JOIN "
                 + tblLoanHeader.Name + " LH ON LH.ID=LD.HEADER_KEY" + qryFilter;

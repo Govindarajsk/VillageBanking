@@ -45,10 +45,12 @@ public class PeriodsEdit extends Fragment {
         binding.btnSave.setOnClickListener(clickMethod());
         DatePicker simpleDatePicker = (DatePicker) binding.editDate; // initiate a date picker
         simpleDatePicker.setSpinnersShown(true);
-        fill_Type(1);
         if (getArguments() != null) {
             long key = getArguments().getLong("primary_key");
             applyValue(key);
+        }
+        else{
+            fill_Type(1);
         }
     }
 
@@ -57,9 +59,10 @@ public class PeriodsEdit extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                tblPeriod.Save("I",getViewData());
-                //DBUtility.DTOSaveUpdate(getViewData(), tblPeriod.Name);
-                getActivity().onBackPressed();
+                if (primary_key > 0)
+                    tblPeriod.Save("U", getViewData());
+                else
+                    tblPeriod.Save("I", getViewData());
             }
         };
     }
@@ -73,7 +76,7 @@ public class PeriodsEdit extends Fragment {
         newData.setActualDate(UIUtility.getDateString(binding.editDate));
         newData.setPeriodValue(UIUtility.getDateInt(binding.editDate));
         newData.setPeriodRemarks(binding.editDetail.getText().toString());
-        newData.setPeriodStatus("");
+        newData.setPeriodStatus("O");
         return newData;
     }
 
@@ -81,38 +84,22 @@ public class PeriodsEdit extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void applyValue(long key) {
-        ArrayList<BOPeriod> datas = DBUtility.DTOGetData(tblPeriod.Name, key);
+        ArrayList<BOPeriod> datas = tblPeriod.GetList(key);
         if (datas.size() > 0) {
             BOPeriod editData = datas.get(0);
             primary_key = editData.getPrimary_key();
-            ((AutoBox)binding.editType.getAdapter()).SetSelected(binding.editType,editData.getPeriodType());
-
-            BOKeyValue selected = UIUtility.GetAutoBoxSelected(binding.editType);
-            editData.setPeriodType(selected.getPrimary_key());
-            editData.setPeriodName(selected.getDisplayValue());
-            binding.editType.setText(String.valueOf(editData.getPeriodType()));
+            fill_Type(editData.getPeriodType());
             UIUtility.getDateFromString(editData.getActualDate(), binding.editDate);
-            binding.editDetail.setText(editData.getPeriodRemarks());
+            binding.editDetail.setText(editData.getPeriodStatus());
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_Type(long type) {
         ArrayList<BOKeyValue> keyValues = new ArrayList<>();
-        keyValues.add(new BOKeyValue(1, "1.Amavasai"));
-        keyValues.add(new BOKeyValue(2, "2.Every 5th"));
-        UIUtility.getAutoBox(this.getContext(), keyValues, binding.editType,null, type);
-        binding.editType.setOnItemClickListener(selectedEvent(binding.editType));
-    }
-
-    AdapterView.OnItemClickListener selectedEvent(AutoCompleteTextView control) {
-        return new AdapterView.OnItemClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onItemClick(AdapterView<?> parent, View arg1, int position, long arg3) {
-                BOKeyValue value = UIUtility.GetAutoBoxSelected(control);
-            }
-        };
+        keyValues.add(new BOKeyValue(1, "Amavasai"));
+        keyValues.add(new BOKeyValue(2, "Every 5th"));
+        UIUtility.getAutoBox(this.getContext(), keyValues, binding.editType, null, type);
     }
 }
 

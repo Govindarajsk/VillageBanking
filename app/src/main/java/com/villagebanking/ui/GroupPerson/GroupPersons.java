@@ -87,7 +87,7 @@ public class GroupPersons extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     void fill_person(long personKey) {
-        ArrayList<BOPerson> people = DBUtility.DTOGetData(tblPerson.Name, 0);
+        ArrayList<BOPerson> people = tblPerson.GetList(0);
         ArrayList<BOKeyValue> keyValues = new ArrayList<>();
         people.stream().forEach(x -> keyValues.add(new BOKeyValue(x.getPrimary_key(), x.getFullName())));
         UIUtility.getAutoBox(this.getContext(), keyValues, binding.editPerson, null, personKey);

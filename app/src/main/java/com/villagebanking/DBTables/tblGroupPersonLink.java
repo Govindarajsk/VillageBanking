@@ -13,6 +13,7 @@ import com.villagebanking.BOObjects.BOPeriod;
 import com.villagebanking.BOObjects.BOPerson;
 import com.villagebanking.BOObjects.BOTransDetail;
 import com.villagebanking.Database.DBUtility;
+import com.villagebanking.ui.UIUtility;
 
 import java.util.ArrayList;
 
@@ -82,11 +83,11 @@ public class tblGroupPersonLink extends tblBase {
             newData.setGroup_Key(res.getLong(1));
             newData.setPerson_Key(res.getLong(2));
 
-            BOGroup group = (BOGroup) DBUtility.GetData(tblGroup.Name, newData.getGroup_Key());
+            BOGroup group = tblUtility.GetTData(tblGroup.GetList(newData.getGroup_Key()));
             if (group != null)
                 newData.setGroup(new BOKeyValue(group.getPrimary_key(), group.getName()));
 
-            BOPerson person = (BOPerson) DBUtility.GetData(tblPerson.Name, newData.getPerson_Key());
+            BOPerson person =tblUtility.GetTData(tblPerson.GetList(newData.getPerson_Key()));
             if (person != null)
                 newData.setPerson( new BOKeyValue(person.getPrimary_key(), person.getFullName()));
 

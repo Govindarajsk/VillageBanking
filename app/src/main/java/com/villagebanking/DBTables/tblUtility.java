@@ -1,15 +1,6 @@
 package com.villagebanking.DBTables;
 
-import com.villagebanking.BOObjects.BOPerson;
-import com.villagebanking.Database.DB2GetList;
-import com.villagebanking.Database.DBUtility;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
-import java.util.List;
-
-import kotlin.jvm.internal.Intrinsics;
 
 public class tblUtility<T> {
     static final String primaryKey = " INTEGER PRIMARY KEY";

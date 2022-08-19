@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class DBUtility<T> {
 
-    static int version = 6;
+    static int version = 7;
     public static DBSQLQuery DBSQLQuery;
     //region Basic
 
@@ -37,13 +37,6 @@ public class DBUtility<T> {
 
     public static void updateField(String tableName, String columnName, String inputValue, long primaryKey) {
         DBSQLQuery.updateField(tableName, columnName, inputValue, primaryKey);
-    }
-    //endregion
-
-    //region Getlist
-    public static <T> ArrayList<T> DTOGetData(String tableName, long primary_key) {
-        Cursor res = DBSQLQuery.DBGetData(tableName, primary_key);
-        return DB2GetList.DTOGetAlls(res, tableName);
     }
     //endregion
 
@@ -70,18 +63,9 @@ public class DBUtility<T> {
         }
     }
 
-
     public static Cursor GetDBList(String sqlQuery) {
         return DBSQLQuery.GetReadableDB().rawQuery(sqlQuery, null);
     }
 
-    public static <T> T GetData(String tableName, long primary_key) {
-        Cursor res = DBSQLQuery.DBGetData(tableName, primary_key);
-        ArrayList<T> list = DB2GetList.DTOGetAlls(res, tableName);
-        if (list.size() > 0) {
-            return list.get(0);
-        }
-        return null;
-    }
     //endregion
 }

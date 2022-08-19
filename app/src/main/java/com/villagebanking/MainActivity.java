@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.villagebanking.BOObjects.BOLoanDetail;
 import com.villagebanking.BOObjects.BOLoanHeader;
+import com.villagebanking.BOObjects.BOTransDetail;
 import com.villagebanking.DBTables.tblLoanDetail;
 import com.villagebanking.DBTables.tblLoanHeader;
 import com.villagebanking.DBTables.tblPerson;
@@ -107,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void dropCreateTable() {
         //DBUtility.AlterTable(tblPerson.Name, tblPerson.CreateTable);
-//        DBUtility.AlterTable(tblTransHeader.Name, tblTransHeader.CreateTable);
-//        DBUtility.AlterTable(tblTransDetail.Name, tblTransDetail.CreateTable);
+        //DBUtility.AlterTable(tblTransHeader.Name, tblTransHeader.CreateTable);
+        //DBUtility.AlterTable(tblTransDetail.Name, tblTransDetail.CreateTable);
     }
 
     private void resetTable() {
@@ -119,8 +120,8 @@ public class MainActivity extends AppCompatActivity {
     private void getDetails() {
         //ArrayList<BOGroupPersonLink> boGroupPersonLinks = DBUtility.DBGetGroupPerson(tblGroupPersonLink.Name);
         //ArrayList<BOTransHeader> boTransHeaders = DBUtility.DTOGetAlls(tblTransHeader.Name);
-        //ArrayList<BOTransDetail> boTransDetails = DBUtility.DTOGetAlls(tblTransDetail.Name);
-        ArrayList<BOLoanHeader> boLoanHeaders = tblLoanHeader.GetList(0, 0);
+        ArrayList<BOTransDetail> boTransDetails = tblTransDetail.GetDetailViewList(0,0);
+        //ArrayList<BOLoanHeader> boLoanHeaders = tblLoanHeader.GetList(0, 0);
         //ArrayList<BOLoanDetail> loanDetails = tblLoanDetail.GetList(0);
         //ArrayList<BOPeriod> periods = tblPeriod.GetList(0);
         //ArrayList<BOPeriod> periods1= tblPeriod.getNextNPeriods(0,1);

@@ -1,5 +1,7 @@
 package com.villagebanking.DBTables;
 
+import com.villagebanking.ui.UIUtility;
+
 import java.util.ArrayList;
 
 public class BOColumn<T> {
@@ -33,6 +35,7 @@ public class BOColumn<T> {
     }
 
     public String getColumnValue() {
+        if (columnValue == null) columnValue = "";
         return columnValue;
     }
 
@@ -91,7 +94,8 @@ public class BOColumn<T> {
 
             for (int i = 0; i < n; i++) {
                 BOColumn item = clmList.get(i);
-                if (!item.getIsPrimaryKey()) {
+                if (!item.getIsPrimaryKey() ||
+                        (item.getIsPrimaryKey() && UIUtility.ToLong(item.getColumnValue()) > 0)) {
                     columnName += item.getClmName();
                     columnValue += item.getColumnValue();
                     if (i != n - 1) {

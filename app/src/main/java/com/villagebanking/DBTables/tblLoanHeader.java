@@ -121,7 +121,7 @@ public class tblLoanHeader extends tblBase {
             newData.setRemarks(res.getString(i++));
 
             long refKey = res.getLong(i++);
-            BOPerson ref1 = DBUtility.GetData(tblPerson.Name, refKey);
+            BOPerson ref1 = tblUtility.GetTData(tblPerson.GetList(refKey));
             if (ref1 != null)
                 newData.setReference1(new BOKeyValue(ref1.getPrimary_key(), ref1.getFullName()));
             newData.setRepayAmount(res.getDouble(i++));

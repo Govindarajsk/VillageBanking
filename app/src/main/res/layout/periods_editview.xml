@@ -29,7 +29,7 @@
         android:datePickerMode="spinner"
         android:spinnersShown="true" />
 
-    <EditText
+    <TextView
         android:id="@+id/editDetail"
         style="@style/editText"
         android:layout_row="3"

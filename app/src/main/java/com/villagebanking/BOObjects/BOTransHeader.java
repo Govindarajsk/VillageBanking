@@ -11,13 +11,8 @@ public class BOTransHeader extends BOBase {
     private double totalAmount;
     private double paidAmount;
     private double balanceAmount;
-
-    private BOKeyValue linkDetail1;
-    private BOKeyValue linkDetail2;
-
-    public boolean IsNew;
-    private ArrayList<BOTransDetail> transDetails;
-
+    private long parentKey;
+    private long tD_Period_Key;
 
     public long getPeriodKey() {
         return periodKey;
@@ -82,6 +77,30 @@ public class BOTransHeader extends BOBase {
     public void setBalanceAmount(double balanceAmount) {
         this.balanceAmount = balanceAmount;
     }
+
+    public long getParentKey() {
+        return parentKey;
+    }
+
+    public void setParentKey(long parentKey) {
+        this.parentKey = parentKey;
+    }
+
+
+    public long gettD_Period_Key() {
+        return tD_Period_Key;
+    }
+
+    public void settD_Period_Key(long tD_Period_Key) {
+        this.tD_Period_Key = tD_Period_Key;
+    }
+
+    private BOKeyValue linkDetail1;
+    private BOKeyValue linkDetail2;
+
+    public boolean IsNew;
+    public boolean IsLastMonth;
+    private ArrayList<BOTransDetail> transDetails;
 
     public BOKeyValue getLinkDetail1() {
         if (linkDetail1 == null) linkDetail1 = new BOKeyValue();

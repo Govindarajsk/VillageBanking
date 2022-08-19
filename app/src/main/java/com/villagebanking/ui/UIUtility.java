@@ -169,5 +169,9 @@ public class UIUtility {
         return input != null && input.getText().length() > 0 ?
                 Long.parseLong(input.getText().toString()) : 0;
     }
+    public static Long ToLong(String input) {
+        return input != null && input.length() > 0 ?
+                Long.parseLong(input) : 0;
+    }
     //endregion
 }
